@@ -1,9 +1,9 @@
 import NextAuth from "next-auth";
-import { Resend } from "resend";
+import { authConfig } from "./auth.config";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
+// Full auth config with email provider (for API routes - Node.js compatible)
 export const { handlers, signIn, signOut, auth } = NextAuth({
+  ...authConfig,
   providers: [
     {
       id: "email",
@@ -11,6 +11,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       type: "email",
       maxAge: 60 * 60, // 1 hour
       sendVerificationRequest: async ({ identifier: email, url }) => {
+        // Dynamic import to avoid loading in Edge runtime
+        const { Resend } = await import("resend");
+        const resend = new Resend(process.env.RESEND_API_KEY);
+        
         try {
           await resend.emails.send({
             from: "Supportive AI <onboarding@resend.dev>",
@@ -47,38 +51,28 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
     },
   ],
-  pages: {
-    signIn: "/login",
-    verifyRequest: "/login/check-email",
-    error: "/login/error",
-  },
   callbacks: {
+    ...authConfig.callbacks,
     async signIn({ user }) {
-      // Only allow specific emails (for now, hardcode allowed emails)
+      // Allowed emails
       const allowedEmails = [
         "lars@supportive-ai.com",
         "larsbeurskens@me.com",
-        // Add more allowed emails here
+        "larsbeurskens@gmail.com",
       ];
       
       if (user.email && allowedEmails.includes(user.email.toLowerCase())) {
         return true;
       }
       
-      // For now, allow all emails during development
-      // Remove this line in production and use allowedEmails only
+      // For development, allow all emails
       return true;
     },
     async session({ session, token }) {
-      // Add businessId to session (hardcoded for now, will come from DB later)
       if (session.user) {
         (session.user as any).businessId = "cml3ihts00000ifulnw03qk9v";
       }
       return session;
     },
   },
-  session: {
-    strategy: "jwt",
-  },
-  trustHost: true,
 });
