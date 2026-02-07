@@ -1,24 +1,23 @@
-import { auth } from "@/lib/auth";
-import { NextResponse } from "next/server";
+// Middleware disabled temporarily - auth not yet configured
+// import { auth } from "@/lib/auth";
+// import { NextResponse } from "next/server";
 
-export default auth((req) => {
-  const isLoggedIn = !!req.auth;
-  const isOnDashboard = req.nextUrl.pathname.startsWith("/dashboard");
-  const isOnLogin = req.nextUrl.pathname.startsWith("/login");
+// export default auth((req) => {
+//   const isLoggedIn = !!req.auth;
+//   const isOnDashboard = req.nextUrl.pathname.startsWith("/dashboard");
+//   const isOnLogin = req.nextUrl.pathname.startsWith("/login");
 
-  // Redirect to login if trying to access dashboard without auth
-  if (isOnDashboard && !isLoggedIn) {
-    return NextResponse.redirect(new URL("/login", req.url));
-  }
+//   if (isOnDashboard && !isLoggedIn) {
+//     return NextResponse.redirect(new URL("/login", req.url));
+//   }
 
-  // Redirect to dashboard if already logged in and trying to access login
-  if (isOnLogin && isLoggedIn) {
-    return NextResponse.redirect(new URL("/dashboard", req.url));
-  }
+//   if (isOnLogin && isLoggedIn) {
+//     return NextResponse.redirect(new URL("/dashboard", req.url));
+//   }
 
-  return NextResponse.next();
-});
+//   return NextResponse.next();
+// });
 
-export const config = {
-  matcher: ["/dashboard/:path*", "/login/:path*"],
-};
+// export const config = {
+//   matcher: ["/dashboard/:path*", "/login/:path*"],
+// };
