@@ -13,7 +13,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       sendVerificationRequest: async ({ identifier: email, url }) => {
         try {
           await resend.emails.send({
-            from: "Supportive AI <noreply@supportive-ai.com>",
+            from: "Supportive AI <onboarding@resend.dev>",
             to: email,
             subject: "Sign in to Supportive AI",
             html: `
