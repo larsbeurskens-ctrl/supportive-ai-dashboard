@@ -15,14 +15,14 @@ export default function LoginPage() {
     setError(null);
 
     try {
-      const result = await signIn('resend', {
+      const result = await signIn('email', {
         email,
-        redirect: false,
         callbackUrl: '/dashboard',
+        redirect: false,
       });
 
       if (result?.error) {
-        setError('Unable to send magic link. Please try again.');
+        setError('Something went wrong. Please try again.');
       } else {
         // Redirect to check-email page
         window.location.href = '/login/check-email';
@@ -46,7 +46,7 @@ export default function LoginPage() {
 
           {/* Error message */}
           {error && (
-            <div className="mb-6 p-4 bg-red-50 text-red-700 rounded-xl text-sm">
+            <div className="bg-red-50 text-red-700 p-4 rounded-xl mb-6 text-sm">
               {error}
             </div>
           )}
@@ -66,7 +66,7 @@ export default function LoginPage() {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="you@company.com"
                   required
-                  className="w-full pl-12 pr-4 py-4 border border-gray-200 rounded-xl text-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                  className="w-full pl-12 pr-4 py-4 border border-gray-200 rounded-xl text-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
             </div>
@@ -74,12 +74,12 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading || !email}
-              className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-blue-600 text-white text-lg font-semibold rounded-xl hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="w-full flex items-center justify-center gap-2 bg-blue-600 text-white py-4 px-6 rounded-xl text-lg font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? (
                 <>
                   <Loader2 className="animate-spin" size={20} />
-                  Sending magic link...
+                  Sending link...
                 </>
               ) : (
                 <>
@@ -90,15 +90,12 @@ export default function LoginPage() {
             </button>
           </form>
 
-          <p className="mt-6 text-center text-sm text-gray-500">
-            We'll send you a magic link to sign in — no password needed.
+          {/* Footer */}
+          <p className="text-center text-sm text-gray-500 mt-8">
+            We'll send you a magic link to sign in.<br />
+            No password needed!
           </p>
         </div>
-
-        {/* Footer */}
-        <p className="mt-8 text-center text-sm text-gray-400">
-          © 2026 Supportive AI. All rights reserved.
-        </p>
       </div>
     </div>
   );

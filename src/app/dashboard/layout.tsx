@@ -2,7 +2,8 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Phone, Calendar, Users, Settings, LayoutDashboard, Menu, X } from 'lucide-react';
+import { useSession, signOut } from 'next-auth/react';
+import { Phone, Calendar, Users, Settings, LayoutDashboard, Menu, X, LogOut } from 'lucide-react';
 import { useState } from 'react';
 
 const navItems = [
@@ -15,7 +16,12 @@ const navItems = [
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const { data: session } = useSession();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const handleSignOut = () => {
+    signOut({ callbackUrl: '/login' });
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -52,6 +58,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               </Link>
             );
           })}
+          <button
+            onClick={handleSignOut}
+            className="flex items-center gap-3 px-4 py-3 rounded-lg text-lg text-red-600 hover:bg-red-50 w-full"
+          >
+            <LogOut size={24} />
+            Sign out
+          </button>
         </nav>
       )}
 
@@ -83,6 +96,20 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               );
             })}
           </nav>
+
+          {/* User section at bottom */}
+          <div className="p-4 border-t border-gray-200">
+            {session?.user?.email && (
+              <p className="text-sm text-gray-500 truncate mb-3">{session.user.email}</p>
+            )}
+            <button
+              onClick={handleSignOut}
+              className="flex items-center gap-2 px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors w-full"
+            >
+              <LogOut size={20} />
+              Sign out
+            </button>
+          </div>
         </aside>
 
         {/* Main content */}
