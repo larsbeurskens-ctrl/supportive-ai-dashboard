@@ -1,13 +1,11 @@
 // API client for Supportive AI backend
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'https://supportive-ai-backend-production.up.railway.app';
 
-// Hardcoded for now — will come from auth session later
-const BUSINESS_ID = process.env.NEXT_PUBLIC_BUSINESS_ID || 'cml3ihts00000ifulnw03qk9v';
-
 export interface Call {
   id: string;
   retellCallId: string;
-  phoneNumber: string;
+  phoneNumber?: string;
+  callerPhone?: string;
   duration: number;
   status: string;
   sentiment?: string;
@@ -65,6 +63,9 @@ export interface DashboardMetrics {
   revenueScheduled: number;
   happyCallerPercent: number;
 }
+
+// Hardcoded for now — will come from auth session later
+const BUSINESS_ID = process.env.NEXT_PUBLIC_BUSINESS_ID || 'cml3ihts00000ifulnw03qk9v';
 
 // Fetch with auth header
 async function fetchWithAuth(endpoint: string, options: RequestInit = {}) {
