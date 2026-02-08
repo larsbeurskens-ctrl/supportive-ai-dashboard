@@ -18,7 +18,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         
         try {
           await resend.emails.send({
-            from: "Supportive AI <onboarding@resend.dev>",
+            from: "Supportive AI <noreply@supportive-ai.com>",
             to: email,
             subject: "Sign in to Supportive AI",
             html: `
