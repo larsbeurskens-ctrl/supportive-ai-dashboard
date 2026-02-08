@@ -73,7 +73,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <aside className="hidden lg:flex lg:flex-col lg:w-64 lg:fixed lg:inset-y-0 bg-white border-r border-gray-200">
           <div className="p-6 border-b border-gray-200">
             <h1 className="text-2xl font-bold text-gray-900">Supportive AI</h1>
-            <p className="text-sm text-gray-500 mt-1">Clean Pro Window Washing</p>
+            <p className="text-sm text-gray-500 mt-1">{session?.user?.businessName || 'Loading...'}</p>
           </div>
           
           <nav className="flex-1 px-4 py-6 space-y-1">

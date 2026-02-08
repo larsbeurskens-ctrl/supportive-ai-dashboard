@@ -64,16 +64,29 @@ export interface DashboardMetrics {
   happyCallerPercent: number;
 }
 
-// Hardcoded for now — will come from auth session later
-const BUSINESS_ID = process.env.NEXT_PUBLIC_BUSINESS_ID || 'cml3ihts00000ifulnw03qk9v';
+// Store businessId from session — set by useApi hook
+let _businessId: string | null = null;
 
-// Fetch with auth header
+export function setBusinessId(id: string | null) {
+  _businessId = id;
+}
+
+export function getBusinessId(): string | null {
+  return _businessId;
+}
+
+// Fetch with business ID header
 async function fetchWithAuth(endpoint: string, options: RequestInit = {}) {
+  const businessId = _businessId;
+  if (!businessId) {
+    throw new Error('Business ID not set. User may not have a business linked.');
+  }
+
   const res = await fetch(`${API_BASE}${endpoint}`, {
     ...options,
     headers: {
       'Content-Type': 'application/json',
-      'X-Business-Id': BUSINESS_ID,
+      'X-Business-Id': businessId,
       ...options.headers,
     },
   });
