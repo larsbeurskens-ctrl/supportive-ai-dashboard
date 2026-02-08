@@ -1,10 +1,10 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useSession, signOut } from 'next-auth/react';
-import { Phone, Calendar, Users, Settings, LayoutDashboard, Menu, X, LogOut } from 'lucide-react';
-import { useState } from 'react';
+import { Phone, Calendar, Users, Settings, LayoutDashboard, Menu, X, LogOut, Loader2 } from 'lucide-react';
+import { useState, useEffect } from 'react';
 
 const navItems = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -16,12 +16,38 @@ const navItems = [
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const { data: session } = useSession();
+  const router = useRouter();
+  const { data: session, status } = useSession();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // Redirect to onboarding if user has no business linked
+  useEffect(() => {
+    if (status === 'authenticated' && session?.user && !session.user.businessId) {
+      router.replace('/onboarding');
+    }
+  }, [status, session, router]);
 
   const handleSignOut = () => {
     signOut({ callbackUrl: '/login' });
   };
+
+  // Show loading while checking session
+  if (status === 'loading') {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <Loader2 className="animate-spin text-blue-600" size={32} />
+      </div>
+    );
+  }
+
+  // Don't render dashboard if no business (redirect is happening)
+  if (status === 'authenticated' && !session?.user?.businessId) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <Loader2 className="animate-spin text-blue-600" size={32} />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
