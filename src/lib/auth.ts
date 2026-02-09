@@ -1,11 +1,15 @@
 import NextAuth from "next-auth";
+import { PrismaAdapter } from "@auth/prisma-adapter";
+import { PrismaClient } from "@prisma/client";
 import { authConfig } from "./auth.config";
 
+const prisma = new PrismaClient();
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'https://supportive-ai-backend-production.up.railway.app';
 
-// Full auth config with email provider (for API routes - Node.js compatible)
+// Full auth config with email provider + database adapter
 export const { handlers, signIn, signOut, auth } = NextAuth({
   ...authConfig,
+  adapter: PrismaAdapter(prisma),
   providers: [
     {
       id: "email",
