@@ -1,0 +1,45 @@
+import { Metadata } from 'next';
+import { VerticalPage } from '@/components/marketing/VerticalPage';
+
+export const metadata: Metadata = {
+  title: 'AI Receptionist for HVAC Technicians — Supportive AI',
+  description: 'Handle peak season call surges without hiring. AI answers every call, triages heating/cooling, books jobs 24/7. Built for HVAC businesses.',
+};
+
+export default function HVACPage() {
+  return (
+    <VerticalPage
+      trade="HVAC"
+      headline="Peak season? We've got your phones covered."
+      subheadline="When the AC dies in July or the heater quits in January, every call matters. Your AI handles the surge."
+      painPoints={[
+        "Call volume triples in summer and winter. You physically can't answer them all.",
+        "Hiring temp receptionists for peak season is expensive and unreliable.",
+        "Customers with no heat in January won't leave a voicemail. They call the next company.",
+        "You lose thousands in peak season revenue to missed calls.",
+      ]}
+      capabilities={[
+        { title: 'Heating vs cooling triage', desc: 'Identifies whether it\'s heating or cooling, system type, and urgency level. Routes the call accordingly.' },
+        { title: 'System diagnostics intake', desc: 'Asks about system type, age, last maintenance, error codes, and symptoms. Your tech arrives prepared.' },
+        { title: 'Unlimited concurrent calls', desc: 'No busy signals. No hold music. Peak season call surges handled without breaking a sweat.' },
+        { title: 'Maintenance plan upsell', desc: 'Mentions your seasonal maintenance packages to callers. Builds recurring revenue on autopilot.' },
+        { title: 'Emergency escalation', desc: 'No heat in winter with vulnerable occupants? Immediate owner alert + priority scheduling.' },
+        { title: 'Warranty & equipment tracking', desc: 'Asks about warranty status and equipment age to help you prepare the right parts for the visit.' },
+      ]}
+      stats={[
+        { value: '3x', label: 'Peak season call surge' },
+        { value: '$0 extra', label: 'Per additional call' },
+        { value: '100%', label: 'Calls handled' },
+      ]}
+      testimonial={{
+        quote: "Peak season used to mean hiring a temp receptionist for $3K/month. Now the AI handles the surge and I save that money. Best investment I've made.",
+        name: 'James Whitfield',
+        title: 'Whitfield HVAC Services',
+        stars: 5,
+      }}
+      phoneNumber={null}
+      accentColor="#059669"
+      available={false}
+    />
+  );
+}

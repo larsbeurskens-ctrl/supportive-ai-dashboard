@@ -1,21 +1,11 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/Providers";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
 export const metadata: Metadata = {
-  title: "Supportive AI Dashboard",
-  description: "AI receptionist dashboard for home services businesses",
+  title: "Supportive AI — Built for the trades that can't afford to miss a call",
+  description:
+    "AI receptionist for home service businesses. Answers every call, books jobs, sends confirmations, and handles payments — 24/7.",
 };
 
 export default function RootLayout({
@@ -25,9 +15,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body>
         <Providers>{children}</Providers>
       </body>
     </html>

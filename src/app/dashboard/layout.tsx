@@ -3,15 +3,18 @@
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useSession, signOut } from 'next-auth/react';
-import { Phone, Calendar, Users, Settings, LayoutDashboard, Menu, X, LogOut, Loader2 } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import {
+  PhoneIcon, CalendarIcon, UsersIcon, SettingsIcon,
+  TrendUpIcon, DollarIcon,
+} from '@/components/marketing/Icons';
 
 const navItems = [
-  { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { href: '/dashboard/calls', label: 'Calls', icon: Phone },
-  { href: '/dashboard/bookings', label: 'Bookings', icon: Calendar },
-  { href: '/dashboard/customers', label: 'Customers', icon: Users },
-  { href: '/dashboard/settings', label: 'Settings', icon: Settings },
+  { href: '/dashboard', label: 'Dashboard', icon: TrendUpIcon },
+  { href: '/dashboard/calls', label: 'Calls', icon: PhoneIcon },
+  { href: '/dashboard/bookings', label: 'Bookings', icon: CalendarIcon },
+  { href: '/dashboard/customers', label: 'Customers', icon: UsersIcon },
+  { href: '/dashboard/settings', label: 'Settings', icon: SettingsIcon },
 ];
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
@@ -20,75 +23,55 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const { data: session, status } = useSession();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  // Redirect to onboarding if user has no business linked
   useEffect(() => {
     if (status === 'authenticated' && session?.user && !session.user.businessId) {
       router.replace('/onboarding');
     }
   }, [status, session, router]);
 
-  const handleSignOut = () => {
-    signOut({ callbackUrl: '/login' });
-  };
+  const handleSignOut = () => signOut({ callbackUrl: '/login' });
 
-  // Show loading while checking session
-  if (status === 'loading') {
+  if (status === 'loading' || (status === 'authenticated' && !session?.user?.businessId)) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <Loader2 className="animate-spin text-blue-600" size={32} />
-      </div>
-    );
-  }
-
-  // Don't render dashboard if no business (redirect is happening)
-  if (status === 'authenticated' && !session?.user?.businessId) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <Loader2 className="animate-spin text-blue-600" size={32} />
+      <div className="min-h-screen bg-[#faf9f7] flex items-center justify-center">
+        <div className="w-6 h-6 border-2 border-[#1a2e3b] border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#faf9f7]">
       {/* Mobile header */}
-      <header className="lg:hidden bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between">
-        <h1 className="text-xl font-bold text-gray-900">Supportive AI</h1>
-        <button
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="p-2 rounded-lg hover:bg-gray-100"
-        >
-          {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+      <header className="lg:hidden bg-white border-b border-[#e5e0da] px-4 py-3 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <div className="w-7 h-7 rounded-md bg-gradient-to-br from-[#1a2e3b] to-[#2a4a5e] flex items-center justify-center text-white font-extrabold text-sm">S</div>
+          <span className="text-[15px] font-bold text-[#1a2e3b]">Supportive AI</span>
+        </div>
+        <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="p-2 rounded-lg hover:bg-[#f0eeeb]">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1a2e3b" strokeWidth="2">
+            {mobileMenuOpen ? (
+              <><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></>
+            ) : (
+              <><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></>
+            )}
+          </svg>
         </button>
       </header>
 
       {/* Mobile menu */}
       {mobileMenuOpen && (
-        <nav className="lg:hidden bg-white border-b border-gray-200 px-4 py-2">
+        <nav className="lg:hidden bg-white border-b border-[#e5e0da] px-4 py-2">
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = pathname === item.href;
             return (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={() => setMobileMenuOpen(false)}
-                className={`flex items-center gap-3 px-4 py-3 rounded-lg text-lg ${
-                  isActive
-                    ? 'bg-blue-50 text-blue-700 font-semibold'
-                    : 'text-gray-700 hover:bg-gray-100'
-                }`}
-              >
-                <Icon size={24} />
-                {item.label}
+              <Link key={item.href} href={item.href} onClick={() => setMobileMenuOpen(false)}
+                className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm no-underline ${isActive ? 'bg-[#faf9f7] text-[#1a2e3b] font-semibold' : 'text-[#5a7184]'}`}>
+                <Icon size={20} />{item.label}
               </Link>
             );
           })}
-          <button
-            onClick={handleSignOut}
-            className="flex items-center gap-3 px-4 py-3 rounded-lg text-lg text-red-600 hover:bg-red-50 w-full"
-          >
-            <LogOut size={24} />
+          <button onClick={handleSignOut} className="flex items-center gap-3 px-4 py-3 text-sm text-[#dc2626] w-full bg-transparent border-none cursor-pointer">
             Sign out
           </button>
         </nav>
@@ -96,51 +79,46 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
       <div className="flex">
         {/* Desktop sidebar */}
-        <aside className="hidden lg:flex lg:flex-col lg:w-64 lg:fixed lg:inset-y-0 bg-white border-r border-gray-200">
-          <div className="p-6 border-b border-gray-200">
-            <h1 className="text-2xl font-bold text-gray-900">Supportive AI</h1>
-            <p className="text-sm text-gray-500 mt-1">{session?.user?.businessName || 'Loading...'}</p>
+        <aside className="hidden lg:flex lg:flex-col lg:w-60 lg:fixed lg:inset-y-0 bg-white border-r border-[#e5e0da]">
+          <div className="p-5 border-b border-[#e5e0da]">
+            <div className="flex items-center gap-2">
+              <div className="w-7 h-7 rounded-md bg-gradient-to-br from-[#1a2e3b] to-[#2a4a5e] flex items-center justify-center text-white font-extrabold text-sm">S</div>
+              <span className="text-[15px] font-bold text-[#1a2e3b]">Supportive AI</span>
+            </div>
+            <p className="text-xs text-[#94a7b8] mt-1">{session?.user?.businessName || 'Loading...'}</p>
           </div>
-          
-          <nav className="flex-1 px-4 py-6 space-y-1">
+
+          <nav className="flex-1 px-3 py-4 space-y-0.5">
             {navItems.map((item) => {
               const Icon = item.icon;
               const isActive = pathname === item.href;
               return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={`flex items-center gap-3 px-4 py-3 rounded-lg text-lg transition-colors ${
+                <Link key={item.href} href={item.href}
+                  className={`flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm no-underline transition-colors ${
                     isActive
-                      ? 'bg-blue-50 text-blue-700 font-semibold'
-                      : 'text-gray-700 hover:bg-gray-100'
-                  }`}
-                >
-                  <Icon size={24} />
-                  {item.label}
+                      ? 'bg-[#faf9f7] text-[#1a2e3b] font-semibold'
+                      : 'text-[#5a7184] hover:bg-[#faf9f7]'
+                  }`}>
+                  <Icon size={18} />{item.label}
                 </Link>
               );
             })}
           </nav>
 
-          {/* User section at bottom */}
-          <div className="p-4 border-t border-gray-200">
+          <div className="p-4 border-t border-[#e5e0da]">
             {session?.user?.email && (
-              <p className="text-sm text-gray-500 truncate mb-3">{session.user.email}</p>
+              <p className="text-xs text-[#94a7b8] truncate mb-2">{session.user.email}</p>
             )}
-            <button
-              onClick={handleSignOut}
-              className="flex items-center gap-2 px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors w-full"
-            >
-              <LogOut size={20} />
+            <button onClick={handleSignOut}
+              className="text-[13px] text-[#dc2626] bg-transparent border-none cursor-pointer font-medium p-0">
               Sign out
             </button>
           </div>
         </aside>
 
         {/* Main content */}
-        <main className="flex-1 lg:pl-64">
-          <div className="p-4 lg:p-8 max-w-7xl mx-auto">
+        <main className="flex-1 lg:pl-60">
+          <div className="p-4 lg:p-7 max-w-[960px] mx-auto">
             {children}
           </div>
         </main>
