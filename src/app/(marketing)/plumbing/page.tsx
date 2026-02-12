@@ -37,9 +37,9 @@ export default function PlumbingPage() {
         title: 'S. Chen Plumbing',
         stars: 5,
       }}
-      phoneNumber={null}
+      phoneNumber="(240) 301-1473"
       accentColor="#dc2626"
-      available={false}
+      available={true}
     />
   );
 }
