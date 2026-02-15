@@ -32,6 +32,7 @@ export function MarketingFooter() {
             <div className="space-y-2.5">
               <Link href="/#how-it-works" className="block text-sm text-[#5a7184] no-underline hover:text-[#1a2e3b]">How it works</Link>
               <Link href="/#pricing" className="block text-sm text-[#5a7184] no-underline hover:text-[#1a2e3b]">Pricing</Link>
+              <Link href="/faq" className="block text-sm text-[#5a7184] no-underline hover:text-[#1a2e3b]">FAQ</Link>
               <Link href="/dashboard" className="block text-sm text-[#5a7184] no-underline hover:text-[#1a2e3b]">Dashboard</Link>
             </div>
           </div>

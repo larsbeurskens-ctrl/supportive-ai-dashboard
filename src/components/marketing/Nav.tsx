@@ -25,6 +25,9 @@ export function MarketingNav() {
         <Link href="/#pricing" className="text-sm text-[#2a4a5e] font-medium no-underline hover:text-[#1a2e3b]">
           Pricing
         </Link>
+        <Link href="/faq" className="text-sm text-[#2a4a5e] font-medium no-underline hover:text-[#1a2e3b]">
+          FAQ
+        </Link>
         <div className="relative group">
           <button className="text-sm text-[#2a4a5e] font-medium cursor-pointer bg-transparent border-none">
             Industries
@@ -36,7 +39,7 @@ export function MarketingNav() {
           </div>
         </div>
         <Link
-          href="/dashboard"
+          href="/login"
           className="text-sm text-[#2a4a5e] font-medium no-underline hover:text-[#1a2e3b]"
         >
           Log in
@@ -71,7 +74,8 @@ export function MarketingNav() {
           <Link href="/window-cleaning" className="block py-3 text-[#2a4a5e] font-medium no-underline">Window Cleaning</Link>
           <Link href="/plumbing" className="block py-3 text-[#2a4a5e] font-medium no-underline">Plumbing</Link>
           <Link href="/hvac" className="block py-3 text-[#2a4a5e] font-medium no-underline">HVAC</Link>
-          <Link href="/dashboard" className="block py-3 text-[#2a4a5e] font-medium no-underline">Log in</Link>
+          <Link href="/faq" className="block py-3 text-[#2a4a5e] font-medium no-underline">FAQ</Link>
+          <Link href="/login" className="block py-3 text-[#2a4a5e] font-medium no-underline">Log in</Link>
           <Link href="/onboarding" className="block mt-2 text-center bg-[#1a2e3b] text-white py-3 rounded-lg font-semibold no-underline">Start Free Trial</Link>
         </div>
       )}
