@@ -43,6 +43,15 @@ function formatCallTime(dateStr: string): string {
   return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) + ` ${time}`;
 }
 
+function formatJobDate(dateStr: string): string {
+  const date = new Date(dateStr);
+  const now = new Date();
+  const tomorrow = new Date(now); tomorrow.setDate(tomorrow.getDate() + 1);
+  if (date.toDateString() === now.toDateString()) return 'Today';
+  if (date.toDateString() === tomorrow.toDateString()) return 'Tomorrow';
+  return date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+}
+
 export default function DashboardPage() {
   const [metrics, setMetrics] = useState<DashboardMetrics | null>(null);
   const [todaysJobs, setTodaysJobs] = useState<Booking[]>([]);
@@ -71,10 +80,14 @@ export default function DashboardPage() {
   }, []);
 
   // Demo data for new accounts — shows what the dashboard looks like in action
+  const tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate() + 1);
+  const dayAfter = new Date(); dayAfter.setDate(dayAfter.getDate() + 2);
+  const nextWeek = new Date(); nextWeek.setDate(nextWeek.getDate() + 4);
+
   const demoJobs: Booking[] = [
-    { id: 'demo-1', customer: { firstName: 'Test Caller' } as any, scheduledTime: '09:00', scheduledDate: new Date().toISOString(), serviceAddress: '12 Market St, Poughkeepsie', status: 'confirmed', stories: 2, propertyType: 'Residential' } as any,
-    { id: 'demo-2', customer: { firstName: 'Test Caller' } as any, scheduledTime: '11:30', scheduledDate: new Date().toISOString(), serviceAddress: '45 Oak St, Newburgh', status: 'confirmed', stories: 1, propertyType: 'Residential' } as any,
-    { id: 'demo-3', customer: { firstName: 'Test Caller' } as any, scheduledTime: '14:00', scheduledDate: new Date().toISOString(), serviceAddress: '8 River Rd, Kingston', status: 'pending', stories: 3, propertyType: 'Residential' } as any,
+    { id: 'demo-1', customer: { firstName: 'Test Caller' } as any, scheduledTime: '09:00', scheduledDate: tomorrow.toISOString(), serviceAddress: '12 Market St, Poughkeepsie', status: 'confirmed', stories: 2, propertyType: 'Residential' } as any,
+    { id: 'demo-2', customer: { firstName: 'Test Caller' } as any, scheduledTime: '11:30', scheduledDate: tomorrow.toISOString(), serviceAddress: '45 Oak St, Newburgh', status: 'confirmed', stories: 1, propertyType: 'Residential' } as any,
+    { id: 'demo-3', customer: { firstName: 'Test Caller' } as any, scheduledTime: '14:00', scheduledDate: dayAfter.toISOString(), serviceAddress: '8 River Rd, Kingston', status: 'confirmed', stories: 3, propertyType: 'Residential' } as any,
   ];
   const demoCalls: Call[] = [
     { id: 'demo-c1', customer: { firstName: 'Test Caller' } as any, startTime: new Date(Date.now() - 3600000).toISOString(), createdAt: new Date().toISOString(), status: 'completed', duration: 142, phoneNumber: '(555) 123-4567' } as any,
@@ -88,7 +101,7 @@ export default function DashboardPage() {
   const displayCalls = recentCalls.length > 0 ? recentCalls : (isDemo ? demoCalls : []);
 
   const metricCards = [
-    { label: 'Calls Answered', value: isDemo ? 23 : (metrics?.callsLast7Days ?? '-'), change: isDemo ? '78% success' : (metrics ? `${metrics.bookingSuccessRate}% success` : ''), icon: PhoneIcon },
+    { label: 'Calls Answered', value: isDemo ? 23 : (metrics?.callsLast7Days ?? '-'), change: isDemo ? '78% booked a job' : (metrics ? `${metrics.bookingSuccessRate}% booked a job` : ''), icon: PhoneIcon },
     { label: 'Jobs Booked', value: isDemo ? 18 : (metrics?.bookingsLast7Days ?? '-'), change: '', icon: CalendarIcon },
     { label: 'Revenue Scheduled', value: isDemo ? '$4,250' : (metrics ? `$${metrics.revenueScheduled.toLocaleString()}` : '-'), change: '', icon: DollarIcon },
     { label: 'Happy Callers', value: isDemo ? '94%' : (metrics ? `${metrics.happyCallerPercent}%` : '-'), change: '', icon: TrendUpIcon },
@@ -142,7 +155,7 @@ export default function DashboardPage() {
         {/* Today's Jobs */}
         <div className="bg-white rounded-xl border border-[#e5e0da]">
           <div className="px-5 py-3.5 border-b border-[#e5e0da] flex justify-between items-center">
-            <h2 className="text-sm font-bold text-[#1a2e3b]">Today&apos;s Jobs</h2>
+            <h2 className="text-sm font-bold text-[#1a2e3b]">Upcoming Jobs</h2>
             <span className="text-xs text-[#94a7b8]">{displayJobs.length} scheduled</span>
           </div>
           <div>
@@ -154,9 +167,12 @@ export default function DashboardPage() {
               displayJobs.map((job, i) => (
                 <div key={job.id} className={`px-5 py-3 flex justify-between items-center ${i < displayJobs.length - 1 ? 'border-b border-[#f0eeeb]' : ''}`}>
                   <div className="flex gap-3.5 items-center">
-                    <span className="text-[13px] font-semibold text-[#2a4a5e] w-[72px] tabular-nums">
-                      {formatTime(job.scheduledTime)}
-                    </span>
+                    <div className="w-[90px]">
+                      <span className="text-[13px] font-semibold text-[#1a2e3b] tabular-nums block">
+                        {formatTime(job.scheduledTime)}
+                      </span>
+                      <span className="text-[11px] text-[#94a7b8]">{formatJobDate(job.scheduledDate)}</span>
+                    </div>
                     <div>
                       <p className="text-sm font-medium text-[#1a2e3b]">
                         {job.customer?.firstName || 'Customer'}

@@ -23,21 +23,39 @@ export default function CustomersPage() {
     fetchCustomers();
   }, []);
 
+  const demoCustomers: Customer[] = [
+    { id: 'dc1', firstName: 'Test Caller', phone: '(555) 123-4567', email: '', _count: { bookings: 3 }, totalBookings: 3, lifetimeValue: 850 } as any,
+    { id: 'dc2', firstName: 'Test Caller', phone: '(555) 234-5678', email: '', _count: { bookings: 2 }, totalBookings: 2, lifetimeValue: 430 } as any,
+    { id: 'dc3', firstName: 'Test Caller', phone: '(555) 345-6789', email: '', _count: { bookings: 1 }, totalBookings: 1, lifetimeValue: 280 } as any,
+    { id: 'dc4', firstName: 'Test Caller', phone: '(555) 456-7890', email: '', _count: { bookings: 4 }, totalBookings: 4, lifetimeValue: 1120 } as any,
+    { id: 'dc5', firstName: 'Test Caller', phone: '(555) 567-8901', email: '', _count: { bookings: 1 }, totalBookings: 1, lifetimeValue: 180 } as any,
+  ];
+
+  const isDemo = customers.length === 0 && !loading;
+  const displayCustomers = customers.length > 0 ? customers : (isDemo ? demoCustomers : []);
+
   return (
     <div className="space-y-6">
       <div>
         <h1 className="text-[22px] font-bold text-[#1a2e3b]">Customers</h1>
-        <p className="text-[13px] text-[#94a7b8] mt-1">View customer history and details</p>
+        <p className="text-[13px] text-[#94a7b8] mt-1">{displayCustomers.length} customer{displayCustomers.length !== 1 ? 's' : ''}</p>
       </div>
       {error && <div className="bg-[#fef2f2] text-[#991b1b] p-4 rounded-xl text-sm">{error}</div>}
+      {isDemo && (
+        <div className="bg-[#fef8f0] border border-[#f0dcc0] rounded-xl px-4 py-3">
+          <p className="text-[13px] text-[#92640a]">
+            <span className="font-semibold">Sample data</span> — your customer directory will populate as your AI takes calls.
+          </p>
+        </div>
+      )}
       <div className="bg-white rounded-xl border border-[#e5e0da]">
         <div className="divide-y divide-[#f0eeeb]">
           {loading ? (
             <div className="p-8 text-center">
               <div className="w-5 h-5 border-2 border-[#1a2e3b] border-t-transparent rounded-full animate-spin mx-auto" />
             </div>
-          ) : customers.length > 0 ? (
-            customers.map((customer) => (
+          ) : displayCustomers.length > 0 ? (
+            displayCustomers.map((customer) => (
               <div key={customer.id} className="px-5 py-4 hover:bg-[#faf9f7] transition-colors">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3.5">

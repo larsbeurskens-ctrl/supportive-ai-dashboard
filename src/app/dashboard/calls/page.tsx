@@ -94,6 +94,17 @@ export default function CallsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  // Demo calls for new accounts
+  const now = Date.now();
+  const demoCalls: Call[] = [
+    { id: 'dc1', customer: { firstName: 'Test Caller' } as any, startTime: new Date(now - 1800000).toISOString(), createdAt: new Date().toISOString(), status: 'booked', duration: 142, phoneNumber: '(555) 123-4567', sentiment: 'positive', transcript: { fullText: 'Hi, I\'d like to book a window cleaning for my two-story home on Market Street...' } } as any,
+    { id: 'dc2', customer: { firstName: 'Test Caller' } as any, startTime: new Date(now - 7200000).toISOString(), createdAt: new Date().toISOString(), status: 'booked', duration: 98, phoneNumber: '(555) 234-5678', sentiment: 'positive', transcript: { fullText: 'Can I schedule someone for next Tuesday morning? I have a ranch-style house...' } } as any,
+    { id: 'dc3', customer: { firstName: 'Test Caller' } as any, startTime: new Date(now - 14400000).toISOString(), createdAt: new Date().toISOString(), status: 'inquiry', duration: 67, phoneNumber: '(555) 345-6789', sentiment: 'neutral', transcript: { fullText: 'How much do you charge for a three-story Victorian? And do you do gutters too?' } } as any,
+    { id: 'dc4', customer: { firstName: 'Test Caller' } as any, startTime: new Date(now - 28800000).toISOString(), createdAt: new Date().toISOString(), status: 'booked', duration: 215, phoneNumber: '(555) 456-7890', sentiment: 'positive', transcript: { fullText: 'I need to reschedule my appointment from Thursday to Friday afternoon if possible...' } } as any,
+    { id: 'dc5', customer: { firstName: 'Test Caller' } as any, startTime: new Date(now - 86400000).toISOString(), createdAt: new Date().toISOString(), status: 'completed', duration: 180, phoneNumber: '(555) 567-8901', sentiment: 'positive', transcript: { fullText: 'I\'m calling about getting my windows cleaned before a party this weekend...' } } as any,
+    { id: 'dc6', customer: { firstName: 'Test Caller' } as any, startTime: new Date(now - 90000000).toISOString(), createdAt: new Date().toISOString(), status: 'missed', duration: 0, phoneNumber: '(555) 678-9012', sentiment: 'neutral' } as any,
+  ];
+
   useEffect(() => {
     async function fetchCalls() {
       try {
@@ -110,6 +121,9 @@ export default function CallsPage() {
     fetchCalls();
   }, []);
 
+  const isDemo = calls.length === 0 && !loading;
+  const displayCalls = calls.length > 0 ? calls : (isDemo ? demoCalls : []);
+
   return (
     <div className="space-y-6">
       <div>
@@ -119,6 +133,14 @@ export default function CallsPage() {
 
       {error && (
         <div className="bg-[#fef2f2] text-[#991b1b] p-4 rounded-xl text-sm">{error}</div>
+      )}
+
+      {isDemo && (
+        <div className="bg-[#fef8f0] border border-[#f0dcc0] rounded-xl px-4 py-3">
+          <p className="text-[13px] text-[#92640a]">
+            <span className="font-semibold">Sample data</span> — your call history will appear here once your AI starts taking calls.
+          </p>
+        </div>
       )}
 
       <div className="bg-white rounded-xl border border-[#e5e0da]">
@@ -140,8 +162,8 @@ export default function CallsPage() {
             <div className="p-8 text-center">
               <div className="w-5 h-5 border-2 border-[#1a2e3b] border-t-transparent rounded-full animate-spin mx-auto" />
             </div>
-          ) : calls.length > 0 ? (
-            calls.map((call) => <CallRow key={call.id} call={call} />)
+          ) : displayCalls.length > 0 ? (
+            displayCalls.map((call) => <CallRow key={call.id} call={call} />)
           ) : (
             <div className="p-8 text-center text-[13px] text-[#94a7b8]">No calls yet</div>
           )}
