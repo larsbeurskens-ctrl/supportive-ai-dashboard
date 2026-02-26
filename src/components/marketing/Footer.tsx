@@ -40,10 +40,18 @@ export function MarketingFooter() {
           {/* Contact */}
           <div>
             <h4 className="text-xs font-bold text-[#1a2e3b] uppercase tracking-wider mb-4">Try it</h4>
-            <p className="text-sm text-[#5a7184] mb-1">Call our demo agent:</p>
-            <a href="tel:+18452092401" className="text-lg font-bold text-[#1a2e3b] no-underline hover:text-[#e8930c]">
-              (845) 209-2401
-            </a>
+            <p className="text-[12px] text-[#94a7b8] mb-2">Call our demo agents:</p>
+            <div className="space-y-1.5">
+              <div>
+                <a href="tel:+18452092401" className="text-[15px] font-bold text-[#1a2e3b] no-underline hover:text-[#e8930c]">(845) 209-2401</a>
+                <span className="text-[11px] text-[#94a7b8] ml-1.5">Window Cleaning</span>
+              </div>
+              <div>
+                <a href="tel:+12403011473" className="text-[15px] font-bold text-[#1a2e3b] no-underline hover:text-[#e8930c]">(240) 301-1473</a>
+                <span className="text-[11px] text-[#94a7b8] ml-1.5">Plumbing</span>
+              </div>
+            </div>
+            <p className="text-[10px] text-[#b8c4ce] mt-2">Standard call rates apply</p>
           </div>
         </div>
 

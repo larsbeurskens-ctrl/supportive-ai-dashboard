@@ -70,11 +70,28 @@ export default function DashboardPage() {
     fetchData();
   }, []);
 
+  // Demo data for new accounts — shows what the dashboard looks like in action
+  const demoJobs: Booking[] = [
+    { id: 'demo-1', customer: { firstName: 'Test Caller' } as any, scheduledTime: '09:00', scheduledDate: new Date().toISOString(), serviceAddress: '12 Market St, Poughkeepsie', status: 'confirmed', stories: 2, propertyType: 'Residential' } as any,
+    { id: 'demo-2', customer: { firstName: 'Test Caller' } as any, scheduledTime: '11:30', scheduledDate: new Date().toISOString(), serviceAddress: '45 Oak St, Newburgh', status: 'confirmed', stories: 1, propertyType: 'Residential' } as any,
+    { id: 'demo-3', customer: { firstName: 'Test Caller' } as any, scheduledTime: '14:00', scheduledDate: new Date().toISOString(), serviceAddress: '8 River Rd, Kingston', status: 'pending', stories: 3, propertyType: 'Residential' } as any,
+  ];
+  const demoCalls: Call[] = [
+    { id: 'demo-c1', customer: { firstName: 'Test Caller' } as any, startTime: new Date(Date.now() - 3600000).toISOString(), createdAt: new Date().toISOString(), status: 'completed', duration: 142, phoneNumber: '(555) 123-4567' } as any,
+    { id: 'demo-c2', customer: { firstName: 'Test Caller' } as any, startTime: new Date(Date.now() - 7200000).toISOString(), createdAt: new Date().toISOString(), status: 'booked', duration: 98, phoneNumber: '(555) 234-5678' } as any,
+    { id: 'demo-c3', customer: { firstName: 'Test Caller' } as any, startTime: new Date(Date.now() - 14400000).toISOString(), createdAt: new Date().toISOString(), status: 'completed', duration: 215, phoneNumber: '(555) 345-6789' } as any,
+    { id: 'demo-c4', customer: { firstName: 'Test Caller' } as any, startTime: new Date(Date.now() - 28800000).toISOString(), createdAt: new Date().toISOString(), status: 'inquiry', duration: 67, phoneNumber: '(555) 456-7890' } as any,
+  ];
+
+  const isDemo = !metrics || (metrics.callsLast7Days === 0 && metrics.bookingsLast7Days === 0);
+  const displayJobs = todaysJobs.length > 0 ? todaysJobs : (isDemo ? demoJobs : []);
+  const displayCalls = recentCalls.length > 0 ? recentCalls : (isDemo ? demoCalls : []);
+
   const metricCards = [
-    { label: 'Calls Answered', value: metrics?.callsLast7Days ?? '-', change: metrics ? `${metrics.bookingSuccessRate}% success` : '', icon: PhoneIcon },
-    { label: 'Jobs Booked', value: metrics?.bookingsLast7Days ?? '-', change: '', icon: CalendarIcon },
-    { label: 'Revenue Scheduled', value: metrics ? `$${metrics.revenueScheduled.toLocaleString()}` : '-', change: '', icon: DollarIcon },
-    { label: 'Happy Callers', value: metrics ? `${metrics.happyCallerPercent}%` : '-', change: '', icon: TrendUpIcon },
+    { label: 'Calls Answered', value: isDemo ? 23 : (metrics?.callsLast7Days ?? '-'), change: isDemo ? '78% success' : (metrics ? `${metrics.bookingSuccessRate}% success` : ''), icon: PhoneIcon },
+    { label: 'Jobs Booked', value: isDemo ? 18 : (metrics?.bookingsLast7Days ?? '-'), change: '', icon: CalendarIcon },
+    { label: 'Revenue Scheduled', value: isDemo ? '$4,250' : (metrics ? `$${metrics.revenueScheduled.toLocaleString()}` : '-'), change: '', icon: DollarIcon },
+    { label: 'Happy Callers', value: isDemo ? '94%' : (metrics ? `${metrics.happyCallerPercent}%` : '-'), change: '', icon: TrendUpIcon },
   ];
 
   return (
@@ -87,6 +104,14 @@ export default function DashboardPage() {
 
       {error && (
         <div className="bg-[#fef2f2] text-[#991b1b] p-4 rounded-xl text-sm font-medium">{error}</div>
+      )}
+
+      {isDemo && !loading && (
+        <div className="bg-[#fef8f0] border border-[#f0dcc0] rounded-xl px-4 py-3 flex items-center justify-between">
+          <p className="text-[13px] text-[#92640a]">
+            <span className="font-semibold">Sample data</span> — this is what your dashboard will look like once your AI starts taking calls.
+          </p>
+        </div>
       )}
 
       {/* Metrics */}
@@ -118,16 +143,16 @@ export default function DashboardPage() {
         <div className="bg-white rounded-xl border border-[#e5e0da]">
           <div className="px-5 py-3.5 border-b border-[#e5e0da] flex justify-between items-center">
             <h2 className="text-sm font-bold text-[#1a2e3b]">Today&apos;s Jobs</h2>
-            <span className="text-xs text-[#94a7b8]">{todaysJobs.length} scheduled</span>
+            <span className="text-xs text-[#94a7b8]">{displayJobs.length} scheduled</span>
           </div>
           <div>
             {loading ? (
               <div className="p-8 text-center">
                 <div className="w-5 h-5 border-2 border-[#1a2e3b] border-t-transparent rounded-full animate-spin mx-auto" />
               </div>
-            ) : todaysJobs.length > 0 ? (
-              todaysJobs.map((job, i) => (
-                <div key={job.id} className={`px-5 py-3 flex justify-between items-center ${i < todaysJobs.length - 1 ? 'border-b border-[#f0eeeb]' : ''}`}>
+            ) : displayJobs.length > 0 ? (
+              displayJobs.map((job, i) => (
+                <div key={job.id} className={`px-5 py-3 flex justify-between items-center ${i < displayJobs.length - 1 ? 'border-b border-[#f0eeeb]' : ''}`}>
                   <div className="flex gap-3.5 items-center">
                     <span className="text-[13px] font-semibold text-[#2a4a5e] w-[72px] tabular-nums">
                       {formatTime(job.scheduledTime)}
@@ -166,9 +191,9 @@ export default function DashboardPage() {
               <div className="p-8 text-center">
                 <div className="w-5 h-5 border-2 border-[#1a2e3b] border-t-transparent rounded-full animate-spin mx-auto" />
               </div>
-            ) : recentCalls.length > 0 ? (
-              recentCalls.map((call, i) => (
-                <div key={call.id} className={`px-5 py-3 flex justify-between items-center ${i < recentCalls.length - 1 ? 'border-b border-[#f0eeeb]' : ''}`}>
+            ) : displayCalls.length > 0 ? (
+              displayCalls.map((call, i) => (
+                <div key={call.id} className={`px-5 py-3 flex justify-between items-center ${i < displayCalls.length - 1 ? 'border-b border-[#f0eeeb]' : ''}`}>
                   <div>
                     <p className="text-sm font-medium text-[#1a2e3b]">
                       {call.customer ? call.customer.firstName : call.phoneNumber}

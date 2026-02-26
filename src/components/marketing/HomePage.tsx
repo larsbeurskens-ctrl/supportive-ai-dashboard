@@ -10,29 +10,60 @@ import {
 
 /* ===== Demo Call Overlay (desktop only) ===== */
 function DemoOverlay({ onClose }: { onClose: () => void }) {
+  const [tab, setTab] = useState<'plumbing' | 'window'>('window');
+  const demos = {
+    window: { phone: '(845) 209-2401', tel: '+18452092401', label: 'Window Cleaning', name: 'Sarah', addresses: ['12 Market Street, Poughkeepsie, NY', '45 Oak Street, Newburgh, NY', '8 River Road, Kingston, NY'] },
+    plumbing: { phone: '(240) 301-1473', tel: '+12403011473', label: 'Plumbing', name: 'the AI agent', addresses: ['51 Market St, Poughkeepsie, NY', '20 Margaret St, Poughkeepsie, NY', '35 Market St, Poughkeepsie, NY'] },
+  };
+  const d = demos[tab];
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 p-4" onClick={onClose}>
-      <div className="bg-white rounded-2xl max-w-[480px] w-full p-8 relative" onClick={e => e.stopPropagation()}>
-        <button onClick={onClose} className="absolute top-4 right-4 text-[#94a7b8] hover:text-[#1a2e3b] bg-transparent border-none cursor-pointer text-xl">&times;</button>
-        <h3 className="text-[22px] font-bold text-[#1a2e3b] mb-2">Try our demo agent</h3>
-        <p className="text-[15px] text-[#5a7184] mb-6">
-          Call from your phone to experience a real AI-powered booking. The demo is set up for a window cleaning business in the Hudson Valley, NY area.
-        </p>
-        <div className="bg-[#f4f3f1] rounded-xl p-5 mb-5 text-center">
-          <p className="text-sm text-[#5a7184] mb-1">Call this number:</p>
-          <a href="tel:+18452092401" className="text-[28px] font-bold text-[#1a2e3b] no-underline">(845) 209-2401</a>
+      <div className="bg-white rounded-2xl max-w-[440px] w-full overflow-hidden" onClick={e => e.stopPropagation()}>
+        {/* Header */}
+        <div className="bg-[#1a2e3b] px-6 py-5 relative">
+          <button onClick={onClose} className="absolute top-4 right-4 text-white/50 hover:text-white bg-transparent border-none cursor-pointer text-lg">&times;</button>
+          <h3 className="text-[20px] font-bold text-white mb-1">Try it yourself</h3>
+          <p className="text-[13px] text-white/60">Call from your phone to experience a real AI booking.</p>
         </div>
-        <div className="bg-[#f4f3f1] rounded-xl p-5 mb-5">
-          <p className="text-sm font-semibold text-[#1a2e3b] mb-2">Use one of these test addresses:</p>
-          <div className="space-y-2 text-sm text-[#5a7184]">
-            <p>12 Market Street, Poughkeepsie, NY</p>
-            <p>45 Oak Street, Newburgh, NY</p>
-            <p>8 River Road, Kingston, NY</p>
+
+        {/* Tabs */}
+        <div className="flex border-b border-[#e5e0da]">
+          {(['window', 'plumbing'] as const).map(t => (
+            <button key={t} onClick={() => setTab(t)}
+              className={`flex-1 py-3 text-[13px] font-semibold transition-colors cursor-pointer border-none ${
+                tab === t ? 'text-[#e8930c] border-b-2 border-[#e8930c] bg-white' : 'text-[#94a7b8] bg-[#faf9f7]'
+              }`}>
+              {demos[t].label}
+            </button>
+          ))}
+        </div>
+
+        <div className="p-6">
+          {/* Phone number */}
+          <div className="text-center mb-5">
+            <a href={`tel:${d.tel}`} className="text-[28px] font-bold text-[#1a2e3b] no-underline hover:text-[#e8930c] transition-colors">
+              {d.phone}
+            </a>
+            <p className="text-[12px] text-[#94a7b8] mt-1">Tap to call · standard call rates apply</p>
           </div>
-        </div>
-        <div className="bg-[#eef9f0] rounded-xl p-4 text-sm text-[#2a6b3d]">
-          <p className="font-semibold mb-1">What to try:</p>
-          <p>Book an appointment, ask about pricing, or say you need to reschedule. Sarah handles it all.</p>
+
+          {/* Test addresses */}
+          <div className="bg-[#faf9f7] rounded-xl p-4 mb-4">
+            <p className="text-[12px] font-semibold text-[#5a7184] mb-2">Use a test address:</p>
+            <div className="space-y-1.5">
+              {d.addresses.map((a, i) => (
+                <p key={i} className="text-[13px] text-[#2a4a5e]">{a}</p>
+              ))}
+            </div>
+          </div>
+
+          {/* What to try */}
+          <div className="bg-[#eef9f0] rounded-xl p-4">
+            <p className="text-[12px] font-semibold text-[#059669] mb-1">What to try:</p>
+            <p className="text-[13px] text-[#2a4a5e]">
+              Book an appointment, ask about pricing, or say you need to reschedule. {d.name} handles it all.
+            </p>
+          </div>
         </div>
       </div>
     </div>
@@ -78,6 +109,7 @@ export function HomePage() {
           </button>
         </div>
         <p className="text-[13px] text-[#94a7b8]">7-day free trial. No credit card. Cancel anytime.</p>
+        <p className="text-[11px] text-[#b8c4ce] mt-1">Demo calls: standard call rates apply</p>
       </section>
 
       {/* ===== TRUST BAR — Google / integrations ===== */}
@@ -334,27 +366,45 @@ export function HomePage() {
         <div className="max-w-[780px] mx-auto bg-[#1a2e3b] rounded-2xl p-10 md:p-12 text-center">
           <h2 className="text-[26px] font-bold text-white mb-2.5">Hear it in action</h2>
           <p className="text-[15px] text-[#b8c9d4] mb-6">
-            Call our demo agent from your phone. Experience a real AI-powered booking in 60 seconds.
+            Call our demo agents from your phone. Experience real AI-powered booking in 60 seconds.
           </p>
-          {/* Mobile: direct tel link */}
-          <a
-            href="tel:+18452092401"
-            className="md:hidden inline-flex items-center gap-3 bg-[#243d4e] rounded-xl px-8 py-[18px] border border-[#35596e] no-underline hover:bg-[#2c4a5d] transition-colors"
-          >
-            <PhoneIcon size={22} className="text-[#e8930c]" />
-            <span className="text-2xl font-bold text-white tracking-wide">(845) 209-2401</span>
-          </a>
-          {/* Desktop: open overlay */}
-          <button
-            onClick={() => setShowDemo(true)}
-            className="hidden md:inline-flex items-center gap-3 bg-[#243d4e] rounded-xl px-8 py-[18px] border border-[#35596e] hover:bg-[#2c4a5d] transition-colors cursor-pointer"
-          >
-            <PhoneIcon size={22} className="text-[#e8930c]" />
-            <span className="text-2xl font-bold text-white tracking-wide">(845) 209-2401</span>
-          </button>
-          <p className="text-[13px] text-[#6b8fa3] mt-3">
-            Live now: window cleaning &amp; plumbing agents. HVAC coming soon.
-          </p>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            {/* Window cleaning */}
+            <a href="tel:+18452092401"
+              className="md:hidden inline-flex items-center gap-3 bg-[#243d4e] rounded-xl px-6 py-4 border border-[#35596e] no-underline">
+              <PhoneIcon size={20} className="text-[#e8930c]" />
+              <div className="text-left">
+                <span className="text-[18px] font-bold text-white">(845) 209-2401</span>
+                <span className="block text-[11px] text-[#6b8fa3]">Window Cleaning</span>
+              </div>
+            </a>
+            <button onClick={() => setShowDemo(true)}
+              className="hidden md:inline-flex items-center gap-3 bg-[#243d4e] rounded-xl px-6 py-4 border border-[#35596e] hover:bg-[#2c4a5d] transition-colors cursor-pointer">
+              <PhoneIcon size={20} className="text-[#e8930c]" />
+              <div className="text-left">
+                <span className="text-[18px] font-bold text-white">(845) 209-2401</span>
+                <span className="block text-[11px] text-[#6b8fa3]">Window Cleaning</span>
+              </div>
+            </button>
+            {/* Plumbing */}
+            <a href="tel:+12403011473"
+              className="md:hidden inline-flex items-center gap-3 bg-[#243d4e] rounded-xl px-6 py-4 border border-[#35596e] no-underline">
+              <PhoneIcon size={20} className="text-[#e8930c]" />
+              <div className="text-left">
+                <span className="text-[18px] font-bold text-white">(240) 301-1473</span>
+                <span className="block text-[11px] text-[#6b8fa3]">Plumbing</span>
+              </div>
+            </a>
+            <button onClick={() => setShowDemo(true)}
+              className="hidden md:inline-flex items-center gap-3 bg-[#243d4e] rounded-xl px-6 py-4 border border-[#35596e] hover:bg-[#2c4a5d] transition-colors cursor-pointer">
+              <PhoneIcon size={20} className="text-[#e8930c]" />
+              <div className="text-left">
+                <span className="text-[18px] font-bold text-white">(240) 301-1473</span>
+                <span className="block text-[11px] text-[#6b8fa3]">Plumbing</span>
+              </div>
+            </button>
+          </div>
+          <p className="text-[11px] text-[#4a6a7d] mt-3">Standard call rates apply · no premium charges</p>
         </div>
       </section>
 
@@ -483,7 +533,7 @@ export function HomePage() {
                 price: 149,
                 calls: '100 calls/mo',
                 target: 'Solo operators',
-                features: ['24/7 AI answering', 'WhatsApp AI agent', 'Calendar booking', 'SMS confirmations', 'Payment links', 'Dashboard'],
+                features: ['24/7 AI answering', 'Personal onboarding call', 'Route-optimised booking', 'WhatsApp AI agent', 'Calendar booking', 'SMS confirmations', 'Payment links'],
                 popular: false,
               },
               {
@@ -491,7 +541,7 @@ export function HomePage() {
                 price: 299,
                 calls: '250 calls/mo',
                 target: 'Growing businesses',
-                features: ['Everything in Starter', 'Route-optimised booking', 'Review requests', 'Call analytics', 'Priority support'],
+                features: ['Everything in Starter', 'Review requests', 'Call analytics', 'Priority support', 'Dashboard'],
                 popular: true,
               },
               {
@@ -499,7 +549,7 @@ export function HomePage() {
                 price: 499,
                 calls: 'Unlimited',
                 target: 'Established teams',
-                features: ['Everything in Pro', 'Unlimited calls', 'Multi-crew scheduling', 'API access', 'Dedicated onboarding'],
+                features: ['Everything in Pro', 'Unlimited calls', 'Multi-crew scheduling', 'API access', 'Dedicated account manager'],
                 popular: false,
               },
             ].map((plan) => (
@@ -567,19 +617,20 @@ export function HomePage() {
             >
               Start Your Free Trial
             </Link>
-            <a
-              href="tel:+18452092401"
-              className="md:hidden bg-white text-[#1a2e3b] px-8 py-[15px] rounded-lg text-base font-semibold no-underline border border-[#d1ccc6] hover:bg-[#f0eeeb] transition-colors flex items-center justify-center gap-2"
-            >
-              <PhoneIcon size={18} /> (845) 209-2401
-            </a>
             <button
               onClick={() => setShowDemo(true)}
               className="hidden md:flex bg-white text-[#1a2e3b] px-8 py-[15px] rounded-lg text-base font-semibold border border-[#d1ccc6] hover:bg-[#f0eeeb] transition-colors items-center justify-center gap-2 cursor-pointer"
             >
-              <PhoneIcon size={18} /> (845) 209-2401
+              <PhoneIcon size={18} /> Call a demo agent
             </button>
+            <a
+              href="tel:+18452092401"
+              className="md:hidden bg-white text-[#1a2e3b] px-8 py-[15px] rounded-lg text-base font-semibold no-underline border border-[#d1ccc6] hover:bg-[#f0eeeb] transition-colors flex items-center justify-center gap-2"
+            >
+              <PhoneIcon size={18} /> Call a demo agent
+            </a>
           </div>
+          <p className="text-[11px] text-[#94a7b8] mt-3">Standard call rates apply</p>
         </div>
       </section>
     </>
