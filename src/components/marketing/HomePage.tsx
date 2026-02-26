@@ -8,12 +8,12 @@ import {
   StarIcon, GoogleIcon, QuoteIcon,
 } from './Icons';
 
-/* ===== Demo Call Overlay (desktop only) ===== */
+/* ===== Demo Call Overlay ===== */
 function DemoOverlay({ onClose }: { onClose: () => void }) {
   const [tab, setTab] = useState<'plumbing' | 'window'>('window');
   const demos = {
-    window: { phone: '(845) 209-2401', tel: '+18452092401', label: 'Window Cleaning', name: 'Sarah', addresses: ['12 Market Street, Poughkeepsie, NY', '45 Oak Street, Newburgh, NY', '8 River Road, Kingston, NY'] },
-    plumbing: { phone: '(240) 301-1473', tel: '+12403011473', label: 'Plumbing', name: 'the AI agent', addresses: ['51 Market St, Poughkeepsie, NY', '20 Margaret St, Poughkeepsie, NY', '35 Market St, Poughkeepsie, NY'] },
+    window: { phone: '(845) 209-2401', tel: '+18452092401', label: 'Window Cleaning', name: 'Sarah', addresses: ['12 Market Street, Poughkeepsie, NY 12601', '45 Oak Street, Newburgh, NY 12550', '8 River Road, Kingston, NY 12401'] },
+    plumbing: { phone: '(240) 301-1473', tel: '+12403011473', label: 'Plumbing', name: 'the AI agent', addresses: ['51 Market St, Poughkeepsie, NY 12601', '20 Margaret St, Poughkeepsie, NY 12601', '35 Market St, Poughkeepsie, NY 12601'] },
   };
   const d = demos[tab];
   return (
@@ -94,21 +94,15 @@ export function HomePage() {
           >
             Start Your Free Trial
           </Link>
-          {/* Mobile: direct tel link. Desktop: open overlay */}
-          <a
-            href="tel:+18452092401"
-            className="md:hidden bg-white text-[#1a2e3b] px-8 py-[15px] rounded-lg text-base font-semibold no-underline border border-[#d1ccc6] hover:bg-[#f0eeeb] transition-colors flex items-center justify-center gap-2"
-          >
-            <PhoneIcon size={18} /> Call our demo agent
-          </a>
+          {/* Both mobile and desktop: open overlay */}
           <button
             onClick={() => setShowDemo(true)}
-            className="hidden md:flex bg-white text-[#1a2e3b] px-8 py-[15px] rounded-lg text-base font-semibold border border-[#d1ccc6] hover:bg-[#f0eeeb] transition-colors items-center justify-center gap-2 cursor-pointer"
+            className="bg-white text-[#1a2e3b] px-8 py-[15px] rounded-lg text-base font-semibold border border-[#d1ccc6] hover:bg-[#f0eeeb] transition-colors flex items-center justify-center gap-2 cursor-pointer"
           >
             <PhoneIcon size={18} /> Call our demo agent
           </button>
         </div>
-        <p className="text-[13px] text-[#94a7b8]">7-day free trial. No credit card. Cancel anytime.</p>
+        <p className="text-[13px] text-[#94a7b8]">7-day free trial · up to 50 calls · no credit card required.</p>
         <p className="text-[11px] text-[#b8c4ce] mt-1">Demo calls: standard call rates apply</p>
       </section>
 
@@ -288,7 +282,7 @@ export function HomePage() {
           </div>
           <p className="text-center text-[13px] text-[#94a7b8] mt-6">
             Recordings from real test calls. Audio coming soon — or{' '}
-            <a href="tel:+18452092401" className="text-[#1a2e3b] font-semibold no-underline hover:underline">call our demo agent</a>{' '}
+            <button onClick={() => setShowDemo(true)} className="text-[#1a2e3b] font-semibold hover:underline bg-transparent border-none cursor-pointer p-0 text-[13px]">call our demo agent</button>{' '}
             to hear it live.
           </p>
         </div>
@@ -370,16 +364,8 @@ export function HomePage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             {/* Window cleaning */}
-            <a href="tel:+18452092401"
-              className="md:hidden inline-flex items-center gap-3 bg-[#243d4e] rounded-xl px-6 py-4 border border-[#35596e] no-underline">
-              <PhoneIcon size={20} className="text-[#e8930c]" />
-              <div className="text-left">
-                <span className="text-[18px] font-bold text-white">(845) 209-2401</span>
-                <span className="block text-[11px] text-[#6b8fa3]">Window Cleaning</span>
-              </div>
-            </a>
             <button onClick={() => setShowDemo(true)}
-              className="hidden md:inline-flex items-center gap-3 bg-[#243d4e] rounded-xl px-6 py-4 border border-[#35596e] hover:bg-[#2c4a5d] transition-colors cursor-pointer">
+              className="inline-flex items-center gap-3 bg-[#243d4e] rounded-xl px-6 py-4 border border-[#35596e] hover:bg-[#2c4a5d] transition-colors cursor-pointer">
               <PhoneIcon size={20} className="text-[#e8930c]" />
               <div className="text-left">
                 <span className="text-[18px] font-bold text-white">(845) 209-2401</span>
@@ -387,16 +373,8 @@ export function HomePage() {
               </div>
             </button>
             {/* Plumbing */}
-            <a href="tel:+12403011473"
-              className="md:hidden inline-flex items-center gap-3 bg-[#243d4e] rounded-xl px-6 py-4 border border-[#35596e] no-underline">
-              <PhoneIcon size={20} className="text-[#e8930c]" />
-              <div className="text-left">
-                <span className="text-[18px] font-bold text-white">(240) 301-1473</span>
-                <span className="block text-[11px] text-[#6b8fa3]">Plumbing</span>
-              </div>
-            </a>
             <button onClick={() => setShowDemo(true)}
-              className="hidden md:inline-flex items-center gap-3 bg-[#243d4e] rounded-xl px-6 py-4 border border-[#35596e] hover:bg-[#2c4a5d] transition-colors cursor-pointer">
+              className="inline-flex items-center gap-3 bg-[#243d4e] rounded-xl px-6 py-4 border border-[#35596e] hover:bg-[#2c4a5d] transition-colors cursor-pointer">
               <PhoneIcon size={20} className="text-[#e8930c]" />
               <div className="text-left">
                 <span className="text-[18px] font-bold text-white">(240) 301-1473</span>
@@ -531,25 +509,28 @@ export function HomePage() {
               {
                 name: 'Starter',
                 price: 149,
-                calls: '100 calls/mo',
+                calls: '150 calls/mo',
                 target: 'Solo operators',
-                features: ['24/7 AI answering', 'Personal onboarding call', 'Route-optimised booking', 'WhatsApp AI agent', 'Calendar booking', 'SMS confirmations', 'Payment links'],
+                features: ['24/7 AI answering', 'Dashboard & call analytics', 'Route-optimised booking', 'Calendar + SMS confirmations', 'Review requests', '1st line customer service'],
+                note: '$1.50/call overage',
                 popular: false,
               },
               {
                 name: 'Pro',
                 price: 299,
-                calls: '250 calls/mo',
+                calls: '500 calls/mo',
                 target: 'Growing businesses',
-                features: ['Everything in Starter', 'Review requests', 'Call analytics', 'Priority support', 'Dashboard'],
+                features: ['Everything in Starter', 'Multi-crew scheduling', 'Priority support', 'WhatsApp AI agent', 'Payment links'],
+                note: '$1.25/call overage',
                 popular: true,
               },
               {
                 name: 'Growth',
                 price: 499,
-                calls: 'Unlimited',
+                calls: 'Unlimited calls',
                 target: 'Established teams',
-                features: ['Everything in Pro', 'Unlimited calls', 'Multi-crew scheduling', 'API access', 'Dedicated account manager'],
+                features: ['Everything in Pro', 'Unlimited calls', 'API access', 'Dedicated account manager'],
+                note: null,
                 popular: false,
               },
             ].map((plan) => (
@@ -572,7 +553,9 @@ export function HomePage() {
                   <span className="text-[40px] font-extrabold text-[#1a2e3b]">${plan.price}</span>
                   <span className="text-[15px] text-[#5a7184]">/mo</span>
                 </div>
-                <p className="text-[13px] text-[#e8930c] font-bold mb-5">{plan.calls}</p>
+                <p className="text-[13px] text-[#e8930c] font-bold mb-1">{plan.calls}</p>
+                {plan.note && <p className="text-[11px] text-[#94a7b8] mb-5">{plan.note}</p>}
+                {!plan.note && <div className="mb-5" />}
                 <ul className="space-y-2 mb-6">
                   {plan.features.map((f) => (
                     <li key={f} className="flex items-center gap-2 text-sm text-[#2a4a5e]">
@@ -595,7 +578,7 @@ export function HomePage() {
             ))}
           </div>
           <p className="text-center text-[13px] text-[#94a7b8] mt-5">
-            7-day free trial on all plans. No setup fees. Cancel anytime.
+            7-day free trial on all plans (up to 50 calls). No setup fees. Cancel anytime.
           </p>
         </div>
       </section>
@@ -619,16 +602,10 @@ export function HomePage() {
             </Link>
             <button
               onClick={() => setShowDemo(true)}
-              className="hidden md:flex bg-white text-[#1a2e3b] px-8 py-[15px] rounded-lg text-base font-semibold border border-[#d1ccc6] hover:bg-[#f0eeeb] transition-colors items-center justify-center gap-2 cursor-pointer"
+              className="bg-white text-[#1a2e3b] px-8 py-[15px] rounded-lg text-base font-semibold border border-[#d1ccc6] hover:bg-[#f0eeeb] transition-colors flex items-center justify-center gap-2 cursor-pointer"
             >
               <PhoneIcon size={18} /> Call a demo agent
             </button>
-            <a
-              href="tel:+18452092401"
-              className="md:hidden bg-white text-[#1a2e3b] px-8 py-[15px] rounded-lg text-base font-semibold no-underline border border-[#d1ccc6] hover:bg-[#f0eeeb] transition-colors flex items-center justify-center gap-2"
-            >
-              <PhoneIcon size={18} /> Call a demo agent
-            </a>
           </div>
           <p className="text-[11px] text-[#94a7b8] mt-3">Standard call rates apply</p>
         </div>
