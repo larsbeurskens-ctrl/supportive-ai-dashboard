@@ -3,6 +3,6 @@ import { authMiddleware } from "@/lib/auth.config";
 export default authMiddleware;
 
 export const config = {
-  // Protect dashboard and onboarding routes, allow login/api/static
-  matcher: ["/dashboard/:path*", "/onboarding"],
+  // Protect dashboard and welcome routes. Onboarding is public (lead capture).
+  matcher: ["/dashboard/:path*", "/welcome"],
 };
