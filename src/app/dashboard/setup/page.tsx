@@ -76,7 +76,7 @@ export default function ForwardingPage() {
   const [selectedCarrier, setSelectedCarrier] = useState<string>('');
 
   // Replace placeholder with actual AI phone number
-  const aiNumber = session?.user?.twilioPhoneNumber || '(your AI number)';
+  const aiNumber = (session?.user as any)?.twilioPhoneNumber || '(your AI number)';
 
   const carrier = carriers.find(c => c.name === selectedCarrier);
   const modeData = carrier?.modes[selectedMode as keyof typeof carrier.modes];
