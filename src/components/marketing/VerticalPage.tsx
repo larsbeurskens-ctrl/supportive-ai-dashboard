@@ -39,10 +39,7 @@ export function VerticalPage({
     <>
       {/* Hero */}
       <section className="pt-16 pb-10 md:pt-20 px-6 md:px-10 max-w-[800px] mx-auto text-center">
-        <span
-          className="inline-block px-4 py-1.5 rounded-full text-[13px] font-bold mb-6 uppercase tracking-wide"
-          style={{ background: accentColor + '18', color: accentColor }}
-        >
+        <span className="inline-block px-4 py-1.5 rounded-full text-[13px] font-bold mb-6 uppercase tracking-wide bg-[#e8930c]/10 text-[#e8930c]">
           {trade}
         </span>
         <h1 className="text-[36px] md:text-[42px] font-extrabold text-[#1a2e3b] leading-[1.15] mb-5 tracking-tight">
@@ -56,8 +53,7 @@ export function VerticalPage({
             <>
               <Link
                 href="/onboarding"
-                className="text-white px-8 py-[15px] rounded-lg text-base font-bold no-underline transition-colors"
-                style={{ background: '#e8930c', boxShadow: '0 2px 8px rgba(232,147,12,0.3)' }}
+                className="bg-[#e8930c] text-white px-8 py-[15px] rounded-lg text-base font-bold no-underline hover:bg-[#d17f00] transition-colors shadow-[0_2px_8px_rgba(232,147,12,0.3)]"
               >
                 Start Free Trial
               </Link>
@@ -71,10 +67,9 @@ export function VerticalPage({
           ) : (
             <Link
               href="/onboarding"
-              className="text-white px-8 py-[15px] rounded-lg text-base font-bold no-underline"
-              style={{ background: '#e8930c' }}
+              className="bg-[#e8930c] text-white px-8 py-[15px] rounded-lg text-base font-bold no-underline hover:bg-[#d17f00]"
             >
-              Join the Waitlist — Launching Q2 2026
+              Join the Waitlist
             </Link>
           )}
         </div>
@@ -92,21 +87,25 @@ export function VerticalPage({
         </div>
       </section>
 
-      {/* Pain points */}
+      {/* Pain points — clean card design */}
       <section className="py-14 px-6 md:px-10 bg-white border-t border-b border-[#e5e0da]">
         <div className="max-w-[800px] mx-auto">
-          <h2 className="text-[26px] font-bold text-[#1a2e3b] mb-8 text-center">Sound familiar?</h2>
+          <h2 className="text-[26px] font-bold text-[#1a2e3b] mb-2 text-center">Every {trade.toLowerCase()} business owner knows this</h2>
+          <p className="text-[15px] text-[#5a7184] text-center mb-8">These problems cost you real money every week.</p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {painPoints.map((p, i) => (
-              <div key={i} className="p-5 rounded-lg bg-[#fef8f8] border-l-[3px] border-[#dc2626]">
-                <p className="text-sm text-[#5a2020] leading-relaxed font-medium">{p}</p>
+              <div key={i} className="flex items-start gap-3.5 p-5 rounded-xl bg-[#faf9f7] border border-[#e5e0da]">
+                <span className="flex-shrink-0 w-6 h-6 rounded-full bg-[#fef2e0] flex items-center justify-center mt-0.5">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#e8930c" strokeWidth="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </span>
+                <p className="text-[14px] text-[#2a4a5e] leading-relaxed font-medium">{p}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Capabilities */}
+      {/* Capabilities — green checkmarks always */}
       <section className="py-16 px-6 md:px-10 max-w-[800px] mx-auto">
         <h2 className="text-[26px] font-bold text-[#1a2e3b] mb-3 text-center">
           What your AI agent actually does
@@ -116,8 +115,8 @@ export function VerticalPage({
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {capabilities.map((c, i) => (
-            <div key={i} className="flex gap-3.5 p-5 bg-white rounded-lg border border-[#e5e0da]">
-              <span className="flex-shrink-0 mt-0.5" style={{ color: accentColor }}><CheckIcon size={18} /></span>
+            <div key={i} className="flex gap-3.5 p-5 bg-white rounded-xl border border-[#e5e0da]">
+              <span className="flex-shrink-0 mt-0.5 text-[#059669]"><CheckIcon size={18} /></span>
               <div>
                 <h3 className="text-[15px] font-bold text-[#1a2e3b] mb-1">{c.title}</h3>
                 <p className="text-[13px] text-[#5a7184] leading-relaxed">{c.desc}</p>
@@ -165,7 +164,7 @@ export function VerticalPage({
         </section>
       )}
 
-      {/* Waitlist CTA (for upcoming verticals) */}
+      {/* Waitlist CTA */}
       {!available && (
         <section className="py-16 px-6 md:px-10">
           <div className="max-w-[600px] mx-auto text-center">
@@ -177,7 +176,7 @@ export function VerticalPage({
             </p>
             <Link
               href="/onboarding"
-              className="inline-block bg-[#e8930c] text-white px-8 py-[15px] rounded-lg text-base font-bold no-underline"
+              className="inline-block bg-[#e8930c] text-white px-8 py-[15px] rounded-lg text-base font-bold no-underline hover:bg-[#d17f00]"
             >
               Join the Waitlist
             </Link>

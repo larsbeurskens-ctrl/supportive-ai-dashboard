@@ -11,15 +11,15 @@ export default function PlumbingPage() {
     <VerticalPage
       trade="Plumbing"
       headline="Never miss an emergency call again."
-      subheadline="Your AI receptionist triages urgency, qualifies the lead, and books the job — even at 2am when a pipe bursts."
+      subheadline="Your AI receptionist triages urgency, qualifies the lead, and books the job — so you never lose an emergency call to voicemail again."
       painPoints={[
-        "Emergency calls at 3am go to voicemail. The customer calls the next plumber in Google.",
+        "Missed calls go straight to voicemail. The customer Googles the next plumber.",
         "You can't tell urgent from routine when you're already on a job.",
         "Customers expect instant response. If you don't pick up, they move on.",
-        "You lose $300-800 emergency jobs to a $0.03 missed call.",
+        "You lose $300-800 emergency jobs to a single missed call.",
       ]}
       capabilities={[
-        { title: 'Emergency triage', desc: 'Detects burst pipes, flooding, sewage backup, no hot water. Escalates true emergencies to you immediately via SMS.' },
+        { title: 'Emergency triage', desc: 'Detects burst pipes, flooding, sewage backup, no hot water. Flags emergencies and notifies you immediately via SMS and phone.' },
         { title: 'Homeowner verification', desc: 'Asks if caller is homeowner or renter. Renters advised to check with landlord — saves you wasted trips.' },
         { title: 'Structured diagnostic intake', desc: "What's the issue? Where in the home? How long? Is water shut off? Access details? Your tech arrives prepared." },
         { title: 'Safety guidance', desc: 'Tells callers to shut off water main if there\'s active flooding. Basic safety advice before you arrive.' },
@@ -38,7 +38,7 @@ export default function PlumbingPage() {
         stars: 5,
       }}
       phoneNumber="(240) 301-1473"
-      accentColor="#dc2626"
+      accentColor="#e8930c"
       available={true}
     />
   );

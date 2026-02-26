@@ -38,7 +38,7 @@ export default function WindowCleaningPage() {
         stars: 5,
       }}
       phoneNumber="(845) 209-2401"
-      accentColor="#2563eb"
+      accentColor="#e8930c"
       available={true}
     />
   );

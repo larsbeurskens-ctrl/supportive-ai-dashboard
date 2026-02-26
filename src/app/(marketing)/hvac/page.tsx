@@ -38,7 +38,7 @@ export default function HVACPage() {
         stars: 5,
       }}
       phoneNumber={null}
-      accentColor="#059669"
+      accentColor="#e8930c"
       available={false}
     />
   );
