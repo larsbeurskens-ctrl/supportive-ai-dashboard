@@ -145,7 +145,10 @@ export default function DashboardPage() {
                 </div>
               ))
             ) : (
-              <div className="p-8 text-center text-sm text-[#94a7b8]">No jobs scheduled for today</div>
+              <div className="p-8 text-center text-sm text-[#94a7b8]">
+                <p className="mb-1">No jobs scheduled yet</p>
+                <p className="text-xs">Once your AI starts booking, today&apos;s jobs appear here</p>
+              </div>
             )}
           </div>
         </div>
@@ -179,7 +182,10 @@ export default function DashboardPage() {
                 </div>
               ))
             ) : (
-              <div className="p-8 text-center text-sm text-[#94a7b8]">No recent calls</div>
+              <div className="p-8 text-center text-sm text-[#94a7b8]">
+                <p className="mb-1">No calls yet</p>
+                <p className="text-xs">Your AI&apos;s call history will show up here</p>
+              </div>
             )}
           </div>
         </div>

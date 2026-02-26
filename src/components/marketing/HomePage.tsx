@@ -77,7 +77,7 @@ export function HomePage() {
             <PhoneIcon size={18} /> Call our demo agent
           </button>
         </div>
-        <p className="text-[13px] text-[#94a7b8]">14-day free trial. No credit card. Cancel anytime.</p>
+        <p className="text-[13px] text-[#94a7b8]">7-day free trial. No credit card. Cancel anytime.</p>
       </section>
 
       {/* ===== TRUST BAR — Google / integrations ===== */}
@@ -324,6 +324,68 @@ export function HomePage() {
         </div>
       </section>
 
+      {/* ===== PERSONAL ONBOARDING + TRIAL YOUR WAY ===== */}
+      <section className="py-16 px-6 md:px-10 bg-white border-t border-[#e5e0da]">
+        <div className="max-w-[860px] mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Personal onboarding */}
+            <div className="bg-[#faf9f7] rounded-2xl p-7 border border-[#e5e0da]">
+              <div className="w-12 h-12 rounded-full bg-[#e8930c] flex items-center justify-center mb-4">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/></svg>
+              </div>
+              <h3 className="text-[20px] font-bold text-[#1a2e3b] mb-2">We set it up with you</h3>
+              <p className="text-[14px] text-[#5a7184] leading-relaxed mb-4">
+                No docs to read. No DIY configuration. Book a free 15-minute call and we&apos;ll configure your AI, assign your phone number,
+                connect your calendar, and make a test call together — all on one call.
+              </p>
+              <div className="space-y-2 text-[13px] text-[#2a4a5e]">
+                <div className="flex items-center gap-2">
+                  <CheckIcon size={15} className="text-[#059669] flex-shrink-0" />
+                  <span>Your AI trained on your specific trade</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckIcon size={15} className="text-[#059669] flex-shrink-0" />
+                  <span>Dedicated local phone number assigned</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckIcon size={15} className="text-[#059669] flex-shrink-0" />
+                  <span>Calendar connected and tested live</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckIcon size={15} className="text-[#059669] flex-shrink-0" />
+                  <span>Call forwarding walked through step by step</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Trial your way */}
+            <div className="bg-[#faf9f7] rounded-2xl p-7 border border-[#e5e0da]">
+              <div className="w-12 h-12 rounded-full bg-[#1a2e3b] flex items-center justify-center mb-4">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              </div>
+              <h3 className="text-[20px] font-bold text-[#1a2e3b] mb-2">Trial it your way</h3>
+              <p className="text-[14px] text-[#5a7184] leading-relaxed mb-4">
+                Your business, your rules. Choose exactly when the AI picks up — and change it anytime. No commitment during your 7-day trial.
+              </p>
+              <div className="space-y-3.5">
+                <div className="bg-white rounded-xl p-3.5 border border-[#e5e0da]">
+                  <p className="text-[13px] font-bold text-[#1a2e3b] mb-0.5">After 4 rings, no answer</p>
+                  <p className="text-[12px] text-[#5a7184]">Your phone rings first. AI catches what you miss. Most popular option.</p>
+                </div>
+                <div className="bg-white rounded-xl p-3.5 border border-[#e5e0da]">
+                  <p className="text-[13px] font-bold text-[#1a2e3b] mb-0.5">After hours only</p>
+                  <p className="text-[12px] text-[#5a7184]">You handle calls during the day. AI takes over evenings and weekends.</p>
+                </div>
+                <div className="bg-white rounded-xl p-3.5 border border-[#e5e0da]">
+                  <p className="text-[13px] font-bold text-[#1a2e3b] mb-0.5">Always on</p>
+                  <p className="text-[12px] text-[#5a7184]">AI answers every call. You focus entirely on the work.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ===== PRICING ===== */}
       <section id="pricing" className="py-16 px-6 md:px-10 bg-white border-t border-[#e5e0da]">
         <div className="max-w-[860px] mx-auto">
@@ -364,12 +426,12 @@ export function HomePage() {
                 key={plan.name}
                 className={`p-7 rounded-xl relative ${
                   plan.popular
-                    ? 'border-2 border-[#1a2e3b] bg-[#fafaf8]'
+                    ? 'border-2 border-[#e8930c] bg-[#fffdf9]'
                     : 'border border-[#e5e0da] bg-white'
                 }`}
               >
                 {plan.popular && (
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#1a2e3b] text-white px-4 py-1 rounded-full text-xs font-semibold">
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#e8930c] text-white px-4 py-1 rounded-full text-xs font-semibold">
                     Most popular
                   </div>
                 )}
@@ -392,7 +454,7 @@ export function HomePage() {
                   href={plan.name === 'Growth' ? '/#contact' : '/onboarding'}
                   className={`block text-center py-3 rounded-lg text-sm font-semibold no-underline transition-colors ${
                     plan.popular
-                      ? 'bg-[#1a2e3b] text-white hover:bg-[#243d4e]'
+                      ? 'bg-[#e8930c] text-white hover:bg-[#d17f00] shadow-[0_2px_8px_rgba(232,147,12,0.25)]'
                       : 'bg-white text-[#1a2e3b] border border-[#d1ccc6] hover:bg-[#f0eeeb]'
                   }`}
                 >
@@ -402,7 +464,7 @@ export function HomePage() {
             ))}
           </div>
           <p className="text-center text-[13px] text-[#94a7b8] mt-5">
-            14-day free trial on all plans. No setup fees. Cancel anytime.
+            7-day free trial on all plans. No setup fees. Cancel anytime.
           </p>
         </div>
       </section>
@@ -414,8 +476,8 @@ export function HomePage() {
             Ready to stop missing calls?
           </h2>
           <p className="text-base text-[#5a7184] mb-8">
-            Set up in under 10 minutes. No technical skills needed.
-            <br />Your AI receptionist starts answering today.
+            We&apos;ll set it up with you on a free 15-minute call. Your AI receptionist
+            <br className="hidden md:block" /> can be answering calls today.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link

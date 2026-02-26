@@ -8,12 +8,14 @@ import {
   PhoneIcon, CalendarIcon, UsersIcon, SettingsIcon,
   TrendUpIcon, DollarIcon,
 } from '@/components/marketing/Icons';
+import { SetupBanner } from '@/components/SetupBanner';
 
 const navItems = [
   { href: '/dashboard', label: 'Dashboard', icon: TrendUpIcon },
   { href: '/dashboard/calls', label: 'Calls', icon: PhoneIcon },
   { href: '/dashboard/bookings', label: 'Bookings', icon: CalendarIcon },
   { href: '/dashboard/customers', label: 'Customers', icon: UsersIcon },
+  { href: '/dashboard/setup', label: 'Call Forwarding', icon: PhoneIcon },
   { href: '/dashboard/settings', label: 'Settings', icon: SettingsIcon },
 ];
 
@@ -119,6 +121,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         {/* Main content */}
         <main className="flex-1 lg:pl-60">
           <div className="p-4 lg:p-7 max-w-[960px] mx-auto">
+            <SetupBanner />
             {children}
           </div>
         </main>

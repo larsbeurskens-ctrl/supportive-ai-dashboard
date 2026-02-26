@@ -92,7 +92,7 @@ export default function OnboardingPage() {
                   id="name" type="text" value={name}
                   onChange={e => setName(e.target.value)}
                   placeholder="Mike Johnson"
-                  className="w-full px-4 py-3 border border-[#e5e0da] rounded-xl text-[15px] text-[#1a2e3b] placeholder:text-[#b8c4ce] focus:outline-none focus:ring-2 focus:ring-[#1a2e3b] focus:border-transparent bg-white"
+                  className="w-full px-4 py-3 border border-[#e5e0da] rounded-xl text-[15px] text-[#1a2e3b] placeholder:text-[#b8c4ce] focus:outline-none focus:ring-2 focus:ring-[#e8930c] focus:border-transparent bg-white"
                 />
               </div>
 
@@ -102,7 +102,7 @@ export default function OnboardingPage() {
                   id="email" type="email" value={email}
                   onChange={e => setEmail(e.target.value)}
                   placeholder="mike@smithplumbing.com"
-                  className="w-full px-4 py-3 border border-[#e5e0da] rounded-xl text-[15px] text-[#1a2e3b] placeholder:text-[#b8c4ce] focus:outline-none focus:ring-2 focus:ring-[#1a2e3b] focus:border-transparent bg-white"
+                  className="w-full px-4 py-3 border border-[#e5e0da] rounded-xl text-[15px] text-[#1a2e3b] placeholder:text-[#b8c4ce] focus:outline-none focus:ring-2 focus:ring-[#e8930c] focus:border-transparent bg-white"
                 />
               </div>
 
@@ -112,7 +112,7 @@ export default function OnboardingPage() {
                   id="company" type="text" value={company}
                   onChange={e => setCompany(e.target.value)}
                   placeholder="Smith's Plumbing"
-                  className="w-full px-4 py-3 border border-[#e5e0da] rounded-xl text-[15px] text-[#1a2e3b] placeholder:text-[#b8c4ce] focus:outline-none focus:ring-2 focus:ring-[#1a2e3b] focus:border-transparent bg-white"
+                  className="w-full px-4 py-3 border border-[#e5e0da] rounded-xl text-[15px] text-[#1a2e3b] placeholder:text-[#b8c4ce] focus:outline-none focus:ring-2 focus:ring-[#e8930c] focus:border-transparent bg-white"
                 />
               </div>
 
@@ -122,7 +122,7 @@ export default function OnboardingPage() {
                   <select
                     id="trade" value={trade}
                     onChange={e => setTrade(e.target.value)}
-                    className="w-full px-4 py-3 border border-[#e5e0da] rounded-xl text-[15px] text-[#1a2e3b] focus:outline-none focus:ring-2 focus:ring-[#1a2e3b] focus:border-transparent appearance-none bg-white"
+                    className="w-full px-4 py-3 border border-[#e5e0da] rounded-xl text-[15px] text-[#1a2e3b] focus:outline-none focus:ring-2 focus:ring-[#e8930c] focus:border-transparent appearance-none bg-white"
                   >
                     <option value="" className="text-[#b8c4ce]">Select your trade...</option>
                     {TRADES.map(t => (
@@ -151,12 +151,12 @@ export default function OnboardingPage() {
           <div className="flex items-center justify-center gap-5 mt-6 text-[12px] text-[#94a7b8]">
             <span className="flex items-center gap-1.5">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-              14-day free trial
+              7-day free trial
             </span>
             <span className="text-[#d1ccc6]">·</span>
             <span>No credit card</span>
             <span className="text-[#d1ccc6]">·</span>
-            <span>Cancel anytime</span>
+            <span>Personal setup included</span>
           </div>
 
           {/* Existing user */}
