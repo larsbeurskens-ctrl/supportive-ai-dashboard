@@ -7,7 +7,7 @@ export function MarketingNav() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <nav className="flex justify-between items-center px-6 md:px-10 py-3.5 bg-white border-b border-[#e5e0da]">
+    <nav className="relative flex justify-between items-center px-6 md:px-10 py-3.5 bg-white border-b border-[#e5e0da]">
       <Link href="/" className="flex items-center gap-2.5 no-underline">
         <div className="w-[34px] h-[34px] rounded-lg bg-gradient-to-br from-[#1a2e3b] to-[#2a4a5e] flex items-center justify-center text-white font-extrabold text-[17px]">
           S
@@ -68,15 +68,15 @@ export function MarketingNav() {
 
       {/* Mobile menu */}
       {mobileOpen && (
-        <div className="absolute top-full left-0 right-0 bg-white border-b border-[#e5e0da] p-4 md:hidden z-50">
-          <Link href="/#how-it-works" className="block py-3 text-[#2a4a5e] font-medium no-underline">How it works</Link>
-          <Link href="/#pricing" className="block py-3 text-[#2a4a5e] font-medium no-underline">Pricing</Link>
-          <Link href="/window-cleaning" className="block py-3 text-[#2a4a5e] font-medium no-underline">Window Cleaning</Link>
-          <Link href="/plumbing" className="block py-3 text-[#2a4a5e] font-medium no-underline">Plumbing</Link>
-          <Link href="/hvac" className="block py-3 text-[#2a4a5e] font-medium no-underline">HVAC</Link>
-          <Link href="/faq" className="block py-3 text-[#2a4a5e] font-medium no-underline">FAQ</Link>
-          <Link href="/login" className="block py-3 text-[#2a4a5e] font-medium no-underline">Log in</Link>
-          <Link href="/onboarding" className="block mt-2 text-center bg-[#1a2e3b] text-white py-3 rounded-lg font-semibold no-underline">Start Free Trial</Link>
+        <div className="absolute top-full left-0 right-0 bg-white border-b border-[#e5e0da] shadow-lg p-4 md:hidden z-50">
+          <Link href="/#how-it-works" onClick={() => setMobileOpen(false)} className="block py-3 text-[#2a4a5e] font-medium no-underline">How it works</Link>
+          <Link href="/#pricing" onClick={() => setMobileOpen(false)} className="block py-3 text-[#2a4a5e] font-medium no-underline">Pricing</Link>
+          <Link href="/window-cleaning" onClick={() => setMobileOpen(false)} className="block py-3 text-[#2a4a5e] font-medium no-underline">Window Cleaning</Link>
+          <Link href="/plumbing" onClick={() => setMobileOpen(false)} className="block py-3 text-[#2a4a5e] font-medium no-underline">Plumbing</Link>
+          <Link href="/hvac" onClick={() => setMobileOpen(false)} className="block py-3 text-[#2a4a5e] font-medium no-underline">HVAC</Link>
+          <Link href="/faq" onClick={() => setMobileOpen(false)} className="block py-3 text-[#2a4a5e] font-medium no-underline">FAQ</Link>
+          <Link href="/login" onClick={() => setMobileOpen(false)} className="block py-3 text-[#2a4a5e] font-medium no-underline">Log in</Link>
+          <Link href="/onboarding" onClick={() => setMobileOpen(false)} className="block mt-2 text-center bg-[#1a2e3b] text-white py-3 rounded-lg font-semibold no-underline">Start Free Trial</Link>
         </div>
       )}
     </nav>

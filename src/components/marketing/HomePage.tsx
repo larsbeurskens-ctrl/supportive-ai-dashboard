@@ -1,3 +1,6 @@
+'use client';
+
+import { useState } from 'react';
 import Link from 'next/link';
 import {
   PhoneIcon, CalendarIcon, CheckIcon, BrainIcon,
@@ -5,9 +8,43 @@ import {
   StarIcon, GoogleIcon, QuoteIcon,
 } from './Icons';
 
+/* ===== Demo Call Overlay (desktop only) ===== */
+function DemoOverlay({ onClose }: { onClose: () => void }) {
+  return (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 p-4" onClick={onClose}>
+      <div className="bg-white rounded-2xl max-w-[480px] w-full p-8 relative" onClick={e => e.stopPropagation()}>
+        <button onClick={onClose} className="absolute top-4 right-4 text-[#94a7b8] hover:text-[#1a2e3b] bg-transparent border-none cursor-pointer text-xl">&times;</button>
+        <h3 className="text-[22px] font-bold text-[#1a2e3b] mb-2">Try our demo agent</h3>
+        <p className="text-[15px] text-[#5a7184] mb-6">
+          Call from your phone to experience a real AI-powered booking. The demo is set up for a window cleaning business in the Hudson Valley, NY area.
+        </p>
+        <div className="bg-[#f4f3f1] rounded-xl p-5 mb-5 text-center">
+          <p className="text-sm text-[#5a7184] mb-1">Call this number:</p>
+          <a href="tel:+18452092401" className="text-[28px] font-bold text-[#1a2e3b] no-underline">(845) 209-2401</a>
+        </div>
+        <div className="bg-[#f4f3f1] rounded-xl p-5 mb-5">
+          <p className="text-sm font-semibold text-[#1a2e3b] mb-2">Use one of these test addresses:</p>
+          <div className="space-y-2 text-sm text-[#5a7184]">
+            <p>12 Market Street, Poughkeepsie, NY</p>
+            <p>45 Oak Street, Newburgh, NY</p>
+            <p>8 River Road, Kingston, NY</p>
+          </div>
+        </div>
+        <div className="bg-[#eef9f0] rounded-xl p-4 text-sm text-[#2a6b3d]">
+          <p className="font-semibold mb-1">What to try:</p>
+          <p>Book an appointment, ask about pricing, or say you need to reschedule. Sarah handles it all.</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function HomePage() {
+  const [showDemo, setShowDemo] = useState(false);
   return (
     <>
+      {showDemo && <DemoOverlay onClose={() => setShowDemo(false)} />}
+
       {/* ===== HERO ===== */}
       <section className="pt-16 pb-6 md:pt-20 md:pb-8 px-6 md:px-10 max-w-[860px] mx-auto text-center">
         <h1 className="text-[40px] md:text-[50px] font-extrabold text-[#1a2e3b] leading-[1.12] mb-5 tracking-[-1.5px]">
@@ -26,12 +63,19 @@ export function HomePage() {
           >
             Start Your Free Trial
           </Link>
+          {/* Mobile: direct tel link. Desktop: open overlay */}
           <a
             href="tel:+18452092401"
-            className="bg-white text-[#1a2e3b] px-8 py-[15px] rounded-lg text-base font-semibold no-underline border border-[#d1ccc6] hover:bg-[#f0eeeb] transition-colors flex items-center justify-center gap-2"
+            className="md:hidden bg-white text-[#1a2e3b] px-8 py-[15px] rounded-lg text-base font-semibold no-underline border border-[#d1ccc6] hover:bg-[#f0eeeb] transition-colors flex items-center justify-center gap-2"
           >
             <PhoneIcon size={18} /> Call our demo agent
           </a>
+          <button
+            onClick={() => setShowDemo(true)}
+            className="hidden md:flex bg-white text-[#1a2e3b] px-8 py-[15px] rounded-lg text-base font-semibold border border-[#d1ccc6] hover:bg-[#f0eeeb] transition-colors items-center justify-center gap-2 cursor-pointer"
+          >
+            <PhoneIcon size={18} /> Call our demo agent
+          </button>
         </div>
         <p className="text-[13px] text-[#94a7b8]">14-day free trial. No credit card. Cancel anytime.</p>
       </section>
@@ -47,6 +91,11 @@ export function HomePage() {
           <div className="flex items-center gap-2">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="#635BFF"><path d="M13.976 9.15c-2.172-.806-3.356-1.426-3.356-2.409 0-.831.683-1.305 1.901-1.305 2.227 0 4.515.858 6.09 1.631l.89-5.494C18.252.975 15.697 0 12.165 0 9.667 0 7.589.654 6.104 1.872 4.56 3.147 3.757 4.992 3.757 7.218c0 4.039 2.467 5.76 6.476 7.219 2.585.92 3.445 1.574 3.445 2.583 0 .98-.84 1.545-2.354 1.545-1.875 0-4.965-.921-6.99-2.109l-.9 5.555C5.175 22.99 8.385 24 11.714 24c2.641 0 4.843-.624 6.328-1.813 1.664-1.305 2.525-3.236 2.525-5.732 0-4.128-2.524-5.851-6.591-7.305z"/></svg>
             <span className="text-sm font-semibold text-[#5a7184]">Stripe Payments</span>
+          </div>
+          <span className="text-[#d1ccc6]">·</span>
+          <div className="flex items-center gap-2">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            <span className="text-sm font-semibold text-[#5a7184]">WhatsApp</span>
           </div>
           <span className="text-[#d1ccc6]">·</span>
           <div className="flex items-center gap-2">
@@ -82,6 +131,23 @@ export function HomePage() {
               <p className="text-sm text-[#5a7184] leading-relaxed">{c.desc}</p>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* ===== WHATSAPP USP CALLOUT ===== */}
+      <section className="py-8 px-6 md:px-10 max-w-[860px] mx-auto">
+        <div className="bg-[#dcf8e6] rounded-2xl p-7 md:p-9 flex flex-col md:flex-row items-center gap-6 border border-[#b8e6c8]">
+          <div className="flex-shrink-0">
+            <div className="w-14 h-14 rounded-full bg-[#25D366] flex items-center justify-center">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            </div>
+          </div>
+          <div className="text-center md:text-left">
+            <h3 className="text-[18px] font-bold text-[#1a2e3b] mb-1">WhatsApp AI agent — included free on every plan</h3>
+            <p className="text-[14px] text-[#2a6b3d] leading-relaxed">
+              Your customers can call <em>or</em> text. Our WhatsApp agent books appointments, answers questions, and handles scheduling — the same intelligence as your phone agent, in a chat. No extra cost.
+            </p>
+          </div>
         </div>
       </section>
 
@@ -180,17 +246,26 @@ export function HomePage() {
         <div className="max-w-[780px] mx-auto bg-[#1a2e3b] rounded-2xl p-10 md:p-12 text-center">
           <h2 className="text-[26px] font-bold text-white mb-2.5">Hear it in action</h2>
           <p className="text-[15px] text-[#b8c9d4] mb-6">
-            Call our demo agent. Experience a real AI-powered booking in 60 seconds.
+            Call our demo agent from your phone. Experience a real AI-powered booking in 60 seconds.
           </p>
+          {/* Mobile: direct tel link */}
           <a
             href="tel:+18452092401"
-            className="inline-flex items-center gap-3 bg-[#243d4e] rounded-xl px-8 py-[18px] border border-[#35596e] no-underline hover:bg-[#2c4a5d] transition-colors"
+            className="md:hidden inline-flex items-center gap-3 bg-[#243d4e] rounded-xl px-8 py-[18px] border border-[#35596e] no-underline hover:bg-[#2c4a5d] transition-colors"
           >
             <PhoneIcon size={22} className="text-[#e8930c]" />
             <span className="text-2xl font-bold text-white tracking-wide">(845) 209-2401</span>
           </a>
+          {/* Desktop: open overlay */}
+          <button
+            onClick={() => setShowDemo(true)}
+            className="hidden md:inline-flex items-center gap-3 bg-[#243d4e] rounded-xl px-8 py-[18px] border border-[#35596e] hover:bg-[#2c4a5d] transition-colors cursor-pointer"
+          >
+            <PhoneIcon size={22} className="text-[#e8930c]" />
+            <span className="text-2xl font-bold text-white tracking-wide">(845) 209-2401</span>
+          </button>
           <p className="text-[13px] text-[#6b8fa3] mt-3">
-            Currently live: window cleaning agent. Plumbing & HVAC agents coming Q2 2026.
+            Live now: window cleaning &amp; plumbing agents. HVAC coming soon.
           </p>
         </div>
       </section>
@@ -265,7 +340,7 @@ export function HomePage() {
                 price: 149,
                 calls: '100 calls/mo',
                 target: 'Solo operators',
-                features: ['24/7 AI answering', 'Calendar booking', 'SMS confirmations', 'Payment links', 'Dashboard'],
+                features: ['24/7 AI answering', 'WhatsApp AI agent', 'Calendar booking', 'SMS confirmations', 'Payment links', 'Dashboard'],
                 popular: false,
               },
               {
@@ -351,10 +426,16 @@ export function HomePage() {
             </Link>
             <a
               href="tel:+18452092401"
-              className="bg-white text-[#1a2e3b] px-8 py-[15px] rounded-lg text-base font-semibold no-underline border border-[#d1ccc6] hover:bg-[#f0eeeb] transition-colors flex items-center justify-center gap-2"
+              className="md:hidden bg-white text-[#1a2e3b] px-8 py-[15px] rounded-lg text-base font-semibold no-underline border border-[#d1ccc6] hover:bg-[#f0eeeb] transition-colors flex items-center justify-center gap-2"
             >
               <PhoneIcon size={18} /> (845) 209-2401
             </a>
+            <button
+              onClick={() => setShowDemo(true)}
+              className="hidden md:flex bg-white text-[#1a2e3b] px-8 py-[15px] rounded-lg text-base font-semibold border border-[#d1ccc6] hover:bg-[#f0eeeb] transition-colors items-center justify-center gap-2 cursor-pointer"
+            >
+              <PhoneIcon size={18} /> (845) 209-2401
+            </button>
           </div>
         </div>
       </section>
