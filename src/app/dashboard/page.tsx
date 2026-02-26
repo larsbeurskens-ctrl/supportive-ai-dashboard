@@ -134,7 +134,7 @@ export default function DashboardPage() {
                     </span>
                     <div>
                       <p className="text-sm font-medium text-[#1a2e3b]">
-                        {job.customer?.firstName} {job.customer?.lastName}
+                        {job.customer?.firstName || 'Customer'}
                       </p>
                       <p className="text-xs text-[#94a7b8]">{job.serviceAddress}</p>
                     </div>
@@ -171,7 +171,7 @@ export default function DashboardPage() {
                 <div key={call.id} className={`px-5 py-3 flex justify-between items-center ${i < recentCalls.length - 1 ? 'border-b border-[#f0eeeb]' : ''}`}>
                   <div>
                     <p className="text-sm font-medium text-[#1a2e3b]">
-                      {call.customer ? `${call.customer.firstName} ${call.customer.lastName}` : call.phoneNumber}
+                      {call.customer ? call.customer.firstName : call.phoneNumber}
                     </p>
                     <p className="text-xs text-[#94a7b8]">{formatCallTime(call.startTime || call.createdAt)}</p>
                   </div>

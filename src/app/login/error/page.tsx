@@ -20,7 +20,7 @@ export default function AuthErrorPage() {
           {/* Back link */}
           <Link
             href="/login"
-            className="inline-flex items-center justify-center gap-2 w-full bg-blue-600 text-white py-4 px-6 rounded-xl text-lg font-semibold hover:bg-blue-700 transition-colors"
+            className="inline-flex items-center justify-center gap-2 w-full bg-[#e8930c] text-white py-4 px-6 rounded-xl text-lg font-semibold hover:bg-[#d17f00] transition-colors shadow-[0_2px_8px_rgba(232,147,12,0.25)]"
           >
             <ArrowLeft size={20} />
             Try again

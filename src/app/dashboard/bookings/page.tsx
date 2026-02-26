@@ -1,19 +1,20 @@
 'use client';
 
-import { MapPin, Clock, DollarSign, Loader2 } from 'lucide-react';
+import { MapPin, Clock, DollarSign } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { getBookings, Booking } from '@/lib/api';
 
 function StatusBadge({ status }: { status: string }) {
-  const styles: Record<string, string> = {
-    confirmed: 'bg-green-100 text-green-700',
-    pending: 'bg-yellow-100 text-yellow-700',
-    cancelled: 'bg-red-100 text-red-700',
-    completed: 'bg-gray-100 text-gray-700',
+  const config: Record<string, { bg: string; text: string; label: string }> = {
+    confirmed: { bg: 'bg-[#eef9f0]', text: 'text-[#059669]', label: 'Confirmed' },
+    pending: { bg: 'bg-[#fef8f0]', text: 'text-[#d97706]', label: 'Pending' },
+    cancelled: { bg: 'bg-[#fef2f2]', text: 'text-[#dc2626]', label: 'Cancelled' },
+    completed: { bg: 'bg-[#f4f3f1]', text: 'text-[#5a7184]', label: 'Completed' },
   };
+  const c = config[status] || { bg: 'bg-[#f4f3f1]', text: 'text-[#5a7184]', label: status };
   return (
-    <span className={`px-3 py-1 rounded-full text-sm font-medium capitalize ${styles[status] || 'bg-gray-100 text-gray-700'}`}>
-      {status}
+    <span className={`px-2.5 py-1 rounded-full text-[12px] font-semibold capitalize ${c.bg} ${c.text}`}>
+      {c.label}
     </span>
   );
 }
@@ -27,11 +28,7 @@ function formatTime(timeStr: string): string {
 }
 
 function formatDate(dateStr: string): string {
-  return new Date(dateStr).toLocaleDateString('en-US', { 
-    weekday: 'short',
-    month: 'short', 
-    day: 'numeric'
-  });
+  return new Date(dateStr).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
 }
 
 export default function BookingsPage() {
@@ -48,9 +45,7 @@ export default function BookingsPage() {
       } catch (err) {
         console.error('Failed to fetch bookings:', err);
         setError('Failed to load bookings');
-      } finally {
-        setLoading(false);
-      }
+      } finally { setLoading(false); }
     }
     fetchBookings();
   }, []);
@@ -58,74 +53,62 @@ export default function BookingsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">Bookings</h1>
-        <p className="text-gray-500 mt-1">Manage your scheduled appointments</p>
+        <h1 className="text-[22px] font-bold text-[#1a2e3b]">Bookings</h1>
+        <p className="text-[13px] text-[#94a7b8] mt-1">Manage your scheduled appointments</p>
       </div>
-
-      {error && (
-        <div className="bg-red-50 text-red-700 p-4 rounded-xl">{error}</div>
-      )}
-
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100">
-        <div className="p-4 border-b border-gray-100 flex items-center gap-4">
-          <select className="px-4 py-2 border border-gray-200 rounded-lg text-gray-700">
-            <option>All Status</option>
-            <option>Confirmed</option>
-            <option>Pending</option>
-            <option>Completed</option>
+      {error && <div className="bg-[#fef2f2] text-[#991b1b] p-4 rounded-xl text-sm">{error}</div>}
+      <div className="bg-white rounded-xl border border-[#e5e0da]">
+        <div className="px-5 py-3.5 border-b border-[#e5e0da] flex items-center gap-3">
+          <select className="px-3 py-2 border border-[#e5e0da] rounded-lg text-[13px] text-[#1a2e3b] bg-white">
+            <option>All Status</option><option>Confirmed</option><option>Pending</option><option>Completed</option>
           </select>
-          <select className="px-4 py-2 border border-gray-200 rounded-lg text-gray-700">
-            <option>This Week</option>
-            <option>Next Week</option>
-            <option>This Month</option>
+          <select className="px-3 py-2 border border-[#e5e0da] rounded-lg text-[13px] text-[#1a2e3b] bg-white">
+            <option>This Week</option><option>Next Week</option><option>This Month</option>
           </select>
         </div>
-        
-        <div className="divide-y divide-gray-100">
+        <div className="divide-y divide-[#f0eeeb]">
           {loading ? (
             <div className="p-8 text-center">
-              <Loader2 className="animate-spin text-gray-400 mx-auto" size={32} />
+              <div className="w-5 h-5 border-2 border-[#1a2e3b] border-t-transparent rounded-full animate-spin mx-auto" />
             </div>
           ) : bookings.length > 0 ? (
             bookings.map((booking) => (
-              <div key={booking.id} className="p-4 hover:bg-gray-50 transition-colors">
+              <div key={booking.id} className="px-5 py-4 hover:bg-[#faf9f7] transition-colors">
                 <div className="flex items-start justify-between">
-                  <div className="space-y-2">
-                    <div className="flex items-center gap-4">
-                      <span className="text-lg font-semibold text-blue-600">{formatTime(booking.scheduledTime)}</span>
-                      <span className="text-gray-500">{formatDate(booking.scheduledDate)}</span>
+                  <div className="space-y-1.5">
+                    <div className="flex items-center gap-3">
+                      <span className="text-[15px] font-bold text-[#1a2e3b]">{formatTime(booking.scheduledTime)}</span>
+                      <span className="text-[13px] text-[#94a7b8]">{formatDate(booking.scheduledDate)}</span>
                       <StatusBadge status={booking.status} />
                     </div>
-                    <h3 className="text-xl font-medium text-gray-900">
-                      {booking.customer?.firstName} {booking.customer?.lastName}
+                    <h3 className="text-[15px] font-semibold text-[#1a2e3b]">
+                      {booking.customer?.firstName || 'Customer'}
                     </h3>
-                    <div className="flex items-center gap-6 text-gray-600">
+                    <div className="flex items-center gap-5 text-[13px] text-[#5a7184]">
                       <span className="flex items-center gap-1">
-                        <MapPin size={16} />
-                        {booking.serviceAddress}, {booking.serviceCity}
+                        <MapPin size={14} className="text-[#94a7b8]" />
+                        {booking.serviceAddress}{booking.serviceCity ? `, ${booking.serviceCity}` : ''}
                       </span>
                       <span className="flex items-center gap-1">
-                        <Clock size={16} />
+                        <Clock size={14} className="text-[#94a7b8]" />
                         {booking.estimatedDuration} min
                       </span>
                       {booking.quotedPrice && (
                         <span className="flex items-center gap-1">
-                          <DollarSign size={16} />
+                          <DollarSign size={14} className="text-[#94a7b8]" />
                           ${booking.quotedPrice}
                         </span>
                       )}
                     </div>
                   </div>
-                  <div className="text-right">
-                    <span className="px-3 py-1 bg-gray-100 rounded-full text-sm text-gray-600">
-                      {booking.stories ? `${booking.stories}-story` : booking.propertyType || 'Residential'}
-                    </span>
-                  </div>
+                  <span className="text-[11px] font-semibold text-[#5a7184] bg-[#faf9f7] px-2.5 py-1 rounded">
+                    {booking.stories ? `${booking.stories}-story` : booking.propertyType || 'Residential'}
+                  </span>
                 </div>
               </div>
             ))
           ) : (
-            <div className="p-8 text-center text-gray-500">No bookings found</div>
+            <div className="p-8 text-center text-[13px] text-[#94a7b8]">No bookings yet</div>
           )}
         </div>
       </div>

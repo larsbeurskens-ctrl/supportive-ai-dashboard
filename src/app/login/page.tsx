@@ -66,7 +66,7 @@ export default function LoginPage() {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="you@company.com"
                   required
-                  className="w-full pl-12 pr-4 py-4 border border-gray-200 rounded-xl text-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full pl-12 pr-4 py-4 border border-[#e5e0da] rounded-xl text-lg focus:outline-none focus:ring-2 focus:ring-[#e8930c] focus:border-transparent"
                 />
               </div>
             </div>
@@ -74,7 +74,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading || !email}
-              className="w-full flex items-center justify-center gap-2 bg-blue-600 text-white py-4 px-6 rounded-xl text-lg font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full flex items-center justify-center gap-2 bg-[#e8930c] text-white py-4 px-6 rounded-xl text-lg font-semibold hover:bg-[#d17f00] transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_2px_8px_rgba(232,147,12,0.25)]"
             >
               {loading ? (
                 <>

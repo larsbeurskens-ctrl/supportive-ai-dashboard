@@ -35,7 +35,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                     <p style="color: #666; font-size: 16px; line-height: 1.6; margin-bottom: 32px;">
                       Click the button below to sign in to your dashboard. This link expires in 1 hour.
                     </p>
-                    <a href="${url}" style="display: inline-block; background: #2563eb; color: white; padding: 16px 32px; border-radius: 8px; text-decoration: none; font-size: 16px; font-weight: 600;">
+                    <a href="${url}" style="display: inline-block; background: #e8930c; color: white; padding: 16px 32px; border-radius: 8px; text-decoration: none; font-size: 16px; font-weight: 600;">
                       Sign in to Dashboard
                     </a>
                     <p style="color: #999; font-size: 14px; margin-top: 32px;">

@@ -7,8 +7,8 @@ export default function CheckEmailPage() {
       <div className="w-full max-w-md">
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 text-center">
           {/* Icon */}
-          <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
-            <Mail className="text-blue-600" size={32} />
+          <div className="w-16 h-16 bg-[#fef8f0] rounded-full flex items-center justify-center mx-auto mb-6">
+            <Mail className="text-[#e8930c]" size={32} />
           </div>
 
           {/* Content */}
@@ -31,7 +31,7 @@ export default function CheckEmailPage() {
           {/* Back link */}
           <Link
             href="/login"
-            className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium"
+            className="inline-flex items-center gap-2 text-[#1a2e3b] hover:text-[#e8930c] font-medium no-underline"
           >
             <ArrowLeft size={16} />
             Try a different email

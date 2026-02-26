@@ -1,6 +1,6 @@
 'use client';
 
-import { User, Phone as PhoneIcon, Loader2 } from 'lucide-react';
+import { User, Phone as PhoneIcon } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { getCustomers, Customer } from '@/lib/api';
 
@@ -18,9 +18,7 @@ export default function CustomersPage() {
       } catch (err) {
         console.error('Failed to fetch customers:', err);
         setError('Failed to load customers');
-      } finally {
-        setLoading(false);
-      }
+      } finally { setLoading(false); }
     }
     fetchCustomers();
   }, []);
@@ -28,60 +26,56 @@ export default function CustomersPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">Customers</h1>
-        <p className="text-gray-500 mt-1">View customer history and details</p>
+        <h1 className="text-[22px] font-bold text-[#1a2e3b]">Customers</h1>
+        <p className="text-[13px] text-[#94a7b8] mt-1">View customer history and details</p>
       </div>
-
-      {error && (
-        <div className="bg-red-50 text-red-700 p-4 rounded-xl">{error}</div>
-      )}
-
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100">
-        <div className="divide-y divide-gray-100">
+      {error && <div className="bg-[#fef2f2] text-[#991b1b] p-4 rounded-xl text-sm">{error}</div>}
+      <div className="bg-white rounded-xl border border-[#e5e0da]">
+        <div className="divide-y divide-[#f0eeeb]">
           {loading ? (
             <div className="p-8 text-center">
-              <Loader2 className="animate-spin text-gray-400 mx-auto" size={32} />
+              <div className="w-5 h-5 border-2 border-[#1a2e3b] border-t-transparent rounded-full animate-spin mx-auto" />
             </div>
           ) : customers.length > 0 ? (
             customers.map((customer) => (
-              <div key={customer.id} className="p-4 hover:bg-gray-50 transition-colors">
+              <div key={customer.id} className="px-5 py-4 hover:bg-[#faf9f7] transition-colors">
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                      <User size={24} className="text-blue-600" />
+                  <div className="flex items-center gap-3.5">
+                    <div className="w-10 h-10 bg-[#f4f3f1] rounded-full flex items-center justify-center">
+                      <User size={18} className="text-[#5a7184]" />
                     </div>
                     <div>
-                      <h3 className="text-lg font-medium text-gray-900">
-                        {customer.firstName} {customer.lastName}
+                      <h3 className="text-[14px] font-semibold text-[#1a2e3b]">
+                        {customer.firstName}
                       </h3>
-                      <div className="flex items-center gap-4 text-sm text-gray-500">
+                      <div className="flex items-center gap-3 text-[12px] text-[#94a7b8]">
                         <span className="flex items-center gap-1">
-                          <PhoneIcon size={14} />
+                          <PhoneIcon size={12} />
                           {customer.phone}
                         </span>
                         {customer.email && <span>{customer.email}</span>}
                       </div>
                     </div>
                   </div>
-                  <div className="flex items-center gap-6 text-gray-600">
+                  <div className="flex items-center gap-6">
                     <div className="text-center">
-                      <p className="text-2xl font-bold text-gray-900">
+                      <p className="text-[18px] font-bold text-[#1a2e3b]">
                         {customer._count?.bookings || customer.totalBookings || 0}
                       </p>
-                      <p className="text-sm text-gray-500">Bookings</p>
+                      <p className="text-[11px] text-[#94a7b8]">Bookings</p>
                     </div>
                     <div className="text-center">
-                      <p className="text-2xl font-bold text-green-600">
+                      <p className="text-[18px] font-bold text-[#059669]">
                         ${customer.lifetimeValue || 0}
                       </p>
-                      <p className="text-sm text-gray-500">Total Spent</p>
+                      <p className="text-[11px] text-[#94a7b8]">Spent</p>
                     </div>
                   </div>
                 </div>
               </div>
             ))
           ) : (
-            <div className="p-8 text-center text-gray-500">No customers found</div>
+            <div className="p-8 text-center text-[13px] text-[#94a7b8]">No customers yet</div>
           )}
         </div>
       </div>

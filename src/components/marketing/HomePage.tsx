@@ -415,59 +415,52 @@ export function HomePage() {
       {/* ===== PERSONAL ONBOARDING + TRIAL YOUR WAY ===== */}
       <section className="py-16 px-6 md:px-10 bg-white border-t border-[#e5e0da]">
         <div className="max-w-[860px] mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="text-center mb-10">
+            <h2 className="text-[30px] font-bold text-[#1a2e3b] mb-2">Set up in 15 minutes, not 15 hours</h2>
+            <p className="text-[15px] text-[#5a7184]">We configure everything on a free call. You choose how the AI works for your business.</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {/* Personal onboarding */}
-            <div className="bg-[#faf9f7] rounded-2xl p-7 border border-[#e5e0da]">
-              <div className="w-12 h-12 rounded-full bg-[#e8930c] flex items-center justify-center mb-4">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/></svg>
+            <div className="rounded-xl border border-[#e5e0da] overflow-hidden">
+              <div className="bg-[#e8930c] px-6 py-4">
+                <h3 className="text-[17px] font-bold text-white">We set it up with you</h3>
+                <p className="text-[13px] text-white/80 mt-0.5">Free 15-minute setup call</p>
               </div>
-              <h3 className="text-[20px] font-bold text-[#1a2e3b] mb-2">We set it up with you</h3>
-              <p className="text-[14px] text-[#5a7184] leading-relaxed mb-4">
-                No docs to read. No DIY configuration. Book a free 15-minute call and we&apos;ll configure your AI, assign your phone number,
-                connect your calendar, and make a test call together — all on one call.
-              </p>
-              <div className="space-y-2 text-[13px] text-[#2a4a5e]">
-                <div className="flex items-center gap-2">
-                  <CheckIcon size={15} className="text-[#059669] flex-shrink-0" />
-                  <span>Your AI trained on your specific trade</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckIcon size={15} className="text-[#059669] flex-shrink-0" />
-                  <span>Dedicated local phone number assigned</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckIcon size={15} className="text-[#059669] flex-shrink-0" />
-                  <span>Calendar connected and tested live</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckIcon size={15} className="text-[#059669] flex-shrink-0" />
-                  <span>Call forwarding walked through step by step</span>
-                </div>
+              <div className="p-6 space-y-3">
+                {[
+                  'AI trained on your specific trade',
+                  'Dedicated local phone number assigned',
+                  'Calendar connected and tested live',
+                  'Call forwarding walked through step by step',
+                ].map((item, i) => (
+                  <div key={i} className="flex items-center gap-2.5">
+                    <CheckIcon size={15} className="text-[#059669] flex-shrink-0" />
+                    <span className="text-[14px] text-[#2a4a5e]">{item}</span>
+                  </div>
+                ))}
               </div>
             </div>
 
             {/* Trial your way */}
-            <div className="bg-[#faf9f7] rounded-2xl p-7 border border-[#e5e0da]">
-              <div className="w-12 h-12 rounded-full bg-[#1a2e3b] flex items-center justify-center mb-4">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <div className="rounded-xl border border-[#e5e0da] overflow-hidden">
+              <div className="bg-[#1a2e3b] px-6 py-4">
+                <h3 className="text-[17px] font-bold text-white">Trial it your way</h3>
+                <p className="text-[13px] text-white/60 mt-0.5">You control when the AI picks up</p>
               </div>
-              <h3 className="text-[20px] font-bold text-[#1a2e3b] mb-2">Trial it your way</h3>
-              <p className="text-[14px] text-[#5a7184] leading-relaxed mb-4">
-                Your business, your rules. Choose exactly when the AI picks up — and change it anytime. No commitment during your 7-day trial.
-              </p>
-              <div className="space-y-3.5">
-                <div className="bg-white rounded-xl p-3.5 border border-[#e5e0da]">
-                  <p className="text-[13px] font-bold text-[#1a2e3b] mb-0.5">After 4 rings, no answer</p>
-                  <p className="text-[12px] text-[#5a7184]">Your phone rings first. AI catches what you miss. Most popular option.</p>
-                </div>
-                <div className="bg-white rounded-xl p-3.5 border border-[#e5e0da]">
-                  <p className="text-[13px] font-bold text-[#1a2e3b] mb-0.5">After hours only</p>
-                  <p className="text-[12px] text-[#5a7184]">You handle calls during the day. AI takes over evenings and weekends.</p>
-                </div>
-                <div className="bg-white rounded-xl p-3.5 border border-[#e5e0da]">
-                  <p className="text-[13px] font-bold text-[#1a2e3b] mb-0.5">Always on</p>
-                  <p className="text-[12px] text-[#5a7184]">AI answers every call. You focus entirely on the work.</p>
-                </div>
+              <div className="p-5 space-y-2.5">
+                {[
+                  { mode: 'After 4 rings', desc: 'AI catches what you miss. Most popular.' },
+                  { mode: 'After hours only', desc: 'AI handles evenings and weekends.' },
+                  { mode: 'Always on', desc: 'AI answers every call. You focus on work.' },
+                ].map((item, i) => (
+                  <div key={i} className="flex items-start gap-3 p-3 rounded-lg bg-[#faf9f7]">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#e8930c] mt-2 flex-shrink-0" />
+                    <div>
+                      <span className="text-[13px] font-bold text-[#1a2e3b]">{item.mode}</span>
+                      <span className="text-[13px] text-[#5a7184] ml-1.5">{item.desc}</span>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
