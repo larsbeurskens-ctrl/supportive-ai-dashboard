@@ -136,12 +136,24 @@ export async function getCustomers(limit = 50): Promise<Customer[]> {
   return fetchWithAuth(`/api/customers?limit=${limit}`);
 }
 
-// Provisioning
+// Provisioning & Onboarding
+export interface OnboardingChecklist {
+  agentCreated: boolean;
+  businessDetailsAdded: boolean;
+  ownerPhoneSet: boolean;
+  testCallMade: boolean;
+  calendarConnected: boolean;
+  callForwardingSet: boolean;
+}
+
 export interface ProvisionStatus {
   provisioned: boolean;
   phoneNumber: string | null;
-  calendarConnected: boolean;
   agentId: string | null;
+  agentName: string;
+  voiceId: string | null;
+  isLive: boolean;
+  checklist: OnboardingChecklist;
   calendarAuthUrl: string | null;
 }
 
@@ -150,16 +162,48 @@ export interface ProvisionResult {
   phoneNumber: string;
   phoneNumberPretty: string;
   agentId: string;
+  agentName: string;
   calendarAuthUrl: string | null;
+}
+
+export interface VoiceOption {
+  id: string;
+  label: string;
+  accent: string;
+  preview: boolean;
+}
+
+export interface ProvisionOptions {
+  voices: VoiceOption[];
+  nameSuggestions: string[];
 }
 
 export async function getProvisionStatus(): Promise<ProvisionStatus> {
   return fetchWithAuth(`/api/businesses/${_businessId}/provision-status`);
 }
 
-export async function provisionBusiness(areaCode: string): Promise<ProvisionResult> {
+export async function getProvisionOptions(): Promise<ProvisionOptions> {
+  const res = await fetch(`${API_BASE}/api/provision/options`);
+  if (!res.ok) throw new Error('Failed to fetch provision options');
+  return res.json();
+}
+
+export async function provisionBusiness(areaCode: string, agentName?: string, voiceId?: string): Promise<ProvisionResult> {
   return fetchWithAuth(`/api/businesses/${_businessId}/provision`, {
     method: 'POST',
-    body: JSON.stringify({ areaCode }),
+    body: JSON.stringify({ areaCode, agentName, voiceId }),
+  });
+}
+
+export async function saveBusinessDetails(details: Record<string, unknown>): Promise<{ success: boolean }> {
+  return fetchWithAuth(`/api/businesses/${_businessId}/business-details`, {
+    method: 'POST',
+    body: JSON.stringify(details),
+  });
+}
+
+export async function goLive(): Promise<{ success: boolean; isLive: boolean }> {
+  return fetchWithAuth(`/api/businesses/${_businessId}/go-live`, {
+    method: 'POST',
   });
 }
