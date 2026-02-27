@@ -167,15 +167,7 @@ export interface ProvisionResult {
   calendarAuthUrl: string | null;
 }
 
-export interface VoiceOption {
-  id: string;
-  label: string;
-  accent: string;
-  preview: boolean;
-}
-
 export interface ProvisionOptions {
-  voices: VoiceOption[];
   nameSuggestions: string[];
 }
 
@@ -189,10 +181,10 @@ export async function getProvisionOptions(): Promise<ProvisionOptions> {
   return res.json();
 }
 
-export async function provisionBusiness(areaCode: string, agentName?: string, voiceId?: string): Promise<ProvisionResult> {
+export async function provisionBusiness(areaCode: string, agentName?: string): Promise<ProvisionResult> {
   return fetchWithAuth(`/api/businesses/${_businessId}/provision`, {
     method: 'POST',
-    body: JSON.stringify({ areaCode, agentName, voiceId }),
+    body: JSON.stringify({ areaCode, agentName }),
   });
 }
 

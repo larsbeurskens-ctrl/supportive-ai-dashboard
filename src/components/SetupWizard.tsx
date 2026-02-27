@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { 
   getProvisionStatus, provisionBusiness, getProvisionOptions,
   saveBusinessDetails, goLive,
-  ProvisionStatus, VoiceOption,
+  ProvisionStatus,
 } from '@/lib/api';
 
 // Area code hints
@@ -26,8 +26,6 @@ export default function SetupWizard() {
   // Step 1: Create agent
   const [areaCode, setAreaCode] = useState('');
   const [agentName, setAgentName] = useState('');
-  const [selectedVoice, setSelectedVoice] = useState('');
-  const [voices, setVoices] = useState<VoiceOption[]>([]);
   const [nameSuggestions, setNameSuggestions] = useState<string[]>([]);
   const [provisioning, setProvisioning] = useState(false);
   const [provisionResult, setProvisionResult] = useState<{ phoneNumber: string; phoneNumberPretty: string; agentName: string; calendarAuthUrl: string | null } | null>(null);
@@ -102,11 +100,9 @@ export default function SetupWizard() {
     let retries = 0;
     async function init() {
       try {
-        // Load voice options
+        // Load name suggestions
         const opts = await getProvisionOptions();
-        setVoices(opts.voices);
         setNameSuggestions(opts.nameSuggestions);
-        if (opts.voices.length > 0) setSelectedVoice(opts.voices[0].id);
         
         // Check current status
         const s = await getProvisionStatus();
@@ -146,7 +142,7 @@ export default function SetupWizard() {
     setProvisioning(true);
     setError('');
     try {
-      const res = await provisionBusiness(areaCode, agentName.trim(), selectedVoice || undefined);
+      const res = await provisionBusiness(areaCode, agentName.trim());
       setProvisionResult({ phoneNumber: res.phoneNumber, phoneNumberPretty: res.phoneNumberPretty, agentName: res.agentName, calendarAuthUrl: res.calendarAuthUrl });
       await refreshStatus();
       setStep('business-details');
@@ -276,25 +272,6 @@ export default function SetupWizard() {
                 ))}
               </div>
             </div>
-
-            {/* Voice selection */}
-            {voices.length > 0 && (
-              <div>
-                <label className="block text-sm font-semibold text-[#1a2e3b] mb-1.5">Choose a voice</label>
-                <div className="grid grid-cols-2 gap-2">
-                  {voices.slice(0, 6).map(v => (
-                    <button 
-                      key={v.id} 
-                      onClick={() => setSelectedVoice(v.id)} 
-                      className={`text-left px-3 py-2.5 rounded-xl border transition-colors ${selectedVoice === v.id ? 'border-[#0d9488] bg-[#f0fdfa] ring-1 ring-[#0d9488]' : 'border-[#e5e0da] hover:border-[#0d9488]'}`}
-                    >
-                      <span className="text-[13px] font-medium text-[#1a2e3b]">{v.label}</span>
-                      <span className="text-[11px] text-[#94a7b8] block">{v.accent}</span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
 
             {/* Area code */}
             <div>
