@@ -129,3 +129,31 @@ export async function getUpcomingBookings(limit = 5): Promise<Booking[]> {
 export async function getCustomers(limit = 50): Promise<Customer[]> {
   return fetchWithAuth(`/api/customers?limit=${limit}`);
 }
+
+// Provisioning
+export interface ProvisionStatus {
+  provisioned: boolean;
+  phoneNumber: string | null;
+  calendarConnected: boolean;
+  agentId: string | null;
+  calendarAuthUrl: string | null;
+}
+
+export interface ProvisionResult {
+  success: boolean;
+  phoneNumber: string;
+  phoneNumberPretty: string;
+  agentId: string;
+  calendarAuthUrl: string | null;
+}
+
+export async function getProvisionStatus(): Promise<ProvisionStatus> {
+  return fetchWithAuth(`/api/businesses/${_businessId}/provision-status`);
+}
+
+export async function provisionBusiness(areaCode: string): Promise<ProvisionResult> {
+  return fetchWithAuth(`/api/businesses/${_businessId}/provision`, {
+    method: 'POST',
+    body: JSON.stringify({ areaCode }),
+  });
+}

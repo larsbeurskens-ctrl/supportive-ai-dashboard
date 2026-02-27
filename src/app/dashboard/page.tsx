@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { getDashboardMetrics, getTodaysBookings, getCalls, DashboardMetrics, Booking, Call } from '@/lib/api';
+import SetupWizard from '@/components/SetupWizard';
 import {
   PhoneIcon, CalendarIcon, DollarIcon, ClockIcon, TrendUpIcon,
 } from '@/components/marketing/Icons';
@@ -127,54 +128,8 @@ export default function DashboardPage() {
         </div>
       )}
 
-      {/* Setup call CTA — shows for new accounts */}
-      {isDemo && !loading && (
-        <div className="bg-white rounded-2xl border-2 border-[#e8930c] overflow-hidden">
-          <div className="bg-[#1a2e3b] px-6 py-5">
-            <h2 className="text-[18px] font-bold text-white mb-1">Let&apos;s get your AI receptionist live</h2>
-            <p className="text-[13px] text-white/60">Book a free 15-minute setup call. We&apos;ll get everything working together.</p>
-          </div>
-          <div className="p-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-4">
-                <div className="flex items-start gap-3">
-                  <span className="w-6 h-6 rounded-full bg-[#e8930c] text-white text-xs font-bold flex items-center justify-center flex-shrink-0 mt-0.5">1</span>
-                  <div>
-                    <p className="text-[14px] font-semibold text-[#1a2e3b]">Connect your phone number</p>
-                    <p className="text-[12px] text-[#5a7184]">We&apos;ll set up call forwarding so your AI answers when you can&apos;t</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <span className="w-6 h-6 rounded-full bg-[#e8930c] text-white text-xs font-bold flex items-center justify-center flex-shrink-0 mt-0.5">2</span>
-                  <div>
-                    <p className="text-[14px] font-semibold text-[#1a2e3b]">Link your calendar</p>
-                    <p className="text-[12px] text-[#5a7184]">Google Calendar integration — bookings appear automatically</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <span className="w-6 h-6 rounded-full bg-[#e8930c] text-white text-xs font-bold flex items-center justify-center flex-shrink-0 mt-0.5">3</span>
-                  <div>
-                    <p className="text-[14px] font-semibold text-[#1a2e3b]">Test it together</p>
-                    <p className="text-[12px] text-[#5a7184]">Make a live call and see your AI handle it in real time</p>
-                  </div>
-                </div>
-              </div>
-              <div className="flex flex-col items-center justify-center">
-                <a
-                  href="https://cal.com/lars-beurskens-g1aaqy/15min"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 bg-[#e8930c] text-white px-8 py-3.5 rounded-xl text-[16px] font-bold no-underline hover:bg-[#d17f00] transition-colors shadow-[0_2px_8px_rgba(232,147,12,0.3)]"
-                >
-                  <CalendarIcon size={20} />
-                  Book your setup call
-                </a>
-                <p className="text-[12px] text-[#94a7b8] mt-2.5">Free · 15 minutes · no commitment</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Setup wizard — shows for new accounts */}
+      {isDemo && !loading && <SetupWizard />}
 
       {/* Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3.5">
