@@ -45,8 +45,48 @@ export default function SetupWizard() {
   // Go live
   const [goingLive, setGoingLive] = useState(false);
 
-  // Get the vertical from the business (passed from parent or inferred)
-  const vertical = 'plumbing'; // TODO: get from business record
+  // Get the vertical from the status (set during account creation)
+  const vertical = status?.vertical || 'window_cleaning';
+
+  // Vertical-specific labels
+  const VERTICAL_LABELS: Record<string, { feeLabel: string; feePlaceholder: string; servicesPlaceholder: string }> = {
+    plumbing: {
+      feeLabel: 'Call-out / diagnostic fee',
+      feePlaceholder: 'e.g. $89, free estimates, varies by job',
+      servicesPlaceholder: 'e.g. drain cleaning, water heater repair, emergency plumbing, bathroom remodels...',
+    },
+    window_cleaning: {
+      feeLabel: 'Starting price / estimate range',
+      feePlaceholder: 'e.g. from $150 for a standard home, free quotes',
+      servicesPlaceholder: 'e.g. interior/exterior windows, screens, tracks, skylights, gutter cleaning...',
+    },
+    hvac: {
+      feeLabel: 'Service call fee',
+      feePlaceholder: 'e.g. $79 diagnostic, waived with repair',
+      servicesPlaceholder: 'e.g. AC repair, furnace install, duct cleaning, thermostat replacement, maintenance plans...',
+    },
+    electrician: {
+      feeLabel: 'Service call fee',
+      feePlaceholder: 'e.g. $75 trip charge, free estimates for big jobs',
+      servicesPlaceholder: 'e.g. panel upgrades, outlet install, lighting, ceiling fans, whole-home rewiring...',
+    },
+    roofing: {
+      feeLabel: 'Inspection / estimate fee',
+      feePlaceholder: 'e.g. free inspections, $150 for detailed report',
+      servicesPlaceholder: 'e.g. shingle repair, metal roofing, flat roofs, storm damage, gutter install...',
+    },
+    pest_control: {
+      feeLabel: 'Initial treatment price',
+      feePlaceholder: 'e.g. $149 initial treatment, monthly plans from $49',
+      servicesPlaceholder: 'e.g. termites, rodents, ants, mosquitoes, bed bugs, wildlife removal...',
+    },
+    landscaping: {
+      feeLabel: 'Starting price',
+      feePlaceholder: 'e.g. mowing from $40, free estimates for projects',
+      servicesPlaceholder: 'e.g. lawn care, tree trimming, hardscaping, irrigation, seasonal cleanup...',
+    },
+  };
+  const labels = VERTICAL_LABELS[vertical] || VERTICAL_LABELS.window_cleaning;
 
   const refreshStatus = useCallback(async () => {
     try {
@@ -341,9 +381,9 @@ export default function SetupWizard() {
 
             {/* Pricing */}
             <div>
-              <label className="block text-sm font-semibold text-[#1a2e3b] mb-1">Call-out / diagnostic fee</label>
+              <label className="block text-sm font-semibold text-[#1a2e3b] mb-1">{labels.feeLabel}</label>
               <input type="text" value={diagnosticFee} onChange={e => setDiagnosticFee(e.target.value)}
-                placeholder="e.g. $89, free estimates, varies by job"
+                placeholder={labels.feePlaceholder}
                 className="w-full px-4 py-2.5 border border-[#e5e0da] rounded-xl text-[14px] text-[#1a2e3b] focus:outline-none focus:ring-2 focus:ring-[#0d9488]" />
             </div>
 
@@ -351,7 +391,7 @@ export default function SetupWizard() {
             <div>
               <label className="block text-sm font-semibold text-[#1a2e3b] mb-1">Services you offer</label>
               <textarea value={services} onChange={e => setServices(e.target.value)}
-                placeholder="e.g. drain cleaning, water heater repair, emergency plumbing, bathroom remodels..."
+                placeholder={labels.servicesPlaceholder}
                 rows={2}
                 className="w-full px-4 py-2.5 border border-[#e5e0da] rounded-xl text-[14px] text-[#1a2e3b] focus:outline-none focus:ring-2 focus:ring-[#0d9488] resize-none" />
             </div>

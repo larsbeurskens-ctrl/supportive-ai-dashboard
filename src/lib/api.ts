@@ -152,6 +152,7 @@ export interface ProvisionStatus {
   agentId: string | null;
   agentName: string;
   voiceId: string | null;
+  vertical: string;
   isLive: boolean;
   checklist: OnboardingChecklist;
   calendarAuthUrl: string | null;
