@@ -156,7 +156,7 @@ export default function OnboardingPage() {
             <span className="text-[#d1ccc6]">·</span>
             <span>No credit card</span>
             <span className="text-[#d1ccc6]">·</span>
-            <span>Personal setup included</span>
+            <span>Live in 5 minutes</span>
           </div>
 
           {/* Existing user */}

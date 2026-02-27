@@ -179,15 +179,16 @@ export function HomePage() {
 
       {/* ===== HOW IT WORKS ===== */}
       <section id="how-it-works" className="py-16 px-6 md:px-10 max-w-[860px] mx-auto">
-        <h2 className="text-[30px] font-bold text-[#1a2e3b] text-center mb-12">How it works</h2>
+        <h2 className="text-[30px] font-bold text-[#1a2e3b] text-center mb-3">How it works</h2>
+        <p className="text-[15px] text-[#5a7184] text-center mb-12">Live in under 5 minutes. No tech skills needed.</p>
         <div className="relative flex flex-col md:flex-row gap-8 md:gap-0">
           {/* Connecting line (desktop) */}
           <div className="hidden md:block absolute top-6 left-10 right-10 h-[2px] bg-[#d1ccc6] z-0" />
           {[
-            { n: '1', title: 'Customer calls your number', desc: 'AI answers in under a second. Greets by your business name.' },
-            { n: '2', title: 'Qualifies & books the job', desc: 'Asks trade-specific questions. Checks your live calendar. Books the slot.' },
-            { n: '3', title: 'You get confirmation + details', desc: 'SMS to you and the customer. Job details in your calendar. Ready to go.' },
-            { n: '4', title: 'After the job, get paid', desc: 'Send invoice from dashboard. Customer pays via secure link. Done.' },
+            { n: '1', title: 'Sign up & pick your area code', desc: 'Create an account in 30 seconds. Choose a local number your customers will recognise.' },
+            { n: '2', title: 'Your AI goes live instantly', desc: 'We build a trade-trained agent for your business. It knows your pricing, services, and area.' },
+            { n: '3', title: 'Connect your calendar', desc: 'One click to link Google Calendar. Your AI books jobs into real open slots — no double-bookings.' },
+            { n: '4', title: 'Forward your calls', desc: 'Dial a code from your phone to forward missed calls to your AI. Takes 30 seconds. Done.' },
           ].map((s, i) => (
             <div key={i} className="flex-1 text-center relative z-[1]">
               <div className="w-12 h-12 rounded-full bg-[#1a2e3b] text-white flex items-center justify-center mx-auto mb-4 text-lg font-bold">
@@ -212,31 +213,36 @@ export function HomePage() {
               {
                 label: 'Window Cleaning',
                 scenario: 'New booking — 2-story colonial',
-                duration: '1:42',
+                duration: '1:24',
                 bubbles: [
-                  { role: 'ai', text: "Hi, you've reached Clean Pro Window Washing! How can I help you today?" },
-                  { role: 'customer', text: "I need my windows cleaned. It's a 2-story colonial." },
-                  { role: 'ai', text: "I'd be happy to help. Can I get your address so we can check availability in your area?" },
+                  { role: 'ai', text: "Hey! Thanks for calling Clean Pro Window Washing, this is Sarah. How can I help?" },
+                  { role: 'customer', text: "I'm looking to get my windows cleaned. Two-story colonial, just the exterior." },
+                  { role: 'ai', text: "For a two-story exterior, you're typically looking at around $250–400. Want me to find a time that works?" },
+                  { role: 'customer', text: "Yeah, what do you have next week?" },
+                  { role: 'ai', text: "Let me check... I've got Tuesday at 9 AM, Wednesday at 1 PM, or Thursday at 10. Which works best?" },
                 ],
               },
               {
                 label: 'Plumbing',
-                scenario: 'Emergency — burst pipe',
-                duration: '2:15',
+                scenario: 'Urgent leak — same-day booking',
+                duration: '1:38',
                 bubbles: [
-                  { role: 'ai', text: "Thank you for calling! How can I help?" },
-                  { role: 'customer', text: "I have water spraying from a pipe under my kitchen sink!" },
-                  { role: 'ai', text: "I understand that's urgent. First — can you locate the water shut-off valve and turn it off?" },
+                  { role: 'customer', text: "I've got water leaking from under my kitchen sink and it's getting everywhere!" },
+                  { role: 'ai', text: "Oh no — first, put a bucket under the leak and turn off the water valve under the sink. That'll slow things down. Let me check what we have today..." },
+                  { role: 'ai', text: "Good news — we've got a 2 PM slot this afternoon. Diagnostic is $89, and if you go ahead with the repair, that rolls into the cost. Want me to lock that in?" },
+                  { role: 'customer', text: "Yes, please! 2 PM works." },
                 ],
               },
               {
-                label: 'Reschedule',
-                scenario: 'Moving an appointment',
-                duration: '1:18',
+                label: 'After Hours',
+                scenario: '9 PM — water heater emergency',
+                duration: '1:15',
                 bubbles: [
-                  { role: 'ai', text: "Hi! How can I help you today?" },
-                  { role: 'customer', text: "I need to reschedule my appointment from Friday to next Monday." },
-                  { role: 'ai', text: "Let me check Monday availability for you. Do you prefer morning or afternoon?" },
+                  { role: 'customer', text: "It's 9 PM and my water heater is making banging noises with water on the floor." },
+                  { role: 'ai', text: "Turn off the shut-off valve on the water heater, and if it's gas, turn the gas valve to off too. We're closed for the evening, but I'm sending an urgent message to our team right now." },
+                  { role: 'ai', text: "Someone will call you back as soon as possible. If anything seems unsafe, don't hesitate to call 911." },
+                  { role: 'customer', text: "Thank you so much." },
+                  { role: 'ai', text: "Of course, Rachel. Hang tight — help is on the way." },
                 ],
               },
             ].map((conv, i) => (
@@ -440,56 +446,78 @@ export function HomePage() {
         </div>
       </section>
 
-      {/* ===== PERSONAL ONBOARDING + TRIAL YOUR WAY ===== */}
+      {/* ===== SETUP + TRIAL YOUR WAY ===== */}
       <section className="py-16 px-6 md:px-10 bg-white border-t border-[#e5e0da]">
         <div className="max-w-[860px] mx-auto">
           <div className="text-center mb-10">
-            <h2 className="text-[30px] font-bold text-[#1a2e3b] mb-2">Set up in 15 minutes, not 15 hours</h2>
-            <p className="text-[15px] text-[#5a7184]">We configure everything on a free call. You choose how the AI works for your business.</p>
+            <h2 className="text-[30px] font-bold text-[#1a2e3b] mb-2">Live in 5 minutes, not 5 days</h2>
+            <p className="text-[15px] text-[#5a7184]">Set it up yourself — or we&apos;ll walk you through it. Either way, it&apos;s fast.</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-            {/* Personal onboarding */}
+            {/* Self-serve setup */}
             <div className="rounded-xl border border-[#e5e0da] overflow-hidden">
-              <div className="bg-[#e8930c] px-6 py-4">
-                <h3 className="text-[17px] font-bold text-white">We set it up with you</h3>
-                <p className="text-[13px] text-white/80 mt-0.5">Free 15-minute setup call</p>
+              <div className="bg-[#1a2e3b] px-6 py-4">
+                <h3 className="text-[17px] font-bold text-white">Set it up yourself</h3>
+                <p className="text-[13px] text-white/60 mt-0.5">Takes under 5 minutes</p>
               </div>
               <div className="p-6 space-y-3">
                 {[
-                  'AI trained on your specific trade',
-                  'Dedicated local phone number assigned',
-                  'Calendar connected and tested live',
-                  'Call forwarding walked through step by step',
+                  { step: '1', text: 'Create your account (30 seconds)' },
+                  { step: '2', text: 'Pick your local area code' },
+                  { step: '3', text: 'AI agent goes live instantly' },
+                  { step: '4', text: 'Connect Google Calendar' },
+                  { step: '5', text: 'Forward calls from your phone' },
                 ].map((item, i) => (
-                  <div key={i} className="flex items-center gap-2.5">
+                  <div key={i} className="flex items-center gap-3">
+                    <span className="w-6 h-6 rounded-full bg-[#1a2e3b] text-white text-[11px] font-bold flex items-center justify-center flex-shrink-0">{item.step}</span>
+                    <span className="text-[14px] text-[#2a4a5e]">{item.text}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Guided setup */}
+            <div className="rounded-xl border border-[#e5e0da] overflow-hidden">
+              <div className="bg-[#e8930c] px-6 py-4">
+                <h3 className="text-[17px] font-bold text-white">Need a hand? We&apos;re here.</h3>
+                <p className="text-[13px] text-white/80 mt-0.5">Free 15-minute setup call</p>
+              </div>
+              <div className="p-6">
+                <p className="text-[14px] text-[#5a7184] leading-relaxed mb-5">
+                  Not sure about call forwarding or calendar setup? No worries — book a quick call and we&apos;ll do it together. We&apos;ve helped hundreds of trades businesses get set up.
+                </p>
+                {[
+                  'We walk you through every step live',
+                  'Test your AI with a real call together',
+                  'Customise how and when it picks up',
+                  'Answer any questions about your setup',
+                ].map((item, i) => (
+                  <div key={i} className="flex items-center gap-2.5 mb-2.5">
                     <CheckIcon size={15} className="text-[#059669] flex-shrink-0" />
                     <span className="text-[14px] text-[#2a4a5e]">{item}</span>
                   </div>
                 ))}
               </div>
             </div>
+          </div>
 
-            {/* Trial your way */}
-            <div className="rounded-xl border border-[#e5e0da] overflow-hidden">
-              <div className="bg-[#1a2e3b] px-6 py-4">
-                <h3 className="text-[17px] font-bold text-white">Trial it your way</h3>
-                <p className="text-[13px] text-white/60 mt-0.5">You control when the AI picks up</p>
-              </div>
-              <div className="p-5 space-y-2.5">
-                {[
-                  { mode: 'After 4 rings', desc: 'AI catches what you miss. Most popular.' },
-                  { mode: 'After hours only', desc: 'AI handles evenings and weekends.' },
-                  { mode: 'Always on', desc: 'AI answers every call. You focus on work.' },
-                ].map((item, i) => (
-                  <div key={i} className="flex items-start gap-3 p-3 rounded-lg bg-[#faf9f7]">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#e8930c] mt-2 flex-shrink-0" />
-                    <div>
-                      <span className="text-[13px] font-bold text-[#1a2e3b]">{item.mode}</span>
-                      <span className="text-[13px] text-[#5a7184] ml-1.5">{item.desc}</span>
-                    </div>
+          {/* Trial control */}
+          <div className="mt-8 bg-[#faf9f7] rounded-xl border border-[#e5e0da] p-6">
+            <h3 className="text-[15px] font-bold text-[#1a2e3b] mb-4 text-center">You control when the AI picks up</h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              {[
+                { mode: 'After 4 rings', desc: 'AI catches what you miss. Most popular.' },
+                { mode: 'After hours only', desc: 'AI handles evenings and weekends.' },
+                { mode: 'Always on', desc: 'AI answers every call. You focus on work.' },
+              ].map((item, i) => (
+                <div key={i} className="flex items-start gap-3 p-3 rounded-lg bg-white border border-[#e5e0da]">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#e8930c] mt-2 flex-shrink-0" />
+                  <div>
+                    <span className="text-[13px] font-bold text-[#1a2e3b]">{item.mode}</span>
+                    <span className="text-[13px] text-[#5a7184] ml-1.5">{item.desc}</span>
                   </div>
-                ))}
-              </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
@@ -590,8 +618,8 @@ export function HomePage() {
             Ready to stop missing calls?
           </h2>
           <p className="text-base text-[#5a7184] mb-8">
-            We&apos;ll set it up with you on a free 15-minute call. Your AI receptionist
-            <br className="hidden md:block" /> can be answering calls today.
+            Sign up, pick your area code, and your AI receptionist
+            <br className="hidden md:block" /> can be answering calls in under 5 minutes.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link
