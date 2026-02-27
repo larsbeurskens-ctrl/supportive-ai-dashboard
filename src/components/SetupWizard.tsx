@@ -23,6 +23,7 @@ export default function SetupWizard() {
   const [result, setResult] = useState<{ phoneNumber: string; phoneNumberPretty: string; calendarAuthUrl: string | null } | null>(null);
 
   useEffect(() => {
+    let retries = 0;
     async function checkStatus() {
       try {
         const s = await getProvisionStatus();
@@ -36,7 +37,13 @@ export default function SetupWizard() {
           setStep('done');
         }
       } catch {
-        setStep('provision');
+        // businessId might not be set yet — retry a couple times
+        if (retries < 3) {
+          retries++;
+          setTimeout(checkStatus, 1000);
+        } else {
+          setStep('provision');
+        }
       }
     }
     checkStatus();
@@ -215,19 +222,19 @@ export default function SetupWizard() {
 
         {/* Need help? — always visible */}
         <div className="mt-6 pt-5 border-t border-[#f0eeeb]">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-[13px] font-semibold text-[#1a2e3b]">Need a hand?</p>
-              <p className="text-[12px] text-[#94a7b8]">We&apos;re here to guide you through setup — no question too small</p>
+          <div className="bg-[#eef4f8] rounded-xl p-4 flex flex-col sm:flex-row items-center gap-4">
+            <div className="flex-1 text-center sm:text-left">
+              <p className="text-[14px] font-bold text-[#1a2e3b]">Prefer a guided setup? We&apos;ll do it together.</p>
+              <p className="text-[12px] text-[#5a7184] mt-0.5">Free 15-minute call — we walk you through everything, no tech skills needed.</p>
             </div>
             <a
               href="https://cal.com/lars-beurskens-g1aaqy/15min"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#2a4a5e] bg-[#faf9f7] border border-[#e5e0da] px-4 py-2 rounded-lg no-underline hover:bg-[#f0eeeb] transition-colors flex-shrink-0"
+              className="inline-flex items-center gap-2 text-[14px] font-bold text-white bg-[#2a4a5e] px-5 py-2.5 rounded-xl no-underline hover:bg-[#1a2e3b] transition-colors flex-shrink-0 shadow-sm"
             >
-              <CalendarIcon size={14} />
-              Book a setup call
+              <CalendarIcon size={16} />
+              Book free setup call
             </a>
           </div>
         </div>

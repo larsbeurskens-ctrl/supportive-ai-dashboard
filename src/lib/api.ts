@@ -92,7 +92,13 @@ async function fetchWithAuth(endpoint: string, options: RequestInit = {}) {
   });
   
   if (!res.ok) {
-    throw new Error(`API error: ${res.status}`);
+    // Try to include the error body for better error handling
+    let errorMsg = `API error: ${res.status}`;
+    try {
+      const body = await res.json();
+      if (body?.error) errorMsg = body.error;
+    } catch { /* ignore parse errors */ }
+    throw new Error(errorMsg);
   }
   
   return res.json();
