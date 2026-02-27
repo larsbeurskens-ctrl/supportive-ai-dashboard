@@ -156,6 +156,7 @@ export interface ProvisionStatus {
   isLive: boolean;
   checklist: OnboardingChecklist;
   calendarAuthUrl: string | null;
+  overrides: Record<string, any>;
 }
 
 export interface ProvisionResult {
