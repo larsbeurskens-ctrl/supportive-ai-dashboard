@@ -17,7 +17,7 @@ const RECORDINGS: Recording[] = [
     id: 'booking',
     title: 'Customer books a window cleaning',
     subtitle: '2-story colonial — full booking with pricing',
-    duration: '3:10',
+    duration: '2:00',
     url: '/audio/demo-call-wc-booking-mike.m4a',
     transcript: [
       { speaker: 'Sarah', text: "Hey there! Thanks for calling Clean Pro Window Washing, this is Sarah. How can I help you today?" },
