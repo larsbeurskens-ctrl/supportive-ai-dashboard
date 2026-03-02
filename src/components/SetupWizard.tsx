@@ -540,20 +540,16 @@ export default function SetupWizard() {
             <div className="border-t border-[#f0eeeb] pt-4">
               <h3 className="text-[13px] font-bold text-[#1a2e3b] mb-1">📱 Set up call forwarding</h3>
               <p className="text-[13px] text-[#5a7184] mb-4">
-                This is how customers reach {displayName}. You forward your existing business number to {displayName}&apos;s number, so callers dial the number they already know.
+                This is how customers reach your AI receptionist. You forward your existing business number so callers dial the number they already know.
               </p>
 
               <div className="space-y-3 mb-4">
                 {/* Option 1: Forward unanswered */}
                 <div className="bg-[#f8fafc] rounded-xl p-4 border border-[#e5e0da]">
-                  <div className="flex items-start gap-2.5 mb-1.5">
-                    <span className="bg-[#0d9488] text-white text-[10px] font-bold px-1.5 py-0.5 rounded mt-0.5">RECOMMENDED</span>
-                    <div>
-                      <p className="text-[13px] font-semibold text-[#1a2e3b]">Forward unanswered calls</p>
-                      <p className="text-[12px] text-[#5a7184] mt-0.5">Your phone rings first. If you don&apos;t pick up after ~4 rings, {displayName} answers instead. You stay in control — the AI only picks up calls you miss.</p>
-                    </div>
-                  </div>
-                  <div className="ml-9 mt-2">
+                  <span className="inline-block bg-[#0d9488] text-white text-[10px] font-bold px-1.5 py-0.5 rounded mb-2">RECOMMENDED</span>
+                  <p className="text-[13px] font-semibold text-[#1a2e3b]">Forward unanswered calls</p>
+                  <p className="text-[12px] text-[#5a7184] mt-0.5">Your phone rings first. If you don&apos;t pick up after ~4 rings, the AI answers instead. You stay in control — the AI only picks up calls you miss.</p>
+                  <div className="mt-2.5">
                     <p className="text-[12px] text-[#5a7184]">
                       Dial <code className="bg-[#e5e0da] px-1.5 py-0.5 rounded text-[#1a2e3b] font-semibold">*71{status.phoneNumber?.replace('+1', '')}</code> from your business phone
                     </p>
@@ -563,8 +559,8 @@ export default function SetupWizard() {
                 {/* Option 2: Forward all */}
                 <div className="bg-[#f8fafc] rounded-xl p-4 border border-[#e5e0da]">
                   <p className="text-[13px] font-semibold text-[#1a2e3b]">Forward all calls</p>
-                  <p className="text-[12px] text-[#5a7184] mt-0.5">Every call goes straight to {displayName}. Your phone won&apos;t ring at all. Best for after-hours or when you want {displayName} handling everything.</p>
-                  <div className="mt-2">
+                  <p className="text-[12px] text-[#5a7184] mt-0.5">Every call goes straight to your AI receptionist. Your phone won&apos;t ring at all. Best for after-hours or when you want the AI handling everything.</p>
+                  <div className="mt-2.5">
                     <p className="text-[12px] text-[#5a7184]">
                       Dial <code className="bg-[#e5e0da] px-1.5 py-0.5 rounded text-[#1a2e3b] font-semibold">*72{status.phoneNumber?.replace('+1', '')}</code> from your business phone
                     </p>
@@ -611,11 +607,11 @@ export default function SetupWizard() {
                         <p className="text-[13px] font-semibold text-[#1a2e3b]">Google Calendar</p>
                       </div>
                       {status.checklist.calendarConnected ? (
-                        <p className="text-[12px] text-[#059669] ml-6">{displayName} checks your calendar before booking, so customers never get double-booked.</p>
+                        <p className="text-[12px] text-[#059669] ml-6">Your AI checks your calendar before booking, so customers never get double-booked.</p>
                       ) : (
                         <div className="ml-6">
-                          <p className="text-[12px] text-[#5a7184]">{displayName} can still book appointments without this — she&apos;ll offer standard time slots (mornings and afternoons) and you&apos;ll get an SMS for each booking. But she won&apos;t know when you&apos;re already busy, so you may need to reschedule some jobs manually.</p>
-                          <p className="text-[12px] text-[#0d9488] font-semibold mt-1">With calendar connected: {displayName} sees your real availability and avoids conflicts automatically.</p>
+                          <p className="text-[12px] text-[#5a7184]">Your AI can still book appointments without this — it&apos;ll offer standard time slots (mornings and afternoons) and you&apos;ll get an SMS for each booking. But it won&apos;t know when you&apos;re already busy, so you may need to reschedule some jobs manually.</p>
+                          <p className="text-[12px] text-[#0d9488] font-semibold mt-1">With calendar connected: your AI sees your real availability and avoids conflicts automatically.</p>
                         </div>
                       )}
                     </div>
