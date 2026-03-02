@@ -13,6 +13,7 @@ const navItems = [
   { href: '/dashboard', label: 'Dashboard', icon: TrendUpIcon },
   { href: '/dashboard/calls', label: 'Calls', icon: PhoneIcon },
   { href: '/dashboard/bookings', label: 'Bookings', icon: CalendarIcon },
+  { href: '/dashboard/invoices', label: 'Invoices', icon: DollarIcon },
   { href: '/dashboard/customers', label: 'Customers', icon: UsersIcon },
   { href: '/dashboard/setup', label: 'Call Forwarding', icon: PhoneIcon },
   { href: '/dashboard/settings', label: 'Settings', icon: SettingsIcon },

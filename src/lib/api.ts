@@ -201,3 +201,58 @@ export async function goLive(): Promise<{ success: boolean; isLive: boolean }> {
     method: 'POST',
   });
 }
+
+// Invoices
+export interface Invoice {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  bookingId: string;
+  customerId: string;
+  description: string;
+  lineItems: { description: string; address?: string; date?: string; amount: number | null }[] | null;
+  amount: number | null;
+  status: 'draft' | 'sent' | 'paid' | 'overdue' | 'cancelled';
+  stripePaymentLinkUrl?: string;
+  sentAt?: string;
+  paidAt?: string;
+  reminderCount: number;
+  notes?: string;
+  customer?: {
+    firstName: string;
+    lastName: string;
+    phone: string;
+  };
+  booking?: Booking;
+}
+
+export async function getInvoices(status?: string): Promise<Invoice[]> {
+  const query = status ? `?status=${status}` : '';
+  return fetchWithAuth(`/api/invoices/${_businessId}${query}`);
+}
+
+export async function createInvoice(bookingId: string): Promise<{ success: boolean; invoice: Invoice }> {
+  return fetchWithAuth('/api/invoices', {
+    method: 'POST',
+    body: JSON.stringify({ bookingId }),
+  });
+}
+
+export async function updateInvoice(invoiceId: string, data: { amount?: number; description?: string; lineItems?: any; notes?: string }): Promise<Invoice> {
+  return fetchWithAuth(`/api/invoices/${invoiceId}`, {
+    method: 'PATCH',
+    body: JSON.stringify(data),
+  });
+}
+
+export async function sendInvoice(invoiceId: string): Promise<{ success: boolean; invoice: Invoice }> {
+  return fetchWithAuth(`/api/invoices/${invoiceId}/send`, {
+    method: 'POST',
+  });
+}
+
+export async function cancelInvoice(invoiceId: string): Promise<{ success: boolean }> {
+  return fetchWithAuth(`/api/invoices/${invoiceId}/cancel`, {
+    method: 'POST',
+  });
+}
