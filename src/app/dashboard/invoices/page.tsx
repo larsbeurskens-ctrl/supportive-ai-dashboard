@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { getInvoices, getBookings, createInvoice, updateInvoice, sendInvoice, cancelInvoice, Invoice, Booking } from '@/lib/api';
+import { getInvoices, getBookings, getProvisionStatus, createInvoice, updateInvoice, sendInvoice, cancelInvoice, connectStripe, Invoice, Booking } from '@/lib/api';
 
 function StatusBadge({ status }: { status: string }) {
   const config: Record<string, { bg: string; text: string; label: string }> = {
@@ -58,13 +58,15 @@ function InvoiceEditor({ invoice, onSaved, onClose }: { invoice: Invoice; onSave
     setSending(true);
     setError('');
     try {
-      // Save first, then send
       await updateInvoice(invoice.id, {
         amount: parseFloat(amount),
         description,
         notes: notes || undefined,
       });
-      await sendInvoice(invoice.id);
+      const result = await sendInvoice(invoice.id);
+      if (result.smsSent === false) {
+        alert('Invoice created but SMS could not be delivered (landline?). Use "Copy Link" to send the payment link manually.');
+      }
       onSaved();
       onClose();
     } catch (e: any) {
@@ -209,6 +211,8 @@ export default function InvoicesPage() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [showCreate, setShowCreate] = useState(false);
   const [cancelling, setCancelling] = useState<string | null>(null);
+  const [stripeConnected, setStripeConnected] = useState<boolean | null>(null);
+  const [connectingStripe, setConnectingStripe] = useState(false);
 
   async function loadInvoices() {
     setLoading(true);
@@ -223,6 +227,22 @@ export default function InvoicesPage() {
   }
 
   useEffect(() => { loadInvoices(); }, [filter]);
+
+  useEffect(() => {
+    getProvisionStatus().then(s => setStripeConnected(s.checklist.stripeConnected)).catch(() => {});
+  }, []);
+
+  async function handleConnectStripe() {
+    setConnectingStripe(true);
+    try {
+      const result = await connectStripe();
+      if (result.onboardingUrl) window.location.href = result.onboardingUrl;
+    } catch (e: any) {
+      alert(e.message);
+    } finally {
+      setConnectingStripe(false);
+    }
+  }
 
   async function handleCancel(invoiceId: string) {
     if (!confirm('Cancel this invoice? This will deactivate the payment link.')) return;
@@ -270,6 +290,23 @@ export default function InvoicesPage() {
           + New Invoice
         </button>
       </div>
+
+      {/* Stripe not connected banner */}
+      {stripeConnected === false && (
+        <div className="bg-[#fef8f0] border border-[#f0dcc0] rounded-xl px-5 py-4 flex items-center justify-between">
+          <div>
+            <p className="text-[13px] font-semibold text-[#92640a]">Connect Stripe to send invoices</p>
+            <p className="text-[12px] text-[#a16207]">You need a Stripe account to create payment links. Takes 5 minutes.</p>
+          </div>
+          <button
+            onClick={handleConnectStripe}
+            disabled={connectingStripe}
+            className="px-4 py-2 rounded-lg bg-[#635BFF] text-white text-[13px] font-semibold hover:bg-[#5046e5] cursor-pointer border-none flex-shrink-0 disabled:opacity-50"
+          >
+            {connectingStripe ? 'Connecting...' : 'Connect Stripe'}
+          </button>
+        </div>
+      )}
 
       {/* Summary Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -356,14 +393,23 @@ export default function InvoicesPage() {
                     </button>
                   )}
                   {inv.status === 'sent' && inv.stripePaymentLinkUrl && (
-                    <a
-                      href={inv.stripePaymentLinkUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="px-3 py-1.5 rounded-lg bg-[#eff6ff] text-[#2563eb] text-[12px] font-semibold hover:bg-[#dbeafe] no-underline"
-                    >
-                      View Link
-                    </a>
+                    <>
+                      <a
+                        href={inv.stripePaymentLinkUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="px-3 py-1.5 rounded-lg bg-[#eff6ff] text-[#2563eb] text-[12px] font-semibold hover:bg-[#dbeafe] no-underline"
+                      >
+                        View Link
+                      </a>
+                      <button
+                        onClick={() => { navigator.clipboard.writeText(inv.stripePaymentLinkUrl!); alert('Payment link copied!'); }}
+                        className="px-3 py-1.5 rounded-lg bg-[#f0eeeb] text-[#5a7184] text-[12px] font-semibold hover:bg-[#e5e0da] cursor-pointer border-none"
+                        title="Copy link to send manually (WhatsApp, email, etc.)"
+                      >
+                        Copy Link
+                      </button>
+                    </>
                   )}
                   {['draft', 'sent'].includes(inv.status) && (
                     <button

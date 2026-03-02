@@ -143,6 +143,7 @@ export interface OnboardingChecklist {
   ownerPhoneSet: boolean;
   testCallMade: boolean;
   calendarConnected: boolean;
+  stripeConnected: boolean;
   callForwardingSet: boolean;
 }
 
@@ -202,6 +203,14 @@ export async function goLive(): Promise<{ success: boolean; isLive: boolean }> {
   });
 }
 
+// Stripe Connect
+export async function connectStripe(): Promise<{ success: boolean; onboardingUrl: string }> {
+  return fetchWithAuth('/api/stripe/connect', {
+    method: 'POST',
+    body: JSON.stringify({ businessId: _businessId }),
+  });
+}
+
 // Invoices
 export interface Invoice {
   id: string;
@@ -245,7 +254,7 @@ export async function updateInvoice(invoiceId: string, data: { amount?: number; 
   });
 }
 
-export async function sendInvoice(invoiceId: string): Promise<{ success: boolean; invoice: Invoice }> {
+export async function sendInvoice(invoiceId: string): Promise<{ success: boolean; invoice: Invoice; smsSent?: boolean }> {
   return fetchWithAuth(`/api/invoices/${invoiceId}/send`, {
     method: 'POST',
   });

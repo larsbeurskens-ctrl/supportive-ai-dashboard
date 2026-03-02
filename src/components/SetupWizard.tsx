@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { 
   getProvisionStatus, provisionBusiness, getProvisionOptions,
-  saveBusinessDetails, goLive,
+  saveBusinessDetails, goLive, connectStripe,
   ProvisionStatus,
 } from '@/lib/api';
 
@@ -519,6 +519,15 @@ export default function SetupWizard() {
               <ChecklistItem done={status.checklist.testCallMade} label="Test call completed" sublabel={`Call ${displayPhone} to test`} />
               <ChecklistItem done={status.checklist.calendarConnected} label="Calendar connected" sublabel="Optional — lets AI check your real availability" optional
                 onFix={() => { if (status.calendarAuthUrl) window.location.href = status.calendarAuthUrl; }} fixLabel="Connect" />
+              <ChecklistItem done={status.checklist.stripeConnected} label="Payments connected" sublabel="Optional — send invoices via SMS after jobs" optional
+                onFix={async () => {
+                  try {
+                    const result = await connectStripe();
+                    if (result.onboardingUrl) window.location.href = result.onboardingUrl;
+                  } catch (e: any) {
+                    setError(e.message);
+                  }
+                }} fixLabel="Connect Stripe" />
             </div>
 
             {/* Call forwarding instructions */}
