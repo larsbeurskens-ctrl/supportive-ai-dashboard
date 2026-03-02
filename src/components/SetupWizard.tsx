@@ -536,24 +536,45 @@ export default function SetupWizard() {
               </div>
             </div>
 
-            {/* Call forwarding instructions */}
+            {/* Call forwarding instructions — with context */}
             <div className="border-t border-[#f0eeeb] pt-4">
-              <h3 className="text-[13px] font-bold text-[#1a2e3b] mb-2">📱 Set up call forwarding</h3>
-              <p className="text-[13px] text-[#5a7184] mb-3">
-                Forward your business line to {displayPhone} so {displayName} answers when you can&apos;t. You can forward all calls or just unanswered ones.
+              <h3 className="text-[13px] font-bold text-[#1a2e3b] mb-1">📱 Set up call forwarding</h3>
+              <p className="text-[13px] text-[#5a7184] mb-4">
+                This is how customers reach {displayName}. You forward your existing business number to {displayName}&apos;s number, so callers dial the number they already know.
               </p>
-              <div className="bg-[#f8fafc] rounded-xl p-4 space-y-2">
-                <p className="text-[12px] font-semibold text-[#1a2e3b]">Quick setup (most carriers):</p>
-                <p className="text-[12px] text-[#5a7184]">
-                  <strong>Forward all calls:</strong> Dial <code className="bg-[#e5e0da] px-1.5 py-0.5 rounded text-[#1a2e3b]">*72{status.phoneNumber?.replace('+1', '')}</code> from your business phone
-                </p>
-                <p className="text-[12px] text-[#5a7184]">
-                  <strong>Forward unanswered only:</strong> Dial <code className="bg-[#e5e0da] px-1.5 py-0.5 rounded text-[#1a2e3b]">*71{status.phoneNumber?.replace('+1', '')}</code> from your business phone
-                </p>
-                <p className="text-[11px] text-[#94a7b8]">
-                  <a href="/dashboard/setup" className="text-[#0d9488] no-underline hover:underline">See detailed instructions for your carrier →</a>
-                </p>
+
+              <div className="space-y-3 mb-4">
+                {/* Option 1: Forward unanswered */}
+                <div className="bg-[#f8fafc] rounded-xl p-4 border border-[#e5e0da]">
+                  <div className="flex items-start gap-2.5 mb-1.5">
+                    <span className="bg-[#0d9488] text-white text-[10px] font-bold px-1.5 py-0.5 rounded mt-0.5">RECOMMENDED</span>
+                    <div>
+                      <p className="text-[13px] font-semibold text-[#1a2e3b]">Forward unanswered calls</p>
+                      <p className="text-[12px] text-[#5a7184] mt-0.5">Your phone rings first. If you don&apos;t pick up after ~4 rings, {displayName} answers instead. You stay in control — the AI only picks up calls you miss.</p>
+                    </div>
+                  </div>
+                  <div className="ml-9 mt-2">
+                    <p className="text-[12px] text-[#5a7184]">
+                      Dial <code className="bg-[#e5e0da] px-1.5 py-0.5 rounded text-[#1a2e3b] font-semibold">*71{status.phoneNumber?.replace('+1', '')}</code> from your business phone
+                    </p>
+                  </div>
+                </div>
+
+                {/* Option 2: Forward all */}
+                <div className="bg-[#f8fafc] rounded-xl p-4 border border-[#e5e0da]">
+                  <p className="text-[13px] font-semibold text-[#1a2e3b]">Forward all calls</p>
+                  <p className="text-[12px] text-[#5a7184] mt-0.5">Every call goes straight to {displayName}. Your phone won&apos;t ring at all. Best for after-hours or when you want {displayName} handling everything.</p>
+                  <div className="mt-2">
+                    <p className="text-[12px] text-[#5a7184]">
+                      Dial <code className="bg-[#e5e0da] px-1.5 py-0.5 rounded text-[#1a2e3b] font-semibold">*72{status.phoneNumber?.replace('+1', '')}</code> from your business phone
+                    </p>
+                  </div>
+                </div>
               </div>
+
+              <p className="text-[11px] text-[#94a7b8]">
+                These codes work for most carriers. <a href="/dashboard/setup" className="text-[#0d9488] no-underline hover:underline">See instructions for AT&amp;T, Verizon, T-Mobile, and others →</a>
+              </p>
             </div>
 
             {/* Go live button */}
@@ -573,22 +594,71 @@ export default function SetupWizard() {
               )}
             </div>
 
-            {/* Optional add-ons — visually separate */}
+            {/* Optional add-ons — visually separate with explanations */}
             <div className="border-t border-[#f0eeeb] pt-5">
-              <p className="text-[11px] font-bold text-[#94a7b8] uppercase tracking-wider mb-2">Optional add-ons</p>
-              <div className="space-y-2">
-                <ChecklistItem done={status.checklist.calendarConnected} label="Calendar connected" sublabel={status.checklist.calendarConnected ? 'AI checks your real availability' : 'Lets AI check your real availability'} optional
-                  onFix={() => { if (status.calendarAuthUrl) window.location.href = status.calendarAuthUrl; }}
-                  fixLabel={status.checklist.calendarConnected ? undefined : 'Connect'} />
-                <ChecklistItem done={status.checklist.stripeConnected} label="Payments connected" sublabel={status.checklist.stripeConnected ? 'Send invoices via SMS after jobs' : 'Send invoices via SMS after jobs'} optional
-                  onFix={async () => {
-                    try {
-                      const result = await connectStripe();
-                      if (result.onboardingUrl) window.location.href = result.onboardingUrl;
-                    } catch (e: any) {
-                      setError(e.message);
-                    }
-                  }} fixLabel={status.checklist.stripeConnected ? undefined : 'Connect Stripe'} />
+              <p className="text-[11px] font-bold text-[#94a7b8] uppercase tracking-wider mb-3">Optional add-ons</p>
+              <div className="space-y-3">
+                {/* Calendar */}
+                <div className={`rounded-xl p-4 border ${status.checklist.calendarConnected ? 'bg-[#f0fdf4] border-[#86efac]' : 'bg-[#faf9f7] border-[#e5e0da]'}`}>
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-1">
+                        {status.checklist.calendarConnected ? (
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2"><path d="M20 6L9 17l-5-5"/></svg>
+                        ) : (
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94a7b8" strokeWidth="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                        )}
+                        <p className="text-[13px] font-semibold text-[#1a2e3b]">Google Calendar</p>
+                      </div>
+                      {status.checklist.calendarConnected ? (
+                        <p className="text-[12px] text-[#059669] ml-6">{displayName} checks your calendar before booking, so customers never get double-booked.</p>
+                      ) : (
+                        <div className="ml-6">
+                          <p className="text-[12px] text-[#5a7184]">{displayName} can still book appointments without this — she&apos;ll offer standard time slots (mornings and afternoons) and you&apos;ll get an SMS for each booking. But she won&apos;t know when you&apos;re already busy, so you may need to reschedule some jobs manually.</p>
+                          <p className="text-[12px] text-[#0d9488] font-semibold mt-1">With calendar connected: {displayName} sees your real availability and avoids conflicts automatically.</p>
+                        </div>
+                      )}
+                    </div>
+                    {!status.checklist.calendarConnected && status.calendarAuthUrl && (
+                      <button onClick={() => window.location.href = status.calendarAuthUrl!}
+                        className="px-3 py-1.5 rounded-lg bg-white border border-[#e5e0da] text-[#0d9488] text-[12px] font-semibold hover:bg-[#f0fdf4] cursor-pointer flex-shrink-0 mt-0.5">
+                        Connect
+                      </button>
+                    )}
+                  </div>
+                </div>
+
+                {/* Payments */}
+                <div className={`rounded-xl p-4 border ${status.checklist.stripeConnected ? 'bg-[#f0fdf4] border-[#86efac]' : 'bg-[#faf9f7] border-[#e5e0da]'}`}>
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-1">
+                        {status.checklist.stripeConnected ? (
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2"><path d="M20 6L9 17l-5-5"/></svg>
+                        ) : (
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94a7b8" strokeWidth="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+                        )}
+                        <p className="text-[13px] font-semibold text-[#1a2e3b]">Stripe Payments</p>
+                      </div>
+                      {status.checklist.stripeConnected ? (
+                        <p className="text-[12px] text-[#059669] ml-6">You can send payment links to customers via SMS after jobs are done.</p>
+                      ) : (
+                        <p className="text-[12px] text-[#5a7184] ml-6">Lets you send payment links via SMS after completing a job. Customer taps the link, pays by card. You can skip this and add it later from Settings.</p>
+                      )}
+                    </div>
+                    {!status.checklist.stripeConnected && (
+                      <button onClick={async () => {
+                        try {
+                          const result = await connectStripe();
+                          if (result.onboardingUrl) window.location.href = result.onboardingUrl;
+                        } catch (e: any) { setError(e.message); }
+                      }}
+                        className="px-3 py-1.5 rounded-lg bg-[#635BFF] text-white text-[12px] font-semibold hover:bg-[#5046e5] cursor-pointer border-none flex-shrink-0 mt-0.5">
+                        Connect Stripe
+                      </button>
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
 
