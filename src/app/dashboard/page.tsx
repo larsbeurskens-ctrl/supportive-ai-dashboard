@@ -237,7 +237,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Quick Actions */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5">
         <Link href="/dashboard/calls"
           className="flex items-center justify-between p-5 bg-white rounded-xl border border-[#e5e0da] no-underline hover:bg-[#faf9f7] transition-colors group">
           <div className="flex items-center gap-3.5">
@@ -253,6 +253,16 @@ export default function DashboardPage() {
           <div className="flex items-center gap-3.5">
             <span className="text-[#5a7184]"><CalendarIcon size={22} /></span>
             <span className="text-base font-semibold text-[#1a2e3b]">Full Schedule</span>
+          </div>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#94a7b8" strokeWidth="2" className="group-hover:stroke-[#1a2e3b]">
+            <polyline points="9 18 15 12 9 6"/>
+          </svg>
+        </Link>
+        <Link href="/dashboard/invoices"
+          className="flex items-center justify-between p-5 bg-white rounded-xl border border-[#e5e0da] no-underline hover:bg-[#faf9f7] transition-colors group">
+          <div className="flex items-center gap-3.5">
+            <span className="text-[#5a7184]"><DollarIcon size={22} /></span>
+            <span className="text-base font-semibold text-[#1a2e3b]">Invoices</span>
           </div>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#94a7b8" strokeWidth="2" className="group-hover:stroke-[#1a2e3b]">
             <polyline points="9 18 15 12 9 6"/>

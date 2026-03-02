@@ -487,7 +487,7 @@ export default function SetupWizard() {
               </p>
             </div>
             <div className="flex gap-3">
-              <button onClick={async () => { await refreshStatus(); setStep('checklist'); }}
+              <button onClick={async () => { await saveBusinessDetails({ testCallConfirmed: true }); await refreshStatus(); setStep('checklist'); }}
                 className="flex-1 bg-[#0d9488] text-white py-3 rounded-xl text-[15px] font-bold hover:bg-[#0b7c72] transition-colors">
                 I&apos;ve tested {displayName} →
               </button>
@@ -500,34 +500,40 @@ export default function SetupWizard() {
         )}
 
         {/* ====== STEP 4: Go-Live Checklist ====== */}
-        {step === 'checklist' && status && (
+        {step === 'checklist' && status && (() => {
+          const requiredDone = status.checklist.agentCreated && status.checklist.ownerPhoneSet && status.checklist.businessDetailsAdded && status.checklist.testCallMade;
+          return (
           <div className="space-y-5">
-            {/* Test mode banner */}
-            <div className="bg-[#fef3c7] border border-[#fbbf24] rounded-xl p-4 flex items-start gap-3">
-              <span className="text-[18px]">⚡</span>
-              <div>
-                <p className="text-[13px] font-bold text-[#92400e]">{displayName} is in test mode</p>
-                <p className="text-[12px] text-[#a16207]">Only you can call {displayPhone}. Customers won&apos;t reach {displayName} until you go live.</p>
-              </div>
-            </div>
+            {/* Test mode / ready banner */}
+            {!status.isLive ? (
+              requiredDone ? (
+                <div className="bg-[#f0fdf4] border border-[#86efac] rounded-xl p-4 flex items-start gap-3">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2" className="flex-shrink-0 mt-0.5"><path d="M20 6L9 17l-5-5"/></svg>
+                  <div>
+                    <p className="text-[13px] font-bold text-[#059669]">All set! {displayName} is ready to go live.</p>
+                    <p className="text-[12px] text-[#16a34a]">Hit the button below to start receiving real calls.</p>
+                  </div>
+                </div>
+              ) : (
+                <div className="bg-[#fef3c7] border border-[#fbbf24] rounded-xl p-4 flex items-start gap-3">
+                  <span className="text-[18px]">⚡</span>
+                  <div>
+                    <p className="text-[13px] font-bold text-[#92400e]">{displayName} is in test mode</p>
+                    <p className="text-[12px] text-[#a16207]">Complete the items below, then go live.</p>
+                  </div>
+                </div>
+              )
+            ) : null}
 
-            {/* Checklist */}
-            <div className="space-y-2">
-              <ChecklistItem done={status.checklist.agentCreated} label={`AI created: ${displayName}`} sublabel={displayPhone} />
-              <ChecklistItem done={status.checklist.ownerPhoneSet} label="Your phone number added" sublabel="SMS alerts for incoming calls" onFix={goToEdit} />
-              <ChecklistItem done={status.checklist.businessDetailsAdded} label="Business details added" sublabel="Pricing, services, credentials" onFix={goToEdit} />
-              <ChecklistItem done={status.checklist.testCallMade} label="Test call completed" sublabel={`Call ${displayPhone} to test`} />
-              <ChecklistItem done={status.checklist.calendarConnected} label="Calendar connected" sublabel="Optional — lets AI check your real availability" optional
-                onFix={() => { if (status.calendarAuthUrl) window.location.href = status.calendarAuthUrl; }} fixLabel="Connect" />
-              <ChecklistItem done={status.checklist.stripeConnected} label="Payments connected" sublabel="Optional — send invoices via SMS after jobs" optional
-                onFix={async () => {
-                  try {
-                    const result = await connectStripe();
-                    if (result.onboardingUrl) window.location.href = result.onboardingUrl;
-                  } catch (e: any) {
-                    setError(e.message);
-                  }
-                }} fixLabel="Connect Stripe" />
+            {/* Required checklist */}
+            <div>
+              <p className="text-[11px] font-bold text-[#94a7b8] uppercase tracking-wider mb-2">Required</p>
+              <div className="space-y-2">
+                <ChecklistItem done={status.checklist.agentCreated} label={`AI created: ${displayName}`} sublabel={displayPhone} />
+                <ChecklistItem done={status.checklist.ownerPhoneSet} label="Your phone number added" sublabel="SMS alerts for incoming calls" onFix={goToEdit} />
+                <ChecklistItem done={status.checklist.businessDetailsAdded} label="Business details added" sublabel="Pricing, services, credentials" onFix={goToEdit} />
+                <ChecklistItem done={status.checklist.testCallMade} label="Test call completed" sublabel={`Call ${displayPhone} to test`} />
+              </div>
             </div>
 
             {/* Call forwarding instructions */}
@@ -553,7 +559,7 @@ export default function SetupWizard() {
             {/* Go live button */}
             <div className="pt-2">
               <button onClick={handleGoLive}
-                disabled={goingLive || !status.checklist.businessDetailsAdded || !status.checklist.ownerPhoneSet}
+                disabled={goingLive || !requiredDone}
                 className="w-full bg-[#22c55e] text-white py-4 rounded-xl text-[16px] font-bold hover:bg-[#16a34a] transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_2px_8px_rgba(34,197,94,0.3)]">
                 {goingLive ? (
                   <span className="flex items-center justify-center gap-2">
@@ -562,13 +568,34 @@ export default function SetupWizard() {
                   </span>
                 ) : `🚀 Go live — start receiving real calls`}
               </button>
-              {(!status.checklist.businessDetailsAdded || !status.checklist.ownerPhoneSet) && (
+              {!requiredDone && (
                 <p className="text-[12px] text-[#94a7b8] text-center mt-2">Complete the required items above to go live</p>
               )}
             </div>
-            {error && <div className="bg-red-50 text-red-700 p-3 rounded-xl text-[13px]">{error}</div>}
+
+            {/* Optional add-ons — visually separate */}
+            <div className="border-t border-[#f0eeeb] pt-5">
+              <p className="text-[11px] font-bold text-[#94a7b8] uppercase tracking-wider mb-2">Optional add-ons</p>
+              <div className="space-y-2">
+                <ChecklistItem done={status.checklist.calendarConnected} label="Calendar connected" sublabel={status.checklist.calendarConnected ? 'AI checks your real availability' : 'Lets AI check your real availability'} optional
+                  onFix={() => { if (status.calendarAuthUrl) window.location.href = status.calendarAuthUrl; }}
+                  fixLabel={status.checklist.calendarConnected ? undefined : 'Connect'} />
+                <ChecklistItem done={status.checklist.stripeConnected} label="Payments connected" sublabel={status.checklist.stripeConnected ? 'Send invoices via SMS after jobs' : 'Send invoices via SMS after jobs'} optional
+                  onFix={async () => {
+                    try {
+                      const result = await connectStripe();
+                      if (result.onboardingUrl) window.location.href = result.onboardingUrl;
+                    } catch (e: any) {
+                      setError(e.message);
+                    }
+                  }} fixLabel={status.checklist.stripeConnected ? undefined : 'Connect Stripe'} />
+              </div>
+            </div>
+
+            {error && <div className="bg-[#fef8f0] border border-[#f0dcc0] text-[#92640a] p-3 rounded-xl text-[13px]">{error}</div>}
           </div>
-        )}
+          );
+        })()}
 
         {/* Need help — always visible */}
         <div className="mt-6 pt-5 border-t border-[#f0eeeb]">
