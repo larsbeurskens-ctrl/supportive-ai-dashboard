@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import {
   PhoneIcon, CalendarIcon, CheckIcon, BrainIcon,
@@ -72,6 +72,43 @@ function DemoOverlay({ onClose }: { onClose: () => void }) {
 
 export function HomePage() {
   const [showDemo, setShowDemo] = useState(false);
+  const [playing, setPlaying] = useState<string | null>(null);
+  const [progress, setProgress] = useState<Record<string, number>>({});
+  const [durations, setDurations] = useState<Record<string, number>>({});
+  const audioRefs = useRef<Record<string, HTMLAudioElement>>({});
+
+  function togglePlay(id: string, src: string) {
+    const existing = audioRefs.current[id];
+    if (playing === id && existing) {
+      existing.pause();
+      setPlaying(null);
+      return;
+    }
+    // Pause any other playing audio
+    Object.entries(audioRefs.current).forEach(([k, el]) => { if (k !== id) el.pause(); });
+
+    if (!existing) {
+      const audio = new Audio(src);
+      audio.addEventListener('timeupdate', () => setProgress(p => ({ ...p, [id]: audio.currentTime / (audio.duration || 1) * 100 })));
+      audio.addEventListener('loadedmetadata', () => setDurations(d => ({ ...d, [id]: audio.duration })));
+      audio.addEventListener('ended', () => { setPlaying(null); setProgress(p => ({ ...p, [id]: 0 })); });
+      audioRefs.current[id] = audio;
+    }
+    audioRefs.current[id].play();
+    setPlaying(id);
+  }
+
+  function seekAudio(id: string, e: React.MouseEvent<HTMLDivElement>) {
+    const audio = audioRefs.current[id];
+    if (!audio) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const pct = (e.clientX - rect.left) / rect.width;
+    audio.currentTime = pct * audio.duration;
+    setProgress(p => ({ ...p, [id]: pct * 100 }));
+  }
+
+  function fmtTime(s: number) { const m = Math.floor(s / 60); return `${m}:${String(Math.floor(s % 60)).padStart(2, '0')}`; }
+
   return (
     <>
       {showDemo && <DemoOverlay onClose={() => setShowDemo(false)} />}
@@ -201,63 +238,58 @@ export function HomePage() {
         </div>
       </section>
 
-      {/* ===== HEAR IT IN ACTION — Conversation Recordings ===== */}
+      {/* ===== HEAR IT IN ACTION — Real Call Recordings ===== */}
       <section className="py-16 px-6 md:px-10">
         <div className="max-w-[860px] mx-auto">
           <div className="text-center mb-10">
             <h2 className="text-[30px] font-bold text-[#1a2e3b] mb-2.5">Hear real conversations</h2>
-            <p className="text-[15px] text-[#5a7184]">Listen to actual calls handled by our AI agents.</p>
+            <p className="text-[15px] text-[#5a7184]">Actual calls handled by our AI agents. Not scripted. Not edited.</p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {[
               {
+                id: 'wc-mike',
+                src: '/audio/demo-call-wc-booking-mike.m4a',
                 label: 'Window Cleaning',
                 scenario: 'New booking — 2-story colonial',
-                duration: '1:24',
                 bubbles: [
-                  { role: 'ai', text: "Hey! Thanks for calling Clean Pro Window Washing, this is Sarah. How can I help?" },
-                  { role: 'customer', text: "I'm looking to get my windows cleaned. Two-story colonial, just the exterior." },
-                  { role: 'ai', text: "For a two-story exterior, you're typically looking at around $250–400. Want me to find a time that works?" },
-                  { role: 'customer', text: "Yeah, what do you have next week?" },
-                  { role: 'ai', text: "Let me check... I've got Tuesday at 9 AM, Wednesday at 1 PM, or Thursday at 10. Which works best?" },
+                  { role: 'ai', text: "Hey there! Thanks for calling Clean Pro Window Washing, this is Sarah. How can I help you today?" },
+                  { role: 'customer', text: "I'm interested in getting my two story colonial home washed, just the exterior windows only." },
+                  { role: 'ai', text: "For a two-story exterior, every job is a little different, but typically you're looking at somewhere between $250 to $400." },
+                  { role: 'customer', text: "That sounds great. It's 34 Elm Street in Poughkeepsie, 12601." },
+                  { role: 'ai', text: "We have openings at 8 AM, 9 AM, and 10 AM. Would any of those work for you?" },
+                  { role: 'customer', text: "Let's book it in for Friday at 10 AM." },
+                  { role: 'ai', text: "You're all set for Friday, March 6th at 10 AM! You'll get a confirmation text shortly." },
                 ],
               },
               {
-                label: 'Plumbing',
-                scenario: 'Urgent leak — same-day booking',
-                duration: '1:38',
+                id: 'plumb-david',
+                src: '/audio/demo-call-plumbing-emergency-david.m4a',
+                label: 'Plumbing Emergency',
+                scenario: 'Active kitchen leak — immediate escalation',
                 bubbles: [
-                  { role: 'customer', text: "I've got water leaking from under my kitchen sink and it's getting everywhere!" },
-                  { role: 'ai', text: "Oh no — first, put a bucket under the leak and turn off the water valve under the sink. That'll slow things down. Let me check what we have today..." },
-                  { role: 'ai', text: "Good news — we've got a 2 PM slot this afternoon. Diagnostic is $89, and if you go ahead with the repair, that rolls into the cost. Want me to lock that in?" },
-                  { role: 'customer', text: "Yes, please! 2 PM works." },
+                  { role: 'customer', text: "I have water leaking coming from my kitchen sink. I need somebody out today." },
+                  { role: 'ai', text: "Just to confirm — do you have water actively leaking or flooding right now?" },
+                  { role: 'customer', text: "I do. It's actively leaking." },
+                  { role: 'ai', text: "Okay David, I'm going to get someone out to you right away." },
+                  { role: 'ai', text: "I've sent an emergency alert to our team right now. Someone will call you back as soon as possible." },
+                  { role: 'customer', text: "Alright. I appreciate it. I'll wait for their call." },
+                  { role: 'ai', text: "You're welcome, David. Have a great day!" },
                 ],
               },
-              {
-                label: 'After Hours',
-                scenario: '9 PM — water heater emergency',
-                duration: '1:15',
-                bubbles: [
-                  { role: 'customer', text: "It's 9 PM and my water heater is making banging noises with water on the floor." },
-                  { role: 'ai', text: "Turn off the shut-off valve on the water heater, and if it's gas, turn the gas valve to off too. We're closed for the evening, but I'm sending an urgent message to our team right now." },
-                  { role: 'ai', text: "Someone will call you back as soon as possible. If anything seems unsafe, don't hesitate to call 911." },
-                  { role: 'customer', text: "Thank you so much." },
-                  { role: 'ai', text: "Of course, Rachel. Hang tight — help is on the way." },
-                ],
-              },
-            ].map((conv, i) => (
-              <div key={i} className="bg-white rounded-2xl border border-[#e5e0da] overflow-hidden">
+            ].map((conv) => (
+              <div key={conv.id} className="bg-white rounded-2xl border border-[#e5e0da] overflow-hidden">
                 {/* Header */}
                 <div className="px-5 py-3.5 bg-[#faf9f7] border-b border-[#e5e0da] flex items-center justify-between">
                   <div>
                     <span className="text-[12px] font-bold text-[#e8930c] uppercase tracking-wide">{conv.label}</span>
                     <p className="text-[13px] font-semibold text-[#1a2e3b]">{conv.scenario}</p>
                   </div>
-                  <span className="text-[12px] text-[#94a7b8] font-mono">{conv.duration}</span>
+                  <span className="text-[11px] font-semibold text-white bg-[#059669] px-2 py-0.5 rounded-full">Real call</span>
                 </div>
 
                 {/* Chat bubbles */}
-                <div className="p-4 space-y-3">
+                <div className="p-4 space-y-3 max-h-[320px] overflow-y-auto">
                   {conv.bubbles.map((b, j) => (
                     <div key={j} className={`flex ${b.role === 'customer' ? 'justify-end' : 'justify-start'}`}>
                       <div className={`max-w-[85%] px-3.5 py-2.5 rounded-2xl text-[13px] leading-relaxed ${
@@ -271,25 +303,38 @@ export function HomePage() {
                   ))}
                 </div>
 
-                {/* Audio player placeholder */}
+                {/* Audio player */}
                 <div className="px-4 pb-4">
                   <div className="flex items-center gap-3 bg-[#faf9f7] rounded-xl px-4 py-3 border border-[#e5e0da]">
-                    <button className="w-8 h-8 rounded-full bg-[#e8930c] flex items-center justify-center flex-shrink-0 cursor-pointer border-none">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                    <button
+                      onClick={() => togglePlay(conv.id, conv.src)}
+                      className="w-8 h-8 rounded-full bg-[#e8930c] hover:bg-[#d17f00] flex items-center justify-center flex-shrink-0 cursor-pointer border-none transition-colors"
+                    >
+                      {playing === conv.id ? (
+                        <svg width="12" height="14" viewBox="0 0 12 14" fill="white"><rect x="1" y="1" width="3" height="12" rx="1"/><rect x="8" y="1" width="3" height="12" rx="1"/></svg>
+                      ) : (
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                      )}
                     </button>
-                    <div className="flex-1 h-1.5 bg-[#e5e0da] rounded-full">
-                      <div className="h-full bg-[#e8930c] rounded-full" style={{ width: '0%' }} />
+                    <div className="flex-1 h-1.5 bg-[#e5e0da] rounded-full cursor-pointer" onClick={(e) => seekAudio(conv.id, e)}>
+                      <div className="h-full bg-[#e8930c] rounded-full transition-all" style={{ width: `${progress[conv.id] || 0}%` }} />
                     </div>
-                    <span className="text-[11px] text-[#94a7b8] font-mono">{conv.duration}</span>
+                    <span className="text-[11px] text-[#94a7b8] font-mono min-w-[32px]">
+                      {durations[conv.id] ? fmtTime(
+                        playing === conv.id
+                          ? (progress[conv.id] || 0) / 100 * durations[conv.id]
+                          : durations[conv.id]
+                      ) : '--:--'}
+                    </span>
                   </div>
                 </div>
               </div>
             ))}
           </div>
           <p className="text-center text-[13px] text-[#94a7b8] mt-6">
-            Recordings from real test calls. Audio coming soon — or{' '}
+            Real, unedited recordings from test calls — or{' '}
             <button onClick={() => setShowDemo(true)} className="text-[#1a2e3b] font-semibold hover:underline bg-transparent border-none cursor-pointer p-0 text-[13px]">call our demo agent</button>{' '}
-            to hear it live.
+            yourself to hear it live.
           </p>
         </div>
       </section>
