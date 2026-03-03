@@ -584,7 +584,7 @@ export function HomePage() {
                 price: 149,
                 calls: '150 calls/mo',
                 target: 'Solo operators',
-                features: ['24/7 AI answering', 'Dashboard & call analytics', 'Route-optimised booking', 'Calendar + SMS confirmations', 'WhatsApp AI agent', 'Review requests', '1st line customer service'],
+                features: ['24/7 AI answering', 'Dashboard & call analytics', 'Route-optimised booking', 'Calendar + SMS confirmations', 'WhatsApp AI agent', 'Payment links', '1st line customer service'],
                 note: '$1.50/call overage',
                 popular: false,
               },
@@ -593,7 +593,7 @@ export function HomePage() {
                 price: 299,
                 calls: '500 calls/mo',
                 target: 'Growing businesses',
-                features: ['Everything in Starter', 'Multi-crew scheduling', 'Priority support', 'Payment links'],
+                features: ['Everything in Starter', 'Multi-crew scheduling', 'Priority support', 'Review requests'],
                 note: '$1.25/call overage',
                 popular: true,
               },
@@ -602,7 +602,7 @@ export function HomePage() {
                 price: 499,
                 calls: 'Unlimited calls',
                 target: 'Established teams',
-                features: ['Everything in Pro', 'Unlimited calls', 'API access', 'Dedicated account manager'],
+                features: ['Everything in Pro', 'Unlimited calls', 'API access', 'Dedicated account manager', 'Custom-built features'],
                 note: null,
                 popular: false,
               },
@@ -653,6 +653,12 @@ export function HomePage() {
           <p className="text-center text-[13px] text-[#94a7b8] mt-5">
             7-day free trial on all plans (up to 50 calls). No setup fees. Cancel anytime.
           </p>
+          <div className="mt-4 mx-auto max-w-[540px] bg-[#f9f8f6] border border-[#e5e0da] rounded-lg px-5 py-3 text-center">
+            <p className="text-[13px] text-[#2a4a5e]">
+              <span className="font-semibold text-[#1a2e3b]">Go over your limit? No worries.</span>{' '}
+              We keep answering your calls — you'll never miss a customer. Overage calls are billed at your plan rate at the end of the month. No surprises.
+            </p>
+          </div>
         </div>
       </section>
 
