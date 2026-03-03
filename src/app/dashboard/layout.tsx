@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useSession, signOut } from 'next-auth/react';
 import { useState, useEffect } from 'react';
+import { Logo } from '@/components/Logo';
 import {
   PhoneIcon, CalendarIcon, UsersIcon, SettingsIcon,
   TrendUpIcon, DollarIcon,
@@ -46,8 +47,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       {/* Mobile header */}
       <header className="lg:hidden bg-white border-b border-[#e5e0da] px-4 py-3 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className="w-7 h-7 rounded-md bg-gradient-to-br from-[#1a2e3b] to-[#2a4a5e] flex items-center justify-center text-white font-extrabold text-sm">S</div>
-          <span className="text-[15px] font-bold text-[#1a2e3b]">Supportive AI</span>
+          <Logo size="sm" />
         </div>
         <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="p-2 rounded-lg hover:bg-[#f0eeeb]">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1a2e3b" strokeWidth="2">
@@ -84,8 +84,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <aside className="hidden lg:flex lg:flex-col lg:w-60 lg:fixed lg:inset-y-0 bg-white border-r border-[#e5e0da]">
           <div className="p-5 border-b border-[#e5e0da]">
             <div className="flex items-center gap-2">
-              <div className="w-7 h-7 rounded-md bg-gradient-to-br from-[#1a2e3b] to-[#2a4a5e] flex items-center justify-center text-white font-extrabold text-sm">S</div>
-              <span className="text-[15px] font-bold text-[#1a2e3b]">Supportive AI</span>
+              <Logo size="sm" />
             </div>
             <p className="text-xs text-[#94a7b8] mt-1">{session?.user?.businessName || 'Loading...'}</p>
           </div>

@@ -2,19 +2,15 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
+import { Logo } from '@/components/Logo';
 
 export function MarketingNav() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
     <nav className="relative flex justify-between items-center px-6 md:px-10 py-3.5 bg-white border-b border-[#e5e0da]">
-      <Link href="/" className="flex items-center gap-2.5 no-underline">
-        <div className="w-[34px] h-[34px] rounded-lg bg-gradient-to-br from-[#1a2e3b] to-[#2a4a5e] flex items-center justify-center text-white font-extrabold text-[17px]">
-          S
-        </div>
-        <span className="text-[17px] font-bold text-[#1a2e3b] tracking-tight">
-          Supportive AI
-        </span>
+      <Link href="/" className="flex items-center no-underline">
+        <Logo size="md" />
       </Link>
 
       {/* Desktop nav */}

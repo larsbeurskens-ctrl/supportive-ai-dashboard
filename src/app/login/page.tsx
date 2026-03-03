@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { Mail, Loader2, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
+import { Logo } from '@/components/Logo';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -25,9 +26,8 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-[#faf9f7] flex flex-col">
       <nav className="px-6 py-4">
-        <Link href="/" className="flex items-center gap-2.5 no-underline w-fit">
-          <div className="w-[34px] h-[34px] rounded-lg bg-gradient-to-br from-[#1a2e3b] to-[#2a4a5e] flex items-center justify-center text-white font-extrabold text-[17px]">S</div>
-          <span className="text-[17px] font-bold text-[#1a2e3b] tracking-tight">Supportive AI</span>
+        <Link href="/" className="flex items-center no-underline w-fit">
+          <Logo size="md" />
         </Link>
       </nav>
       <div className="flex-1 flex items-center justify-center px-4 pb-12">

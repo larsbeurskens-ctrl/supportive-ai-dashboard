@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { Logo } from '@/components/Logo';
 
 export function MarketingFooter() {
   return (
@@ -7,9 +8,8 @@ export function MarketingFooter() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-10">
           {/* Brand */}
           <div>
-            <div className="flex items-center gap-2 mb-3">
-              <div className="w-7 h-7 rounded-md bg-gradient-to-br from-[#1a2e3b] to-[#2a4a5e] flex items-center justify-center text-white font-extrabold text-sm">S</div>
-              <span className="text-[15px] font-bold text-[#1a2e3b]">Supportive AI</span>
+            <div className="mb-3">
+              <Logo size="sm" />
             </div>
             <p className="text-sm text-[#5a7184] leading-relaxed">
               Built for the trades that can&apos;t afford to miss a call.
