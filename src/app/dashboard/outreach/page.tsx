@@ -14,7 +14,7 @@ const VERTICAL_OPTIONS = [
   { value: 'homepage', label: '🏠 Homepage', destination: '/#hear-it' },
 ];
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://supportiveai.com';
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://supportive-ai.com';
 
 interface LinkClick {
   id: string;
@@ -223,7 +223,7 @@ export default function OutreachPage() {
             </label>
             <div className="flex items-center gap-0">
               <span className="px-3 py-2.5 bg-[#faf9f7] border border-r-0 border-[#d1ccc6] rounded-l-lg text-[13px] text-[#94a7b8] whitespace-nowrap">
-                supportiveai.com/for/
+                supportive-ai.com/for/
               </span>
               <input
                 type="text"
@@ -295,7 +295,7 @@ export default function OutreachPage() {
                           <VerticalBadge vertical={link.vertical} />
                         </div>
                         <span className="text-[12px] text-[#94a7b8] font-mono truncate block">
-                          supportiveai.com/for/{link.slug}
+                          supportive-ai.com/for/{link.slug}
                         </span>
                       </div>
 

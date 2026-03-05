@@ -25,7 +25,7 @@ export async function GET(
       },
     }).catch(() => {});
 
-    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://supportiveai.com';
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://supportive-ai.com';
     const destination = link.destination.startsWith('http')
       ? link.destination
       : `${baseUrl}${link.destination}`;
