@@ -28,15 +28,13 @@ const plumbingRecordings = [
   {
     id: 'plumb-rob',
     src: '/audio/demo-call-plumbing-rob-pricing.m4a',
-    scenario: 'Pricing questions — leaky kitchen faucet',
+    scenario: 'Pricing + insurance — clogged drain',
     bubbles: [
       { role: 'ai' as const, text: "Thank you for calling Hudson Valley Plumbing! This is Sarah. How can I help you today?" },
-      { role: 'customer' as const, text: "Hi, Sarah. Can you give me some ballpark figures to fix a leaky faucet?" },
-      { role: 'ai' as const, text: "Sure! A faucet repair typically runs $100–$250. There's also an $89 diagnostic fee where our plumber comes out, assesses, and quotes before starting any work — no surprises." },
-      { role: 'customer' as const, text: "And just that diagnostic fee — will that be deducted from the repair cost?" },
-      { role: 'ai' as const, text: "The $89 is separate, but you'll know exactly what you're looking at before any work starts. Want me to get someone scheduled?" },
-      { role: 'customer' as const, text: "Yeah, that would be great. My name is Rob. It's the kitchen faucet at 15 Oak Street." },
-      { role: 'ai' as const, text: "You're all set for Wednesday, March 11 at 11 AM! You'll get a confirmation text shortly, Rob." },
+      { role: 'customer' as const, text: "Hi, Sarah. Can you give me some ballpark figures to fix a clogged drain, please?" },
+      { role: 'ai' as const, text: "Sure! For drain clearing it typically runs $150–$300. Our plumber will give you an exact quote on-site before starting — no surprises. There's also an $89 diagnostic fee for the visit." },
+      { role: 'customer' as const, text: "Yes, that would be great. I just wanted to make sure that you're also insured." },
+      { role: 'ai' as const, text: "Absolutely — we're fully licensed and insured. You're in good hands. Let me grab a few details to get you on the schedule." },
     ],
   },
   {
