@@ -178,6 +178,83 @@ export function HomePage() {
         </div>
       </section>
 
+      {/* ===== KEEP YOUR NUMBER ===== */}
+      <section className="py-16 px-6 md:px-10 bg-white border-t border-[#e5e0da]">
+        <div className="max-w-[860px] mx-auto">
+          <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
+            {/* Visual — van/phone illustration */}
+            <div className="flex-shrink-0 w-full md:w-[320px]">
+              <div className="bg-[#faf9f7] rounded-2xl border border-[#e5e0da] p-6 text-center">
+                {/* Stylised phone number on van */}
+                <div className="mb-4">
+                  <svg width="56" height="56" viewBox="0 0 56 56" fill="none" className="mx-auto">
+                    {/* Van body */}
+                    <rect x="4" y="18" width="48" height="24" rx="4" fill="#1a2e3b"/>
+                    <rect x="36" y="12" width="16" height="12" rx="2" fill="#243d4e"/>
+                    {/* Windshield */}
+                    <rect x="38" y="14" width="12" height="8" rx="1" fill="#6b8fa3" opacity="0.5"/>
+                    {/* Wheels */}
+                    <circle cx="16" cy="42" r="5" fill="#1a2e3b" stroke="#e5e0da" strokeWidth="2"/>
+                    <circle cx="40" cy="42" r="5" fill="#1a2e3b" stroke="#e5e0da" strokeWidth="2"/>
+                    {/* Phone number on van */}
+                    <rect x="10" y="24" width="22" height="8" rx="1" fill="#e8930c" opacity="0.9"/>
+                  </svg>
+                </div>
+                <div className="bg-white rounded-xl border border-[#e5e0da] p-4 mb-3">
+                  <p className="text-[22px] font-extrabold text-[#1a2e3b] tracking-tight">281.398.1700</p>
+                  <p className="text-[12px] text-[#94a7b8] mt-1">on your van, your cards, your Google listing</p>
+                </div>
+                <div className="flex items-center justify-center gap-2">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                  <p className="text-[14px] font-semibold text-[#059669]">Stays exactly the same</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Copy */}
+            <div className="flex-1">
+              <h2 className="text-[28px] md:text-[30px] font-bold text-[#1a2e3b] mb-3 leading-tight">
+                Keep your number.<br />We just answer it.
+              </h2>
+              <p className="text-[15px] text-[#5a7184] leading-relaxed mb-6">
+                Your number is on the van, the yard signs, the Google listing. You&apos;re not changing it — and you don&apos;t have to.
+                Customers call the same number they always have. Supportive AI picks up when you can&apos;t.
+              </p>
+              <div className="space-y-3">
+                {[
+                  {
+                    mode: 'After 4 rings',
+                    desc: 'You get first crack. If you can\'t pick up, the AI catches it. Most popular.',
+                    dot: '#e8930c',
+                  },
+                  {
+                    mode: 'After hours only',
+                    desc: 'You answer during the day. AI handles evenings, weekends, and holidays.',
+                    dot: '#3b82f6',
+                  },
+                  {
+                    mode: 'Always on',
+                    desc: 'AI answers every call. You focus on the job. Urgent calls get forwarded to you instantly.',
+                    dot: '#059669',
+                  },
+                ].map((item, i) => (
+                  <div key={i} className="flex items-start gap-3 p-3.5 rounded-xl bg-[#faf9f7] border border-[#e5e0da]">
+                    <span className="w-2.5 h-2.5 rounded-full mt-1.5 flex-shrink-0" style={{ backgroundColor: item.dot }} />
+                    <div>
+                      <span className="text-[14px] font-bold text-[#1a2e3b]">{item.mode}</span>
+                      <span className="text-[13px] text-[#5a7184] ml-1.5">{item.desc}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <p className="text-[13px] text-[#94a7b8] mt-4">
+                Setup takes 30 seconds — just dial a short code from your phone. No tech needed.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ===== HOW IT WORKS ===== */}
       <section id="how-it-works" className="py-16 px-6 md:px-10 max-w-[860px] mx-auto">
         <h2 className="text-[30px] font-bold text-[#1a2e3b] text-center mb-3">How it works</h2>
@@ -189,7 +266,7 @@ export function HomePage() {
             { n: '1', title: 'Sign up & name your AI', desc: 'Create your account in 30 seconds. Pick a local area code. Your AI gets its own number.' },
             { n: '2', title: 'Add your business details', desc: 'Tell it your pricing, services, hours, and credentials. Takes 2 minutes. No tech skills needed.' },
             { n: '3', title: 'Test it with a real call', desc: 'Call your AI number and experience it yourself. Book a job, ask about pricing, try a reschedule. Happy? Go live.' },
-            { n: '4', title: 'Forward calls & start booking', desc: 'Dial a short code from your phone to forward missed calls. Connect Google Calendar. Done.' },
+            { n: '4', title: 'Forward your existing number', desc: 'Keep the number on your van, your cards, everywhere. One short code forwards missed calls to your AI. Done.' },
           ].map((s, i) => (
             <div key={i} className="flex-1 text-center relative z-[1]">
               <div className="w-12 h-12 rounded-full bg-[#1a2e3b] text-white flex items-center justify-center mx-auto mb-4 text-lg font-bold">
