@@ -83,7 +83,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           });
         } catch (error) {
           console.error('Failed to sync user with backend:', error);
-          // Don't block sign-in if backend is temporarily down
         }
       }
       return true;
@@ -122,6 +121,32 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         (session.user as any).timezone = token.timezone || null;
       }
       return session;
+    },
+  },
+  events: {
+    async createUser({ user }) {
+      // Notify Lars when a new user signs up
+      const ADMIN_EMAIL = 'larsbeurskens@gmail.com';
+      if (user.email && user.email !== ADMIN_EMAIL) {
+        try {
+          const { Resend } = await import("resend");
+          const resend = new Resend(process.env.RESEND_API_KEY);
+          await resend.emails.send({
+            from: "Supportive AI <noreply@supportive-ai.com>",
+            to: ADMIN_EMAIL,
+            subject: `🎉 New signup: ${user.email}`,
+            html: `<div style="font-family:sans-serif;padding:20px;">
+              <h2 style="margin:0 0 12px">New user signed up</h2>
+              <p><strong>Email:</strong> ${user.email}</p>
+              <p><strong>Name:</strong> ${user.name || '(not provided)'}</p>
+              <p><strong>Time:</strong> ${new Date().toISOString()}</p>
+              <p style="margin-top:16px;"><a href="https://supportive-ai.com/dashboard">Open Dashboard</a></p>
+            </div>`,
+          });
+        } catch (err) {
+          console.error('[AUTH] Failed to send new signup notification:', err);
+        }
+      }
     },
   },
 });
