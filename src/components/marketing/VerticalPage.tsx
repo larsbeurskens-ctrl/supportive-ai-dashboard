@@ -149,7 +149,7 @@ export function VerticalPage({
 
       {/* ===== REAL RECORDINGS ===== */}
       {recordings.length > 0 && (
-        <section id="hear-it" className="py-14 px-6 md:px-10 bg-white border-t border-b border-[#e5e0da]">
+        <section id="hear-it" className="py-14 px-6 md:px-10 bg-white border-t border-b border-[#e5e0da]" style={{ scrollMarginTop: '5rem' }}>
           <div className="max-w-[820px] mx-auto">
             <div className="text-center mb-10">
               <h2 className="text-[26px] font-bold text-[#1a2e3b] mb-2">Hear it handle real {trade.toLowerCase()} calls</h2>

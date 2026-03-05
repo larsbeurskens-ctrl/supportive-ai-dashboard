@@ -281,7 +281,7 @@ export function HomePage() {
       </section>
 
       {/* ===== HEAR IT IN ACTION — Real Call Recordings ===== */}
-      <section id="hear-it" className="py-16 px-6 md:px-10">
+      <section id="hear-it" className="py-16 px-6 md:px-10" style={{ scrollMarginTop: '5rem' }}>
         <div className="max-w-[860px] mx-auto">
           <div className="text-center mb-10">
             <h2 className="text-[30px] font-bold text-[#1a2e3b] mb-2.5">Hear real conversations</h2>
