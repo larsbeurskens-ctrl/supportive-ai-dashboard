@@ -1,24 +1,41 @@
 'use client';
 
-import { useState } from 'react';
-import { signIn } from 'next-auth/react';
+import { useState, useCallback } from 'react';
 import { Mail, Loader2, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import { Logo } from '@/components/Logo';
+import Turnstile from '@/components/Turnstile';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+
+  const onTurnstileVerify = useCallback((token: string) => {
+    setTurnstileToken(token);
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
     try {
-      const result = await signIn('email', { email, callbackUrl: '/dashboard', redirect: false });
-      if (result?.error) { setError('Something went wrong. Please try again.'); }
-      else { window.location.href = '/login/check-email'; }
+      const res = await fetch('/api/auth/request-signin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email,
+          turnstileToken,
+          callbackUrl: '/dashboard',
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data.error || 'Something went wrong. Please try again.');
+      } else {
+        window.location.href = '/login/check-email';
+      }
     } catch { setError('Something went wrong. Please try again.'); }
     finally { setLoading(false); }
   };
@@ -52,6 +69,7 @@ export default function LoginPage() {
                 className="w-full flex items-center justify-center gap-2 bg-[#e8930c] text-white py-3.5 px-6 rounded-xl text-[16px] font-bold hover:bg-[#d17f00] transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_2px_8px_rgba(232,147,12,0.25)]">
                 {loading ? (<><Loader2 className="animate-spin" size={18} />Sending link...</>) : (<>Continue with Email<ArrowRight size={18} /></>)}
               </button>
+              <Turnstile onVerify={onTurnstileVerify} />
             </form>
             <p className="text-center text-[12px] text-[#94a7b8] mt-5">
               We&apos;ll email you a secure link. No password needed.

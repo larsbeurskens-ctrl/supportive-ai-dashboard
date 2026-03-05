@@ -1,9 +1,9 @@
 'use client';
 
-import { useState } from 'react';
-import { signIn } from 'next-auth/react';
+import { useState, useCallback } from 'react';
 import Link from 'next/link';
 import { Logo } from '@/components/Logo';
+import Turnstile from '@/components/Turnstile';
 
 const TRADES = [
   { value: 'window_cleaning', label: 'Window Cleaning' },
@@ -24,8 +24,13 @@ export default function OnboardingPage() {
   const [trade, setTrade] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
 
   const canSubmit = name && email && company && trade;
+
+  const onTurnstileVerify = useCallback((token: string) => {
+    setTurnstileToken(token);
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,14 +45,19 @@ export default function OnboardingPage() {
         createdAt: new Date().toISOString(),
       }));
 
-      const result = await signIn('email', {
-        email,
-        callbackUrl: '/welcome',
-        redirect: false,
+      const res = await fetch('/api/auth/request-signin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email,
+          turnstileToken,
+          callbackUrl: '/welcome',
+        }),
       });
+      const data = await res.json();
 
-      if (result?.error) {
-        setError('Something went wrong. Please try again.');
+      if (!res.ok) {
+        setError(data.error || 'Something went wrong. Please try again.');
         setLoading(false);
       } else {
         window.location.href = '/onboarding/check-email';
@@ -140,6 +150,7 @@ export default function OnboardingPage() {
               >
                 {loading ? 'Sending verification...' : 'Get Started Free →'}
               </button>
+              <Turnstile onVerify={onTurnstileVerify} />
             </form>
 
             <p className="text-center text-[12px] text-[#94a7b8] mt-4">

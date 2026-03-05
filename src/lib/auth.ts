@@ -17,6 +17,23 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       type: "email",
       maxAge: 60 * 60, // 1 hour
       sendVerificationRequest: async ({ identifier: email, url }) => {
+        // Rate limit: max 3 emails per address per hour, 30 global per hour
+        const now = new Date();
+        const perEmailCount = await prisma.verificationToken.count({
+          where: { identifier: email.toLowerCase(), expires: { gt: now } }
+        });
+        if (perEmailCount >= 3) {
+          console.warn(`[AUTH] Rate limit hit for ${email}: ${perEmailCount} active tokens`);
+          throw new Error("Too many sign-in attempts for this email. Please try again later.");
+        }
+        const globalCount = await prisma.verificationToken.count({
+          where: { expires: { gt: now } }
+        });
+        if (globalCount >= 30) {
+          console.warn(`[AUTH] Global rate limit hit: ${globalCount} active tokens`);
+          throw new Error("Service is busy. Please try again later.");
+        }
+
         const { Resend } = await import("resend");
         const resend = new Resend(process.env.RESEND_API_KEY);
         
