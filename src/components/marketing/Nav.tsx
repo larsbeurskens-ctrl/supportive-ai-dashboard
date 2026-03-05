@@ -18,17 +18,6 @@ export function MarketingNav() {
 
   return (
     <header className="sticky top-0 z-40 bg-white border-b border-[#e5e0da]">
-      {/* Vertical-specific context bar */}
-      {banner && (
-        <div className="bg-[#1a2e3b] px-6 md:px-10 py-2 flex items-center gap-2">
-          <span className="text-base leading-none">{banner.emoji}</span>
-          <span className="text-[13px] font-semibold text-white">{banner.label}</span>
-          <span className="text-[#4a6a7d] text-[13px] mx-1">·</span>
-          <Link href="/" className="text-[13px] text-[#6b8fa3] no-underline hover:text-white transition-colors">
-            See all trades
-          </Link>
-        </div>
-      )}
 
       <nav className="relative flex justify-between items-center px-6 md:px-10 py-3.5">
         <Link href="/" className="flex items-center no-underline">

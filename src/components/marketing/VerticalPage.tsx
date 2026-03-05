@@ -188,25 +188,25 @@ export function VerticalPage({
         <div className="flex flex-col sm:flex-row gap-3 justify-center mb-4">
           {available && phoneNumber ? (
             <>
-              <button
-                onClick={() => setShowDemo(true)}
-                className="bg-[#e8930c] text-white px-8 py-[15px] rounded-lg text-base font-bold border-none hover:bg-[#d17f00] transition-colors shadow-[0_2px_8px_rgba(232,147,12,0.3)] flex items-center justify-center gap-2 cursor-pointer"
-              >
-                <PhoneIcon size={18} /> Call the demo agent
-              </button>
               <Link
                 href="/onboarding"
-                className="bg-white text-[#1a2e3b] px-8 py-[15px] rounded-lg text-base font-semibold no-underline border border-[#d1ccc6] hover:bg-[#f0eeeb] transition-colors"
+                className="bg-[#e8930c] text-white px-8 py-[15px] rounded-lg text-base font-bold no-underline hover:bg-[#d17f00] transition-colors shadow-[0_2px_8px_rgba(232,147,12,0.3)] flex items-center justify-center gap-2"
               >
                 Start free trial
               </Link>
+              <button
+                onClick={() => setShowDemo(true)}
+                className="bg-white text-[#1a2e3b] px-8 py-[15px] rounded-lg text-base font-semibold border border-[#d1ccc6] hover:bg-[#f0eeeb] transition-colors flex items-center justify-center gap-2 cursor-pointer"
+              >
+                <PhoneIcon size={18} /> Call the demo agent
+              </button>
             </>
           ) : (
             <Link
               href="/onboarding"
               className="bg-[#e8930c] text-white px-8 py-[15px] rounded-lg text-base font-bold no-underline hover:bg-[#d17f00]"
             >
-              Join the Waitlist
+              Start free trial
             </Link>
           )}
         </div>

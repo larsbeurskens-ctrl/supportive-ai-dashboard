@@ -12,7 +12,35 @@ export const metadata: Metadata = {
 //   /audio/plumbing-pricing.m4a
 const plumbingRecordings = [
   {
-    id: 'plumb-emergency',
+    id: 'plumb-lance',
+    src: '/audio/demo-call-plumbing-lance-booking.m4a',
+    scenario: 'Leaky faucet — booking a Monday slot',
+    bubbles: [
+      { role: 'ai' as const, text: "Thank you for calling Hudson Valley Plumbing! This is Sarah. How can I help you today?" },
+      { role: 'customer' as const, text: "Hi, Sarah. This is Lance. I'd like to book an appointment at 150 Market Street. My faucet is leaking." },
+      { role: 'ai' as const, text: "Got it, Lance! A leaky faucet at 150 Market Street. Is that in the kitchen, bathroom, or somewhere else?" },
+      { role: 'customer' as const, text: "It's in the bathroom." },
+      { role: 'ai' as const, text: "Great news! We have openings at 8 AM, 9 AM, and 10 AM on Monday. Which one works best for you?" },
+      { role: 'customer' as const, text: "9 AM will be best. Thank you." },
+      { role: 'ai' as const, text: "You're all set for Monday, March 9 at 9 AM! There's an $89 diagnostic visit fee — the plumber will assess and quote before starting any work. No surprises. You'll get a confirmation text shortly." },
+    ],
+  },
+  {
+    id: 'plumb-rob',
+    src: '/audio/demo-call-plumbing-rob-pricing.m4a',
+    scenario: 'Pricing questions — leaky kitchen faucet',
+    bubbles: [
+      { role: 'ai' as const, text: "Thank you for calling Hudson Valley Plumbing! This is Sarah. How can I help you today?" },
+      { role: 'customer' as const, text: "Hi, Sarah. Can you give me some ballpark figures to fix a leaky faucet?" },
+      { role: 'ai' as const, text: "Sure! A faucet repair typically runs $100–$250. There's also an $89 diagnostic fee where our plumber comes out, assesses, and quotes before starting any work — no surprises." },
+      { role: 'customer' as const, text: "And just that diagnostic fee — will that be deducted from the repair cost?" },
+      { role: 'ai' as const, text: "The $89 is separate, but you'll know exactly what you're looking at before any work starts. Want me to get someone scheduled?" },
+      { role: 'customer' as const, text: "Yeah, that would be great. My name is Rob. It's the kitchen faucet at 15 Oak Street." },
+      { role: 'ai' as const, text: "You're all set for Wednesday, March 11 at 11 AM! You'll get a confirmation text shortly, Rob." },
+    ],
+  },
+  {
+    id: 'plumb-john',
     src: '/audio/demo-call-plumbing-emergency-john.m4a',
     scenario: 'Active leak — emergency escalation',
     bubbles: [
@@ -23,34 +51,6 @@ const plumbingRecordings = [
       { role: 'ai' as const, text: "First — can you locate your main water shut-off and turn it off? I'm flagging this as an emergency right now." },
       { role: 'customer' as const, text: "I'm at 60 Market Street in Poughkeepsie. Name is John." },
       { role: 'ai' as const, text: "Our team is being notified now and will call you right back. Stay safe, John." },
-    ],
-  },
-  {
-    id: 'plumb-booking',
-    src: '/audio/demo-call-plumbing-emergency-john.m4a', // Replace with /audio/plumbing-booking.m4a
-    scenario: 'Routine booking — dripping faucet',
-    bubbles: [
-      { role: 'ai' as const, text: "Hudson Valley Plumbing, this is Sarah. How can I help?" },
-      { role: 'customer' as const, text: "Hi, I have a dripping kitchen faucet I'd like looked at. Nothing urgent." },
-      { role: 'ai' as const, text: "Happy to schedule that. Are you the homeowner? And roughly how long has it been dripping?" },
-      { role: 'customer' as const, text: "Yes, homeowner. Maybe a few weeks — it's getting worse." },
-      { role: 'ai' as const, text: "Got it. What's a good day this week? We have morning slots on Tuesday and Thursday." },
-      { role: 'customer' as const, text: "Thursday morning works. I'm at 45 Oak Street, Kingston." },
-      { role: 'ai' as const, text: "Booked for Thursday at 9 AM. Our service call is $89 — the tech will quote any parts on-site. You'll get a confirmation text shortly." },
-    ],
-  },
-  {
-    id: 'plumb-pricing',
-    src: '/audio/demo-call-plumbing-emergency-john.m4a', // Replace with /audio/plumbing-pricing.m4a
-    scenario: 'Pricing question — hot water heater',
-    bubbles: [
-      { role: 'ai' as const, text: "Thanks for calling Hudson Valley Plumbing! What can I help you with today?" },
-      { role: 'customer' as const, text: "I've got no hot water. I think my water heater is dead. How much does a replacement run?" },
-      { role: 'ai' as const, text: "A water heater replacement typically runs $800 to $1,800 depending on tank size, type, and any code upgrades needed. Our tech would give you an exact quote on-site." },
-      { role: 'customer' as const, text: "Is that with the $89 diagnostic fee?" },
-      { role: 'ai' as const, text: "The $89 diagnostic is waived if you go ahead with the repair or replacement. So if it's a full replacement you're looking at the job cost, no extra fee on top." },
-      { role: 'customer' as const, text: "Perfect. Can I get someone out today?" },
-      { role: 'ai' as const, text: "Let me check today's availability for you right now." },
     ],
   },
 ];
