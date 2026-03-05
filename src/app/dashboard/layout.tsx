@@ -23,6 +23,7 @@ const navItems = [
 ];
 
 const adminOnlyItems = [
+  { href: '/dashboard/users', label: 'Signups', icon: UsersIcon },
   { href: '/dashboard/outreach', label: 'Outreach links', icon: LinkIcon },
 ];
 
