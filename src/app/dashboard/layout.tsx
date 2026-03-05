@@ -7,7 +7,7 @@ import { useState, useEffect } from 'react';
 import { Logo } from '@/components/Logo';
 import {
   PhoneIcon, CalendarIcon, UsersIcon, SettingsIcon,
-  TrendUpIcon, DollarIcon,
+  TrendUpIcon, DollarIcon, LinkIcon,
 } from '@/components/marketing/Icons';
 
 const navItems = [
@@ -16,6 +16,7 @@ const navItems = [
   { href: '/dashboard/bookings', label: 'Bookings', icon: CalendarIcon },
   { href: '/dashboard/invoices', label: 'Invoices', icon: DollarIcon },
   { href: '/dashboard/customers', label: 'Customers', icon: UsersIcon },
+  { href: '/dashboard/outreach', label: 'Outreach links', icon: LinkIcon },
   { href: '/dashboard/setup', label: 'Call Forwarding', icon: PhoneIcon },
   { href: '/dashboard/settings', label: 'Settings', icon: SettingsIcon },
 ];

@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-3.0.x"]
 }
 
 datasource db {
@@ -8,20 +9,53 @@ datasource db {
 }
 
 model Business {
-  id                 String     @id @default(cuid())
-  createdAt          DateTime   @default(now())
-  updatedAt          DateTime   @updatedAt
+  id                 String         @id @default(cuid())
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
   name               String
-  email              String     @unique
+  email              String         @unique
   phone              String?
-  timezone           String     @default("America/New_York")
-  twilioPhoneNumber  String     @unique
-  calendarConnected  Boolean    @default(false)
+  timezone           String         @default("America/New_York")
+  businessHours      Json?
+  retellAgentId      String?
+  twilioPhoneNumber  String         @unique
+  whatsappPhoneNumber String?       @unique
+  whatsappEnabled    Boolean        @default(false)
+  twilioAccountSid   String?
+  twilioAuthToken    String?
+  googleCalendarId   String?
+  googleRefreshToken String?
+  subscriptionTier   String         @default("trial")
+  subscriptionStatus String         @default("active")
+  monthlyCallLimit   Int            @default(100)
+  isActive           Boolean        @default(true)
+  address            String?
+  calendarConnected  Boolean        @default(false)
+  industry           String?
+  verticalType       String?          // "window_cleaning", "plumbing", "hvac", "pest_control", "electrician"
+  agentCustomOverrides Json?           // Business-specific template vars: {diagnosticFee, afterHoursInfo, ownerName, etc.}
+  serviceAreaLat     Float?            // Center of service area (latitude)
+  serviceAreaLng     Float?            // Center of service area (longitude)
+  serviceAreaRadius  Int?     @default(30) // Service area radius in miles
+  voicemailPrompt    String?
+  website            String?
   ownerPhone         String?
+  isLive             Boolean  @default(false) // false = test mode, true = accepting real calls
+  onboardingComplete Boolean  @default(false) // true when go-live checklist is done
+  agentName          String?  // Custom AI agent name (e.g. "Emma", "Rachel")
+  bookings           Booking[]
+  calls              Call[]
+  customers          Customer[]
   users              User[]
+  webhookEvents      WebhookEvent[] @relation("BusinessWebhookEvents")
+  invoices           Invoice[]
+  whatsappConversations WhatsAppConversation[]
+  stripeConnectAccountId String?
+  stripeConnectOnboarded Boolean @default(false)
 
   @@index([email])
   @@index([twilioPhoneNumber])
+  @@index([whatsappPhoneNumber])
 }
 
 model User {
@@ -79,4 +113,267 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model Call {
+  id            String      @id @default(cuid())
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  businessId    String
+  retellCallId  String      @unique
+  twilioCallSid String?     @unique
+  callerPhone   String
+  callerName    String?
+  customerId    String?
+  startTime     DateTime
+  endTime       DateTime?
+  duration      Int?
+  status        String
+  outcome       String?
+  sentiment     String?
+  costPerMinute Float
+  totalCost     Float?
+  transcriptId  String?     @unique
+  keyTopics     String[]
+  actionItems   String[]
+  bookingIntent Boolean     @default(false)
+  bookingId     String?     @unique
+  booking       Booking?
+  business      Business    @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  customer      Customer?   @relation(fields: [customerId], references: [id])
+  transcript    Transcript?
+
+  @@index([businessId])
+  @@index([callerPhone])
+  @@index([customerId])
+  @@index([startTime])
+  @@index([status])
+}
+
+model Transcript {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  callId    String   @unique
+  fullText  String
+  messages  Json
+  audioUrl  String?
+  call      Call     @relation(fields: [callId], references: [id], onDelete: Cascade)
+
+  @@index([callId])
+}
+
+model Customer {
+  id            String    @id @default(cuid())
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  businessId    String
+  firstName     String?
+  lastName      String?
+  phone         String
+  email         String?
+  street        String?
+  city          String?
+  state         String?
+  zipCode       String?
+  propertyType  String?
+  stories       Int?
+  source        String?
+  tags          String[]
+  notes         String?
+  totalCalls    Int       @default(0)
+  totalBookings Int       @default(0)
+  lifetimeValue Float     @default(0)
+  lastContact   DateTime?
+  bookings      Booking[]
+  calls         Call[]
+  invoices      Invoice[]
+  whatsappConversations WhatsAppConversation[]
+  business      Business  @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
+  @@unique([businessId, phone])
+  @@index([businessId])
+  @@index([phone])
+  @@index([email])
+}
+
+model Booking {
+  id                  String   @id @default(cuid())
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+  businessId          String
+  customerId          String
+  callId              String?  @unique
+  serviceType         String
+  scheduledDate       DateTime
+  scheduledTime       String
+  estimatedDuration   Int
+  serviceAddress      String
+  serviceCity         String
+  serviceZipCode      String
+  quotedPrice         Float?
+  finalPrice          Float?
+  isPaid              Boolean  @default(false)
+  status              String   @default("pending")
+  channel             String   @default("voice") // voice | whatsapp | web
+  cancellationReason  String?
+  googleEventId       String?
+  confirmationSent    Boolean  @default(false)
+  reminderSent        Boolean  @default(false)
+  specialInstructions String?
+  internalNotes       String?
+  addressValidated    Boolean  @default(false)
+  latitude            Float?
+  longitude           Float?
+  business            Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  call                Call?    @relation(fields: [callId], references: [id])
+  customer            Customer @relation(fields: [customerId], references: [id])
+  invoice             Invoice?
+
+  @@index([businessId])
+  @@index([customerId])
+  @@index([scheduledDate])
+  @@index([status])
+}
+
+model WebhookEvent {
+  id          String    @id @default(cuid())
+  createdAt   DateTime  @default(now())
+  source      String
+  eventType   String
+  eventId     String?
+  payload     Json
+  processed   Boolean   @default(false)
+  processedAt DateTime?
+  error       String?
+  retryCount  Int       @default(0)
+  businessId  String?
+  business    Business? @relation("BusinessWebhookEvents", fields: [businessId], references: [id], onDelete: Cascade)
+
+  @@index([source, eventType])
+  @@index([businessId])
+  @@index([processed])
+  @@index([createdAt])
+}
+
+model DailyMetric {
+  id              String   @id @default(cuid())
+  date            DateTime @unique @db.Date
+  businessId      String
+  totalCalls      Int      @default(0)
+  completedCalls  Int      @default(0)
+  missedCalls     Int      @default(0)
+  avgCallDuration Float    @default(0)
+  totalBookings   Int      @default(0)
+  bookingRate     Float    @default(0)
+  totalRevenue    Float    @default(0)
+  avgBookingValue Float    @default(0)
+  totalCallCost   Float    @default(0)
+
+  @@index([businessId, date])
+}
+
+model Invoice {
+  id                    String    @id @default(cuid())
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+  businessId            String
+  bookingId             String    @unique
+  customerId            String
+  description           String
+  lineItems             Json?
+  amount                Float?
+  status                String    @default("draft")  // draft | sent | paid | overdue | cancelled
+  stripePaymentLinkId   String?
+  stripePaymentLinkUrl  String?
+  sentAt                DateTime?
+  paidAt                DateTime?
+  reminderCount         Int       @default(0)
+  lastReminderAt        DateTime?
+  flaggedAt             DateTime?
+  notes                 String?
+  business              Business  @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  booking               Booking   @relation(fields: [bookingId], references: [id])
+  customer              Customer  @relation(fields: [customerId], references: [id])
+
+  @@index([businessId])
+  @@index([status])
+  @@index([customerId])
+}
+
+// ==========================================
+// WHATSAPP MODELS (Phase WA)
+// ==========================================
+
+model WhatsAppConversation {
+  id              String    @id @default(cuid())
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  businessId      String
+  customerPhone   String    // E.164 format (e.g., +15551234567)
+  customerId      String?   // Linked if existing customer found
+  state           String    @default("greeting") // greeting, qualify, collect_details, check_availability, confirm, booked, faq, escalated, expired
+  context         Json      @default("{}") // Collected booking data: {name, address, stories, serviceType, preferredDate, etc.}
+  messageHistory  Json      @default("[]") // Array of {role, content} for Claude context window
+  verticalType    String    @default("window_cleaning")
+  status          String    @default("active") // active, completed, expired, escalated
+  bookingId       String?   // Linked booking if one was created
+  expiresAt       DateTime  // Auto-expire after inactivity
+  business        Business  @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  customer        Customer? @relation(fields: [customerId], references: [id])
+  messages        WhatsAppMessage[]
+
+  @@index([businessId, customerPhone, status])
+  @@index([expiresAt])
+  @@index([status])
+}
+
+model WhatsAppMessage {
+  id              String   @id @default(cuid())
+  createdAt       DateTime @default(now())
+  conversationId  String
+  direction       String   // inbound | outbound
+  body            String
+  mediaUrl        String?  // If customer sent an image/file
+  mediaType       String?  // image/jpeg, audio/ogg, etc.
+  twilioSid       String?  // Twilio message SID for tracking
+  conversation    WhatsAppConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  @@index([conversationId])
+}
+
+// Outreach lead capture — from /plumbing and /window-cleaning landing pages
+model OutreachLead {
+  id           String   @id @default(cuid())
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  email        String   @unique
+  name         String?
+  businessName String?
+  vertical     String   // 'plumbing' | 'window-cleaning'
+}
+
+// Personalised tracked links — /for/[slug]
+model TrackedLink {
+  id          String       @id @default(cuid())
+  createdAt   DateTime     @default(now())
+  slug        String       @unique   // e.g. "mike-reynolds"
+  label       String                 // Display label for dashboard: "Mike Reynolds – ABC Plumbing"
+  destination String                 // e.g. "/plumbing#hear-it"
+  vertical    String?                // 'plumbing' | 'window-cleaning'
+  clicks      LinkClick[]
+
+  @@index([slug])
+}
+
+model LinkClick {
+  id            String      @id @default(cuid())
+  createdAt     DateTime    @default(now())
+  trackedLinkId String
+  ip            String?
+  userAgent     String?
+  referer       String?
+  trackedLink   TrackedLink @relation(fields: [trackedLinkId], references: [id], onDelete: Cascade)
+
+  @@index([trackedLinkId])
+  @@index([createdAt])
 }
