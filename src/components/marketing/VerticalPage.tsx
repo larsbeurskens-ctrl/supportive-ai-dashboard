@@ -110,19 +110,19 @@ function LeadCaptureForm({ trade, verticalSlug }: { trade: string; verticalSlug:
           className="w-full px-4 py-3 rounded-lg border border-[#d1ccc6] text-[14px] text-[#1a2e3b] placeholder-[#94a7b8] focus:outline-none focus:border-[#e8930c] bg-white"
         />
       </div>
-      <div className="flex gap-2">
+      <div className="flex flex-col sm:flex-row gap-2">
         <input
           type="email"
           required
           placeholder="Work email address"
           value={email}
           onChange={e => setEmail(e.target.value)}
-          className="flex-1 px-4 py-3 rounded-lg border border-[#d1ccc6] text-[14px] text-[#1a2e3b] placeholder-[#94a7b8] focus:outline-none focus:border-[#e8930c] bg-white"
+          className="flex-1 w-full px-4 py-3 rounded-lg border border-[#d1ccc6] text-[14px] text-[#1a2e3b] placeholder-[#94a7b8] focus:outline-none focus:border-[#e8930c] bg-white"
         />
         <button
           type="submit"
           disabled={loading || !email}
-          className="bg-[#e8930c] text-white px-6 py-3 rounded-lg text-[14px] font-bold whitespace-nowrap hover:bg-[#d17f00] transition-colors disabled:opacity-60 cursor-pointer border-none"
+          className="w-full sm:w-auto bg-[#e8930c] text-white px-6 py-3 rounded-lg text-[14px] font-bold whitespace-nowrap hover:bg-[#d17f00] transition-colors disabled:opacity-60 cursor-pointer border-none"
         >
           {loading ? 'Sending…' : 'Send demo →'}
         </button>
@@ -238,12 +238,12 @@ export function VerticalPage({
             <div className={`grid grid-cols-1 ${recordings.length > 1 ? 'md:grid-cols-2' : ''} gap-5`}>
               {recordings.map(conv => (
                 <div key={conv.id} className="bg-white rounded-2xl border border-[#e5e0da] overflow-hidden">
-                  <div className="px-5 py-3.5 bg-[#faf9f7] border-b border-[#e5e0da] flex items-center justify-between">
-                    <div>
+                  <div className="px-5 py-3.5 bg-[#faf9f7] border-b border-[#e5e0da] flex items-center justify-between gap-3">
+                    <div className="min-w-0">
                       <span className="text-[12px] font-bold text-[#e8930c] uppercase tracking-wide">{trade}</span>
-                      <p className="text-[13px] font-semibold text-[#1a2e3b]">{conv.scenario}</p>
+                      <p className="text-[13px] font-semibold text-[#1a2e3b] truncate">{conv.scenario}</p>
                     </div>
-                    <span className="text-[11px] font-semibold text-white bg-[#059669] px-2 py-0.5 rounded-full">Real call</span>
+                    <span className="flex-shrink-0 whitespace-nowrap text-[11px] font-semibold text-white bg-[#059669] px-2 py-0.5 rounded-full">Real call</span>
                   </div>
                   <div className="p-4 space-y-3 max-h-[280px] overflow-y-auto">
                     {conv.bubbles.map((b, j) => (
@@ -341,10 +341,6 @@ export function VerticalPage({
           </p>
           <p className="text-sm font-bold text-[#1a2e3b]">{testimonial.name}</p>
           <p className="text-xs text-[#5a7184]">{testimonial.title}</p>
-          <div className="mt-4 flex items-center justify-center gap-2">
-            <GoogleIcon size={16} />
-            <span className="text-xs text-[#94a7b8]">Verified Google Review</span>
-          </div>
         </div>
       </section>
 

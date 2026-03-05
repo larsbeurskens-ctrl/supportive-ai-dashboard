@@ -222,10 +222,10 @@ export function HomePage() {
           {/* Connecting line (desktop) */}
           <div className="hidden md:block absolute top-6 left-10 right-10 h-[2px] bg-[#d1ccc6] z-0" />
           {[
-            { n: '1', title: 'Sign up & pick your area code', desc: 'Create an account in 30 seconds. Choose a local number your customers will recognise.' },
-            { n: '2', title: 'Your AI goes live instantly', desc: 'We build a trade-trained agent for your business. It knows your pricing, services, and area.' },
-            { n: '3', title: 'Connect your calendar', desc: 'One click to link Google Calendar. Your AI books jobs into real open slots — no double-bookings.' },
-            { n: '4', title: 'Forward your calls', desc: 'Dial a code from your phone to forward missed calls to your AI. Takes 30 seconds. Done.' },
+            { n: '1', title: 'Sign up & name your AI', desc: 'Create your account in 30 seconds. Pick a local area code. Your AI gets its own number.' },
+            { n: '2', title: 'Add your business details', desc: 'Tell it your pricing, services, hours, and credentials. Takes 2 minutes. No tech skills needed.' },
+            { n: '3', title: 'Test it with a real call', desc: 'Call your AI number and experience it yourself. Book a job, ask about pricing, try a reschedule. Happy? Go live.' },
+            { n: '4', title: 'Forward calls & start booking', desc: 'Dial a short code from your phone to forward missed calls. Connect Google Calendar. Done.' },
           ].map((s, i) => (
             <div key={i} className="flex-1 text-center relative z-[1]">
               <div className="w-12 h-12 rounded-full bg-[#1a2e3b] text-white flex items-center justify-center mx-auto mb-4 text-lg font-bold">
@@ -280,12 +280,12 @@ export function HomePage() {
             ].map((conv) => (
               <div key={conv.id} className="bg-white rounded-2xl border border-[#e5e0da] overflow-hidden">
                 {/* Header */}
-                <div className="px-5 py-3.5 bg-[#faf9f7] border-b border-[#e5e0da] flex items-center justify-between">
-                  <div>
+                <div className="px-5 py-3.5 bg-[#faf9f7] border-b border-[#e5e0da] flex items-center justify-between gap-3">
+                  <div className="min-w-0">
                     <span className="text-[12px] font-bold text-[#e8930c] uppercase tracking-wide">{conv.label}</span>
-                    <p className="text-[13px] font-semibold text-[#1a2e3b]">{conv.scenario}</p>
+                    <p className="text-[13px] font-semibold text-[#1a2e3b] truncate">{conv.scenario}</p>
                   </div>
-                  <span className="text-[11px] font-semibold text-white bg-[#059669] px-2 py-0.5 rounded-full">Real call</span>
+                  <span className="flex-shrink-0 whitespace-nowrap text-[11px] font-semibold text-white bg-[#059669] px-2 py-0.5 rounded-full">Real call</span>
                 </div>
 
                 {/* Chat bubbles */}
@@ -388,21 +388,7 @@ export function HomePage() {
               </div>
             ))}
           </div>
-          {/* Google Reviews badge */}
-          <div className="mt-8 flex justify-center">
-            <div className="flex items-center gap-3 bg-white border border-[#e5e0da] rounded-lg px-5 py-3">
-              <GoogleIcon size={22} />
-              <div>
-                <div className="flex items-center gap-1">
-                  {Array.from({ length: 5 }).map((_, i) => (
-                    <StarIcon key={i} size={14} className="text-[#e8930c]" />
-                  ))}
-                  <span className="text-sm font-bold text-[#1a2e3b] ml-1">5.0</span>
-                </div>
-                <p className="text-xs text-[#94a7b8]">Rated on Google Reviews</p>
-              </div>
-            </div>
-          </div>
+          {/* Google Reviews badge — hidden for now */}
         </div>
       </section>
 
@@ -451,8 +437,8 @@ export function HomePage() {
           {[
             {
               icon: <BrainIcon className="text-[#e8930c]" />,
-              title: 'Agents trained on your trade',
-              desc: 'Window cleaning? Asks about stories, interior/exterior, screens. Plumbing? Triages emergency vs routine. HVAC? Identifies heating vs cooling, system age.',
+              title: 'Human-like AI, built to your business',
+              desc: 'Your AI answers with your business name, knows your pricing, your services, your credentials. Customise the name, tone, and what it says — it sounds like part of your team, not a call centre.',
             },
             {
               icon: <MapPinIcon className="text-[#e8930c]" />,
@@ -508,10 +494,11 @@ export function HomePage() {
               <div className="p-6 space-y-3">
                 {[
                   { step: '1', text: 'Create your account (30 seconds)' },
-                  { step: '2', text: 'Pick your local area code' },
-                  { step: '3', text: 'AI agent goes live instantly' },
-                  { step: '4', text: 'Connect Google Calendar' },
-                  { step: '5', text: 'Forward calls from your phone' },
+                  { step: '2', text: 'Pick your local area code — get your AI number' },
+                  { step: '3', text: 'Add your pricing, services & details (2 min)' },
+                  { step: '4', text: 'Make a test call — hear it in action' },
+                  { step: '5', text: 'Connect Google Calendar' },
+                  { step: '6', text: 'Forward calls & go live' },
                 ].map((item, i) => (
                   <div key={i} className="flex items-center gap-3">
                     <span className="w-6 h-6 rounded-full bg-[#1a2e3b] text-white text-[11px] font-bold flex items-center justify-center flex-shrink-0">{item.step}</span>

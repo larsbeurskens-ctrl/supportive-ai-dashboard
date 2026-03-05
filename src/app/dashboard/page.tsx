@@ -112,24 +112,24 @@ export default function DashboardPage() {
     <div className="space-y-7">
       {/* Header */}
       <div>
-        <h1 className="text-[22px] font-bold text-[#1a2e3b]">Dashboard</h1>
-        <p className="text-[13px] text-[#94a7b8] mt-1">Last 7 days overview</p>
+        <h1 className="text-[22px] font-bold text-[#1a2e3b]">{isDemo && !loading ? 'Onboarding' : 'Dashboard'}</h1>
+        <p className="text-[13px] text-[#94a7b8] mt-1">{isDemo && !loading ? 'Get your AI receptionist set up' : 'Last 7 days overview'}</p>
       </div>
 
       {error && (
         <div className="bg-[#fef2f2] text-[#991b1b] p-4 rounded-xl text-sm font-medium">{error}</div>
       )}
 
+      {/* Setup wizard — shows for new accounts */}
+      {isDemo && !loading && <SetupWizard />}
+
       {isDemo && !loading && (
         <div className="bg-[#fef8f0] border border-[#f0dcc0] rounded-xl px-4 py-3 flex items-center justify-between">
           <p className="text-[13px] text-[#92640a]">
-            <span className="font-semibold">Sample data</span> — this is what your dashboard will look like once your AI starts taking calls.
+            <span className="font-semibold">Sample data below</span> — this is what your dashboard will look like once your AI starts taking calls.
           </p>
         </div>
       )}
-
-      {/* Setup wizard — shows for new accounts */}
-      {isDemo && !loading && <SetupWizard />}
 
       {/* Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3.5">

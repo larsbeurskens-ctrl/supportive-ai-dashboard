@@ -74,12 +74,22 @@ export default function ForwardingPage() {
   const { data: session } = useSession();
   const [selectedMode, setSelectedMode] = useState<ForwardingMode>('no-answer');
   const [selectedCarrier, setSelectedCarrier] = useState<string>('');
+  const [savedMode, setSavedMode] = useState<ForwardingMode | null>(null);
+  const [saving, setSaving] = useState(false);
 
   // Replace placeholder with actual AI phone number
   const aiNumber = (session?.user as any)?.twilioPhoneNumber || '(your AI number)';
 
   const carrier = carriers.find(c => c.name === selectedCarrier);
   const modeData = carrier?.modes[selectedMode as keyof typeof carrier.modes];
+
+  function handleSavePreference() {
+    setSaving(true);
+    setTimeout(() => {
+      setSavedMode(selectedMode);
+      setSaving(false);
+    }, 600);
+  }
 
   return (
     <div className="space-y-7">
@@ -96,7 +106,7 @@ export default function ForwardingPage() {
         <h2 className="text-[15px] font-bold text-[#1a2e3b] mb-1">Step 1: When should your AI pick up?</h2>
         <p className="text-[13px] text-[#94a7b8] mb-4">You can change this anytime</p>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
           {(Object.entries(modeLabels) as [ForwardingMode, typeof modeLabels[string]][]).map(([key, mode]) => (
             <button
               key={key}
@@ -114,6 +124,22 @@ export default function ForwardingPage() {
               <p className="text-[12px] text-[#5a7184] leading-relaxed">{mode.description}</p>
             </button>
           ))}
+        </div>
+
+        <div className="flex items-center gap-3 pt-3 border-t border-[#f0eeeb]">
+          <button
+            onClick={handleSavePreference}
+            disabled={saving}
+            className="px-5 py-2.5 bg-[#1a2e3b] text-white text-[13px] font-bold rounded-xl hover:bg-[#243d4e] transition-colors cursor-pointer border-none disabled:opacity-60"
+          >
+            {saving ? 'Saving…' : 'Save preference'}
+          </button>
+          {savedMode === selectedMode && !saving && (
+            <span className="flex items-center gap-1.5 text-[13px] font-semibold text-[#059669]">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              Saved — <span className="font-normal text-[#5a7184]">{modeLabels[savedMode].label}</span>
+            </span>
+          )}
         </div>
       </div>
 

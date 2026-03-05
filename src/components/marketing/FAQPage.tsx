@@ -38,12 +38,12 @@ function Accordion({ item }: { item: FAQItem }) {
 }
 
 const gettingStartedSteps = [
-  { n: '1', title: 'Sign up for a free trial', desc: 'Create your account at supportiveai.com. No credit card required.' },
-  { n: '2', title: 'Tell us about your business', desc: 'Business name, trade, service area, and your operating hours. Takes 2 minutes.' },
-  { n: '3', title: 'Connect your calendar', desc: 'Link your Google Calendar so the AI can see your real availability and book directly.' },
-  { n: '4', title: 'Get your AI phone number', desc: 'We assign a local number, or you can forward your existing number to it.' },
-  { n: '5', title: 'Test it with a call', desc: 'Call your new number and experience the AI yourself. Adjust anything you want.' },
-  { n: '6', title: 'Go live', desc: 'Start receiving real calls. You\'ll get an SMS for every booking with full details.' },
+  { n: '1', title: 'Sign up for your free trial', desc: 'Create your account — no credit card needed. Pick your AI\'s name and a local area code. Your AI phone number is ready in 30 seconds.' },
+  { n: '2', title: 'Add your business details', desc: 'Tell your AI your pricing, services, service area, credentials, and any discounts you offer. Takes about 2 minutes. This is what makes it sound like your business — not a generic answering service.' },
+  { n: '3', title: 'Make a test call', desc: 'Call your new AI number from your phone. Book a fake job, ask about pricing, try to reschedule — put it through its paces. Adjust anything before going live.' },
+  { n: '4', title: 'Connect your Google Calendar', desc: 'One click to authorise Google Calendar access. Your AI can now see your real availability and book directly into open slots — no double-bookings.' },
+  { n: '5', title: 'Forward your calls', desc: 'Dial a short code from your phone to forward missed calls (or all calls) to your AI. Step-by-step instructions for every major carrier are on the setup page. Takes 2 minutes.' },
+  { n: '6', title: 'Go live', desc: 'Hit the "Go live" button in your dashboard. From that point, your AI starts answering real customer calls. You\'ll get an SMS for every booking with full details.' },
 ];
 
 const faqSections: { title: string; items: FAQItem[] }[] = [
@@ -124,11 +124,11 @@ const faqSections: { title: string; items: FAQItem[] }[] = [
         question: 'How much does it cost?',
         answer: (
           <div>
-            <p className="mb-3">Three plans, all with a 14-day free trial:</p>
+            <p className="mb-3">Three plans, all with a 7-day free trial (up to 50 calls):</p>
             <div className="space-y-2">
-              <div className="flex items-baseline gap-2"><strong className="text-[#1a2e3b]">Starter — $149/mo</strong><span>100 calls/month. Perfect for solo operators.</span></div>
-              <div className="flex items-baseline gap-2"><strong className="text-[#1a2e3b]">Pro — $299/mo</strong><span>250 calls/month. Route-optimised booking + analytics.</span></div>
-              <div className="flex items-baseline gap-2"><strong className="text-[#1a2e3b]">Growth — $499/mo</strong><span>Unlimited calls. Multi-crew scheduling + API access.</span></div>
+              <div className="flex items-baseline gap-2"><strong className="text-[#1a2e3b]">Starter — $149/mo</strong><span>150 calls/month. Everything you need to get started. Includes WhatsApp AI agent.</span></div>
+              <div className="flex items-baseline gap-2"><strong className="text-[#1a2e3b]">Pro — $299/mo</strong><span>500 calls/month. Multi-crew scheduling, priority support, review requests.</span></div>
+              <div className="flex items-baseline gap-2"><strong className="text-[#1a2e3b]">Growth — $499/mo</strong><span>Unlimited calls. API access, dedicated account manager, custom-built features.</span></div>
             </div>
             <p className="mt-3">No setup fees. No per-seat charges. Cancel anytime.</p>
           </div>
@@ -136,15 +136,15 @@ const faqSections: { title: string; items: FAQItem[] }[] = [
       },
       {
         question: 'Is there a free trial?',
-        answer: 'Yes — 14 days, fully functional, no credit card required. You get your own AI phone number and can test it with real calls. If it\'s not for you, just don\'t subscribe. No hassle.',
+        answer: 'Yes — 7 days, fully functional, up to 50 calls, no credit card required. You get your own AI phone number and can test it with real calls. If it\'s not for you, just don\'t subscribe.',
       },
       {
         question: 'What happens if I exceed my call limit?',
-        answer: 'We\'ll never cut off your callers mid-month. If you consistently exceed your plan\'s limit, we\'ll reach out to suggest an upgrade. Occasional overages are fine — we\'re not going to charge you per extra call.',
+        answer: 'We keep answering your calls — we\'ll never cut a customer off mid-month. Overage calls are billed at the end of the month at your plan rate (Starter: $1.50/call, Pro: $1.25/call). Growth is unlimited with no overage.',
       },
       {
         question: 'What counts as a "call"?',
-        answer: 'Any inbound call that the AI answers and has a conversation with. Missed calls, hang-ups under 5 seconds, and spam calls don\'t count toward your limit.',
+        answer: 'Any inbound call that the AI answers and has a real conversation with. Hang-ups under 5 seconds and spam calls don\'t count toward your limit.',
       },
     ],
   },
@@ -158,6 +158,40 @@ const faqSections: { title: string; items: FAQItem[] }[] = [
       {
         question: 'Do I need a Stripe account?',
         answer: 'Yes, but we\'ll walk you through setting one up during onboarding — it takes about 5 minutes. Stripe handles all payment processing securely, and funds go directly to your bank account. We never touch your money.',
+      },
+    ],
+  },
+  {
+    title: 'WhatsApp AI agent',
+    items: [
+      {
+        question: 'Is there a WhatsApp AI agent too?',
+        answer: 'Yes — every plan includes a WhatsApp AI agent at no extra cost. Customers who prefer to message rather than call can reach you on WhatsApp. The same AI handles it — same knowledge of your pricing, services, and availability, same ability to book appointments.',
+      },
+      {
+        question: 'Do I need to do anything extra to set up WhatsApp?',
+        answer: 'No extra setup. When you sign up, your WhatsApp agent is provisioned automatically alongside your phone number. You can share the WhatsApp number on your website or marketing materials.',
+      },
+      {
+        question: 'Can the WhatsApp agent book appointments too?',
+        answer: 'Yes. It has full booking capabilities — it can check your Google Calendar, offer available slots, and confirm bookings just like the voice agent. You\'ll get the same SMS notification for every booking.',
+      },
+    ],
+  },
+  {
+    title: 'Customisation',
+    items: [
+      {
+        question: 'Can I customise what the AI says?',
+        answer: 'Yes. During setup — and at any time from your dashboard — you can update your pricing, services, service area, credentials, special discounts (veterans, seniors, recurring customers), and any custom instructions. The AI uses all of this to have informed conversations that sound specific to your business.',
+      },
+      {
+        question: 'Does it handle discounts and special pricing?',
+        answer: 'Yes. You can specify any discounts you offer — veteran discounts, senior rates, first-service offers, referral discounts — and the AI will mention them naturally when relevant. For example, if a caller mentions they\'re a veteran, the AI will bring up your veteran discount without you having to prompt it.',
+      },
+      {
+        question: 'Can it mention financing options?',
+        answer: 'Yes. If you offer financing (e.g. through GreenSky or another provider), you can add those details in your setup. The AI will bring it up naturally when a customer asks about payment options or reacts to a price — something like "we do offer financing for larger jobs, would that help?"',
       },
     ],
   },
