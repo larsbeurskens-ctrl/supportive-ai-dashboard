@@ -32,7 +32,7 @@ const VERTICAL_LABELS: Record<string, {
   window_cleaning: {
     feeLabel: 'Starting price / estimate range',
     feePlaceholder: 'e.g. from $150 for a standard home, free quotes',
-    servicesPlaceholder: 'e.g. interior/exterior windows, screens, tracks, skylights, gutter cleaning...',
+    servicesPlaceholder: 'e.g. interior/exterior windows, screens, tracks, skylights, pressure washing, gutter cleaning...',
     showCleaningMethod: true, feeFieldName: 'diagnosticFee',
   },
   hvac: {
@@ -96,6 +96,8 @@ export default function SetupWizard() {
   const [emergencyService, setEmergencyService] = useState(false);
   const [gasLineWork, setGasLineWork] = useState('');
   const [cleaningMethod, setCleaningMethod] = useState('');
+  const [financing, setFinancing] = useState('');
+  const [discounts, setDiscounts] = useState('');
   const [customFAQ, setCustomFAQ] = useState('');
   const [saving, setSaving] = useState(false);
 
@@ -129,6 +131,8 @@ export default function SetupWizard() {
     if (o.emergencyAvailability !== undefined) setEmergencyService(o.emergencyAvailability);
     if (o.gasLineInfo) setGasLineWork(o.gasLineInfo);
     if (o.cleaningMethod) setCleaningMethod(o.cleaningMethod);
+    if (o.financing) setFinancing(o.financing);
+    if (o.discounts) setDiscounts(o.discounts);
   }
 
   useEffect(() => {
@@ -190,6 +194,8 @@ export default function SetupWizard() {
         emergencyAvailability: emergencyService,
         gasLineInfo: gasLineWork.trim(),
         cleaningMethod: cleaningMethod.trim(),
+        financing: financing.trim(),
+        discounts: discounts.trim(),
       });
       const s = await refreshStatus();
       if (s) { prefillFromStatus(s); determineStep(s); }
@@ -436,10 +442,28 @@ export default function SetupWizard() {
                   <div>
                     <label className="block text-sm font-semibold text-[#1a2e3b] mb-1">Cleaning method / materials</label>
                     <input type="text" value={cleaningMethod} onChange={e => setCleaningMethod(e.target.value)}
-                      placeholder="e.g. water-fed pole, eco-friendly solutions, traditional squeegee..."
+                      placeholder="e.g. water-fed pole, eco-friendly solutions, traditional squeegee, pure water..."
                       className="w-full px-4 py-2.5 border border-[#e5e0da] rounded-xl text-[14px] text-[#1a2e3b] focus:outline-none focus:ring-2 focus:ring-[#0d9488]" />
                   </div>
                 )}
+
+                {/* Financing */}
+                <div>
+                  <label className="block text-sm font-semibold text-[#1a2e3b] mb-1">Do you offer financing?</label>
+                  <input type="text" value={financing} onChange={e => setFinancing(e.target.value)}
+                    placeholder="e.g. Yes, through GreenSky — 12 months same as cash on jobs over $500. Or leave blank."
+                    className="w-full px-4 py-2.5 border border-[#e5e0da] rounded-xl text-[14px] text-[#1a2e3b] focus:outline-none focus:ring-2 focus:ring-[#0d9488]" />
+                  <p className="text-[11px] text-[#94a7b8] mt-1">Your AI will mention this when customers ask about payment options or large jobs.</p>
+                </div>
+
+                {/* Discounts */}
+                <div>
+                  <label className="block text-sm font-semibold text-[#1a2e3b] mb-1">Any discounts you offer?</label>
+                  <input type="text" value={discounts} onChange={e => setDiscounts(e.target.value)}
+                    placeholder="e.g. 10% for veterans, 5% senior discount, 15% off first service, referral discount..."
+                    className="w-full px-4 py-2.5 border border-[#e5e0da] rounded-xl text-[14px] text-[#1a2e3b] focus:outline-none focus:ring-2 focus:ring-[#0d9488]" />
+                  <p className="text-[11px] text-[#94a7b8] mt-1">Your AI will bring this up naturally when relevant — e.g. if a customer mentions they're a veteran.</p>
+                </div>
 
                 {/* Anything else */}
                 <div>
