@@ -60,8 +60,8 @@ export default function WindowCleaningPage() {
     <VerticalPage
       trade="Window Cleaning"
       verticalSlug="window-cleaning"
-      headline="Every missed call is a job gone to your competitor."
-      subheadline="Your AI agent answers every call, books the job, and sends confirmation — while you're on a ladder."
+      headline="The AI receptionist built for window cleaners."
+      subheadline="Answers every call while you're on a ladder. Books the job, sends confirmation, handles reschedules — so you never lose a customer to voicemail."
       painPoints={[
         "You miss 3-5 calls a day because you're on a job site.",
         "By the time you call back from voicemail, they've booked someone else.",

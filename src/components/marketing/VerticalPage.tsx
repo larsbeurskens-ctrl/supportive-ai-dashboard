@@ -174,9 +174,6 @@ export function VerticalPage({
     <>
       {/* ===== HERO ===== */}
       <section className="pt-16 pb-10 md:pt-20 px-6 md:px-10 max-w-[820px] mx-auto text-center">
-        <span className="inline-block px-4 py-1.5 rounded-full text-[13px] font-bold mb-6 uppercase tracking-wide bg-[#e8930c]/10 text-[#e8930c]">
-          {trade} AI Receptionist
-        </span>
         <h1 className="text-[36px] md:text-[44px] font-extrabold text-[#1a2e3b] leading-[1.15] mb-5 tracking-tight">
           {headline}
         </h1>

@@ -77,7 +77,7 @@ export default function PlumbingPage() {
         { title: 'Priority scheduling', desc: 'Emergency calls get the next available slot. Routine maintenance books normally. You set the rules.' },
       ]}
       stats={[
-        { value: '$300-800', label: 'Avg emergency job value' },
+        { value: '0', label: 'Calls sent to voicemail' },
         { value: '24/7', label: 'Always answering' },
         { value: '< 1s', label: 'Pickup time' },
       ]}
