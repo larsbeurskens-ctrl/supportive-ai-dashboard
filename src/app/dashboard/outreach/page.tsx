@@ -1,7 +1,11 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Copy, Check, Plus, ExternalLink, MousePointerClick, Clock, Trash2 } from 'lucide-react';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import { Copy, Check, Plus, ExternalLink, MousePointerClick } from 'lucide-react';
+
+const ADMIN_EMAIL = 'larsbeurskens@gmail.com';
 
 const VERTICAL_OPTIONS = [
   { value: 'plumbing', label: '🔧 Plumbing', destination: '/plumbing#hear-it' },
@@ -78,6 +82,8 @@ function VerticalBadge({ vertical }: { vertical: string | null }) {
 }
 
 export default function OutreachPage() {
+  const { data: session, status } = useSession();
+  const router = useRouter();
   const [links, setLinks] = useState<TrackedLink[]>([]);
   const [loading, setLoading] = useState(true);
   const [showCreate, setShowCreate] = useState(false);
@@ -108,6 +114,12 @@ export default function OutreachPage() {
       setLoading(false);
     }
   }
+
+  useEffect(() => {
+    if (status === 'authenticated' && session?.user?.email !== ADMIN_EMAIL) {
+      router.replace('/dashboard');
+    }
+  }, [status, session, router]);
 
   useEffect(() => { fetchLinks(); }, []);
 

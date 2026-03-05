@@ -16,9 +16,13 @@ const navItems = [
   { href: '/dashboard/bookings', label: 'Bookings', icon: CalendarIcon },
   { href: '/dashboard/invoices', label: 'Invoices', icon: DollarIcon },
   { href: '/dashboard/customers', label: 'Customers', icon: UsersIcon },
-  { href: '/dashboard/outreach', label: 'Outreach links', icon: LinkIcon },
   { href: '/dashboard/setup', label: 'Call Forwarding', icon: PhoneIcon },
   { href: '/dashboard/settings', label: 'Settings', icon: SettingsIcon },
+];
+
+const ADMIN_EMAIL = 'larsbeurskens@gmail.com';
+const adminOnlyItems = [
+  { href: '/dashboard/outreach', label: 'Outreach links', icon: LinkIcon },
 ];
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
@@ -33,7 +37,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     }
   }, [status, session, router]);
 
-  const handleSignOut = () => signOut({ callbackUrl: '/login' });
+  const isAdmin = session?.user?.email === ADMIN_EMAIL;
+  const visibleNavItems = isAdmin ? [...navItems, ...adminOnlyItems] : navItems;
 
   if (status === 'loading' || (status === 'authenticated' && !session?.user?.businessId)) {
     return (
@@ -64,16 +69,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       {/* Mobile menu */}
       {mobileMenuOpen && (
         <nav className="lg:hidden bg-white border-b border-[#e5e0da] px-4 py-2">
-          {navItems.map((item) => {
-            const Icon = item.icon;
-            const isActive = pathname === item.href;
-            return (
-              <Link key={item.href} href={item.href} onClick={() => setMobileMenuOpen(false)}
-                className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm no-underline ${isActive ? 'bg-[#faf9f7] text-[#1a2e3b] font-semibold' : 'text-[#5a7184]'}`}>
-                <Icon size={20} />{item.label}
-              </Link>
-            );
-          })}
+          {visibleNavItems.map((item) => {
           <button onClick={handleSignOut} className="flex items-center gap-3 px-4 py-3 text-sm text-[#dc2626] w-full bg-transparent border-none cursor-pointer">
             Sign out
           </button>
@@ -91,7 +87,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           </div>
 
           <nav className="flex-1 px-3 py-4 space-y-0.5">
-            {navItems.map((item) => {
+            {visibleNavItems.map((item) => {
               const Icon = item.icon;
               const isActive = pathname === item.href;
               return (
