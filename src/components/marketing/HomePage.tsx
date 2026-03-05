@@ -303,58 +303,7 @@ export function HomePage() {
         </div>
       </section>
 
-      {/* ===== TESTIMONIALS ===== */}
-      <section className="py-16 px-6 md:px-10 bg-white border-t border-b border-[#e5e0da]">
-        <div className="max-w-[860px] mx-auto">
-          <div className="text-center mb-10">
-            <h2 className="text-[28px] font-bold text-[#1a2e3b] mb-2">Trusted by tradespeople</h2>
-            <p className="text-[15px] text-[#5a7184]">Hear from business owners who stopped missing calls.</p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {[
-              {
-                quote: "I used to miss 4-5 calls a day while I was up a ladder. Now every call gets answered and booked. My revenue went up 30% in the first month.",
-                name: 'Mike Reynolds',
-                title: 'Owner, Crystal Clear Windows',
-                trade: 'Window Cleaning',
-                stars: 5,
-              },
-              {
-                quote: "The AI actually knows plumbing. It asks about water shut-off, property type, the right things. My customers think they're talking to a real receptionist.",
-                name: 'Sarah Chen',
-                title: 'S. Chen Plumbing',
-                trade: 'Plumbing',
-                stars: 5,
-              },
-              {
-                quote: "Peak season used to mean hiring a temp receptionist for $3K/month. Now the AI handles the surge and I save that money. Best investment I've made.",
-                name: 'James Whitfield',
-                title: 'Whitfield HVAC Services',
-                trade: 'HVAC',
-                stars: 5,
-              },
-            ].map((t, i) => (
-              <div key={i} className="bg-[#faf9f7] rounded-xl p-6 border border-[#e5e0da]">
-                {/* Stars */}
-                <div className="flex gap-0.5 mb-3">
-                  {Array.from({ length: t.stars }).map((_, j) => (
-                    <StarIcon key={j} size={16} className="text-[#e8930c]" />
-                  ))}
-                </div>
-                <p className="text-sm text-[#2a4a5e] leading-relaxed mb-4 italic">
-                  &ldquo;{t.quote}&rdquo;
-                </p>
-                <div className="border-t border-[#e5e0da] pt-3">
-                  <p className="text-sm font-bold text-[#1a2e3b]">{t.name}</p>
-                  <p className="text-xs text-[#5a7184]">{t.title}</p>
-                  <span className="inline-block mt-1.5 text-[11px] font-semibold text-[#94a7b8] uppercase tracking-wider">{t.trade}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-          {/* Google Reviews badge — hidden for now */}
-        </div>
-      </section>
+      {/* ===== TESTIMONIALS — hidden for now ===== */}
 
       {/* ===== DEMO CALL CTA ===== */}
       <section className="py-16 px-6 md:px-10">

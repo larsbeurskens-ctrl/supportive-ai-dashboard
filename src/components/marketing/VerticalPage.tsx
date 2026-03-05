@@ -330,21 +330,7 @@ export function VerticalPage({
         </div>
       </section>
 
-      {/* ===== TESTIMONIAL ===== */}
-      <section className="py-12 px-6 md:px-10 bg-white border-t border-[#e5e0da]">
-        <div className="max-w-[600px] mx-auto text-center">
-          <div className="flex gap-0.5 justify-center mb-4">
-            {Array.from({ length: testimonial.stars }).map((_, j) => (
-              <StarIcon key={j} size={18} className="text-[#e8930c]" />
-            ))}
-          </div>
-          <p className="text-base text-[#2a4a5e] leading-relaxed italic mb-4">
-            &ldquo;{testimonial.quote}&rdquo;
-          </p>
-          <p className="text-sm font-bold text-[#1a2e3b]">{testimonial.name}</p>
-          <p className="text-xs text-[#5a7184]">{testimonial.title}</p>
-        </div>
-      </section>
+      {/* ===== TESTIMONIAL — hidden for now ===== */}
 
       {/* ===== FIND OUT MORE — email capture ===== */}
       <section className="py-16 px-6 md:px-10 bg-[#faf9f7] border-t border-[#e5e0da]">
