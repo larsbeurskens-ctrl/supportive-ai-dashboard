@@ -23,8 +23,9 @@ const navItems = [
 ];
 
 const adminOnlyItems = [
+  { href: '/dashboard/outreach-send', label: 'Outreach', icon: TrendUpIcon },
   { href: '/dashboard/users', label: 'Signups', icon: UsersIcon },
-  { href: '/dashboard/outreach', label: 'Outreach links', icon: LinkIcon },
+  { href: '/dashboard/outreach', label: 'Tracking links', icon: LinkIcon },
 ];
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {

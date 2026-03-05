@@ -377,3 +377,29 @@ model LinkClick {
   @@index([trackedLinkId])
   @@index([createdAt])
 }
+
+
+// Outbound outreach contacts — leads for cold email campaigns
+model OutreachContact {
+  id             String    @id @default(cuid())
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  email          String
+  name           String?
+  businessName   String?
+  phone          String?
+  website        String?
+  vertical       String    // plumbing | window_cleaning | hvac
+  score          Int       @default(0)
+  painSignal     String?
+  status         String    @default("unsent") // unsent | sent | clicked | signed_up
+  sentAt         DateTime?
+  trackingSlug   String?   // slug of auto-created TrackedLink
+  emailTemplate  String?   // which template was used: first_touch | follow_up
+  notes          String?
+
+  @@unique([email, vertical])
+  @@index([vertical])
+  @@index([status])
+  @@index([score])
+}

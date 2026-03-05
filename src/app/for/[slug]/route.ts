@@ -25,6 +25,12 @@ export async function GET(
       },
     }).catch(() => {});
 
+    // Update outreach contact status to "clicked" if linked
+    prisma.outreachContact.updateMany({
+      where: { trackingSlug: slug, status: 'sent' },
+      data: { status: 'clicked' },
+    }).catch(() => {});
+
     const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://supportive-ai.com';
     const destination = link.destination.startsWith('http')
       ? link.destination
