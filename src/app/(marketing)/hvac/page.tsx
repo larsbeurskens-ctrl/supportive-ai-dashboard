@@ -42,6 +42,16 @@ export default function HVACPage() {
       phoneNumber={null}
       accentColor="#e8930c"
       available={false}
+      demoConfig={{
+        label: 'HVAC Demo',
+        phone: '(845) 209-2401',
+        tel: '+18452092401',
+        addresses: [
+          '12 Maple Ave, Poughkeepsie, NY 12601',
+          '45 Oak Street, Newburgh, NY 12550',
+        ],
+        whatToTry: 'Say your AC stopped working in the heat, ask about emergency service, or enquire about a maintenance plan. Coming soon — join the waitlist.',
+      }}
     />
   );
 }

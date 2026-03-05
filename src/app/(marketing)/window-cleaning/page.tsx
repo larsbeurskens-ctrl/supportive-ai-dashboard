@@ -62,6 +62,17 @@ export default function WindowCleaningPage() {
       verticalSlug="window-cleaning"
       headline="The AI receptionist built for window cleaners."
       subheadline="Answers every call while you're on a ladder. Books the job, sends confirmation, handles reschedules — so you never lose a customer to voicemail."
+      demoConfig={{
+        label: 'Window Cleaning Demo',
+        phone: '(845) 209-2401',
+        tel: '+18452092401',
+        addresses: [
+          '34 Elm Street, Poughkeepsie, NY 12601',
+          '45 Oak Street, Newburgh, NY 12550',
+          '8 River Road, Kingston, NY 12401',
+        ],
+        whatToTry: 'Ask for a quote on a 2-story colonial exterior, book a slot, or say you need to reschedule. Try asking about screens or interior windows too.',
+      }}
       painPoints={[
         "You miss 3-5 calls a day because you're on a job site.",
         "By the time you call back from voicemail, they've booked someone else.",

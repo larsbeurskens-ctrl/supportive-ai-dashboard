@@ -62,6 +62,17 @@ export default function PlumbingPage() {
       verticalSlug="plumbing"
       headline="The AI receptionist built for plumbers."
       subheadline="Triages urgency, qualifies every lead, and books the job — 24/7. So you stop losing $500 emergency calls to voicemail."
+      demoConfig={{
+        label: 'Plumbing Demo',
+        phone: '(240) 301-1473',
+        tel: '+12403011473',
+        addresses: [
+          '60 Market Street, Poughkeepsie, NY 12601',
+          '20 Margaret St, Poughkeepsie, NY 12601',
+          '35 Oak Street, Kingston, NY 12401',
+        ],
+        whatToTry: 'Report an active leak and say water is rising — hear how it triages. Or ask about a dripping faucet, water heater replacement cost, or try booking a routine job.',
+      }}
       painPoints={[
         "Missed calls go straight to voicemail. The customer Googles the next plumber.",
         "You can't tell urgent from routine when you're already on a job.",

@@ -3,6 +3,7 @@
 import { useState, useRef } from 'react';
 import Link from 'next/link';
 import { PhoneIcon, CheckIcon, StarIcon, GoogleIcon } from './Icons';
+import { DemoOverlay, DemoConfig } from './DemoOverlay';
 
 interface Capability {
   title: string;
@@ -40,7 +41,8 @@ interface VerticalPageProps {
   accentColor: string;
   available: boolean;
   recordings: Recording[];
-  verticalSlug: string; // 'plumbing' | 'window-cleaning'
+  verticalSlug: string;
+  demoConfig: DemoConfig; // vertical-specific overlay content
 }
 
 /* ===== Audio Player hook helpers ===== */
@@ -135,8 +137,9 @@ function LeadCaptureForm({ trade, verticalSlug }: { trade: string; verticalSlug:
 
 export function VerticalPage({
   trade, headline, subheadline, painPoints, capabilities,
-  stats, testimonial, phoneNumber, available, recordings, verticalSlug,
+  stats, testimonial, phoneNumber, available, recordings, verticalSlug, demoConfig,
 }: VerticalPageProps) {
+  const [showDemo, setShowDemo] = useState(false);
   const [playing, setPlaying] = useState<string | null>(null);
   const [progress, setProgress] = useState<Record<string, number>>({});
   const [durations, setDurations] = useState<Record<string, number>>({});
@@ -172,6 +175,8 @@ export function VerticalPage({
 
   return (
     <>
+      {showDemo && <DemoOverlay onClose={() => setShowDemo(false)} configs={[demoConfig]} />}
+
       {/* ===== HERO ===== */}
       <section className="pt-16 pb-10 md:pt-20 px-6 md:px-10 max-w-[820px] mx-auto text-center">
         <h1 className="text-[36px] md:text-[44px] font-extrabold text-[#1a2e3b] leading-[1.15] mb-5 tracking-tight">
@@ -183,12 +188,12 @@ export function VerticalPage({
         <div className="flex flex-col sm:flex-row gap-3 justify-center mb-4">
           {available && phoneNumber ? (
             <>
-              <a
-                href={`tel:+1${phoneNumber.replace(/\D/g, '')}`}
-                className="bg-[#e8930c] text-white px-8 py-[15px] rounded-lg text-base font-bold no-underline hover:bg-[#d17f00] transition-colors shadow-[0_2px_8px_rgba(232,147,12,0.3)] flex items-center justify-center gap-2"
+              <button
+                onClick={() => setShowDemo(true)}
+                className="bg-[#e8930c] text-white px-8 py-[15px] rounded-lg text-base font-bold border-none hover:bg-[#d17f00] transition-colors shadow-[0_2px_8px_rgba(232,147,12,0.3)] flex items-center justify-center gap-2 cursor-pointer"
               >
                 <PhoneIcon size={18} /> Call the demo agent
-              </a>
+              </button>
               <Link
                 href="/onboarding"
                 className="bg-white text-[#1a2e3b] px-8 py-[15px] rounded-lg text-base font-semibold no-underline border border-[#d1ccc6] hover:bg-[#f0eeeb] transition-colors"
@@ -381,13 +386,13 @@ export function VerticalPage({
             <p className="text-[14px] text-white/60 mb-6">
               It answers in under 1 second. Book a fake appointment — say you need to reschedule — ask about pricing.
             </p>
-            <a
-              href={`tel:+1${phoneNumber.replace(/\D/g, '')}`}
-              className="inline-flex items-center gap-3 bg-[#243d4e] rounded-xl px-8 py-4 border border-[#35596e] no-underline hover:bg-[#2c4a5d] transition-colors"
+            <button
+              onClick={() => setShowDemo(true)}
+              className="inline-flex items-center gap-3 bg-[#243d4e] rounded-xl px-8 py-4 border border-[#35596e] hover:bg-[#2c4a5d] transition-colors cursor-pointer border-none"
             >
               <PhoneIcon size={22} className="text-[#e8930c]" />
               <span className="text-[22px] font-bold text-white tracking-wide">{phoneNumber}</span>
-            </a>
+            </button>
             <p className="text-[12px] text-white/40 mt-4">Standard call rates apply</p>
           </div>
         </section>

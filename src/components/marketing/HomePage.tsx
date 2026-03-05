@@ -7,68 +7,32 @@ import {
   MapPinIcon, DollarIcon, ClockIcon, ShieldIcon,
   StarIcon, GoogleIcon, QuoteIcon,
 } from './Icons';
+import { DemoOverlay } from './DemoOverlay';
 
-/* ===== Demo Call Overlay ===== */
-function DemoOverlay({ onClose }: { onClose: () => void }) {
-  const [tab, setTab] = useState<'plumbing' | 'window'>('window');
-  const demos = {
-    window: { phone: '(845) 209-2401', tel: '+18452092401', label: 'Window Cleaning', name: 'Sarah', addresses: ['12 Market Street, Poughkeepsie, NY 12601', '45 Oak Street, Newburgh, NY 12550', '8 River Road, Kingston, NY 12401'] },
-    plumbing: { phone: '(240) 301-1473', tel: '+12403011473', label: 'Plumbing', name: 'the AI agent', addresses: ['51 Market St, Poughkeepsie, NY 12601', '20 Margaret St, Poughkeepsie, NY 12601', '35 Market St, Poughkeepsie, NY 12601'] },
-  };
-  const d = demos[tab];
-  return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 p-4" onClick={onClose}>
-      <div className="bg-white rounded-2xl max-w-[440px] w-full overflow-hidden" onClick={e => e.stopPropagation()}>
-        {/* Header */}
-        <div className="bg-[#1a2e3b] px-6 py-5 relative">
-          <button onClick={onClose} className="absolute top-4 right-4 text-white/50 hover:text-white bg-transparent border-none cursor-pointer text-lg">&times;</button>
-          <h3 className="text-[20px] font-bold text-white mb-1">Try it yourself</h3>
-          <p className="text-[13px] text-white/60">Call from your phone to experience a real AI booking.</p>
-        </div>
-
-        {/* Tabs */}
-        <div className="flex border-b border-[#e5e0da]">
-          {(['window', 'plumbing'] as const).map(t => (
-            <button key={t} onClick={() => setTab(t)}
-              className={`flex-1 py-3 text-[13px] font-semibold transition-colors cursor-pointer border-none ${
-                tab === t ? 'text-[#e8930c] border-b-2 border-[#e8930c] bg-white' : 'text-[#94a7b8] bg-[#faf9f7]'
-              }`}>
-              {demos[t].label}
-            </button>
-          ))}
-        </div>
-
-        <div className="p-6">
-          {/* Phone number */}
-          <div className="text-center mb-5">
-            <a href={`tel:${d.tel}`} className="text-[28px] font-bold text-[#1a2e3b] no-underline hover:text-[#e8930c] transition-colors">
-              {d.phone}
-            </a>
-            <p className="text-[12px] text-[#94a7b8] mt-1">Tap to call · standard call rates apply</p>
-          </div>
-
-          {/* Test addresses */}
-          <div className="bg-[#faf9f7] rounded-xl p-4 mb-4">
-            <p className="text-[12px] font-semibold text-[#5a7184] mb-2">Use a test address:</p>
-            <div className="space-y-1.5">
-              {d.addresses.map((a, i) => (
-                <p key={i} className="text-[13px] text-[#2a4a5e]">{a}</p>
-              ))}
-            </div>
-          </div>
-
-          {/* What to try */}
-          <div className="bg-[#eef9f0] rounded-xl p-4">
-            <p className="text-[12px] font-semibold text-[#059669] mb-1">What to try:</p>
-            <p className="text-[13px] text-[#2a4a5e]">
-              Book an appointment, ask about pricing, or say you need to reschedule. {d.name} handles it all.
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
+const HOME_DEMO_CONFIGS = [
+  {
+    label: 'Window Cleaning',
+    phone: '(845) 209-2401',
+    tel: '+18452092401',
+    addresses: [
+      '12 Market Street, Poughkeepsie, NY 12601',
+      '45 Oak Street, Newburgh, NY 12550',
+      '8 River Road, Kingston, NY 12401',
+    ],
+    whatToTry: 'Book an exterior clean, ask about pricing for a 2-story colonial, or try rescheduling. Sarah handles it all.',
+  },
+  {
+    label: 'Plumbing',
+    phone: '(240) 301-1473',
+    tel: '+12403011473',
+    addresses: [
+      '51 Market St, Poughkeepsie, NY 12601',
+      '20 Margaret St, Poughkeepsie, NY 12601',
+      '35 Market St, Poughkeepsie, NY 12601',
+    ],
+    whatToTry: 'Report an active leak, ask about a dripping faucet, or request a water heater quote. Try saying it\'s urgent.',
+  },
+];
 
 export function HomePage() {
   const [showDemo, setShowDemo] = useState(false);
@@ -111,7 +75,7 @@ export function HomePage() {
 
   return (
     <>
-      {showDemo && <DemoOverlay onClose={() => setShowDemo(false)} />}
+      {showDemo && <DemoOverlay onClose={() => setShowDemo(false)} configs={HOME_DEMO_CONFIGS} defaultIndex={0} />}
 
       {/* ===== HERO ===== */}
       <section className="pt-16 pb-6 md:pt-20 md:pb-8 px-6 md:px-10 max-w-[860px] mx-auto text-center">
