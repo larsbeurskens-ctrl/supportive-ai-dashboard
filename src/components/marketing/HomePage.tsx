@@ -7,6 +7,7 @@ import {
   MapPinIcon, DollarIcon, ClockIcon, ShieldIcon,
   StarIcon, GoogleIcon, QuoteIcon,
 } from './Icons';
+import { LeadCaptureForm } from './LeadCaptureForm';
 import { DemoOverlay } from './DemoOverlay';
 
 const HOME_DEMO_CONFIGS = [
@@ -633,6 +634,32 @@ export function HomePage() {
               <span className="font-semibold text-[#1a2e3b]">Go over your limit? No worries.</span>{' '}
               We keep answering your calls — you'll never miss a customer. Overage calls are billed at your plan rate at the end of the month. No surprises.
             </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ===== LEAD CAPTURE ===== */}
+      <section className="py-16 px-6 md:px-10 bg-[#faf9f7] border-t border-[#e5e0da]">
+        <div className="max-w-[580px] mx-auto">
+          <div className="text-center mb-8">
+            <h2 className="text-[24px] font-bold text-[#1a2e3b] mb-2">
+              Want to see exactly how it would work for your business?
+            </h2>
+            <p className="text-[15px] text-[#5a7184]">
+              We&apos;ll send you a sample conversation, a breakdown of what it handles,
+              and how to get it live in 5 minutes.
+            </p>
+          </div>
+          <div className="bg-white rounded-2xl border border-[#e5e0da] p-6">
+            <LeadCaptureForm />
+          </div>
+          <div className="flex justify-center gap-6 mt-6">
+            {['7-day free trial', 'No credit card', 'Cancel anytime'].map((s, i) => (
+              <div key={i} className="flex items-center gap-1.5">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span className="text-[13px] text-[#5a7184] font-medium">{s}</span>
+              </div>
+            ))}
           </div>
         </div>
       </section>
