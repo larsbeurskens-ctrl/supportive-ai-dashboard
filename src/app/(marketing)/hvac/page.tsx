@@ -10,6 +10,8 @@ export default function HVACPage() {
   return (
     <VerticalPage
       trade="HVAC"
+      verticalSlug="hvac"
+      recordings={[]}
       headline="Peak season? We've got your phones covered."
       subheadline="When the AC dies in July or the heater quits in January, every call matters. Your AI handles the surge."
       painPoints={[

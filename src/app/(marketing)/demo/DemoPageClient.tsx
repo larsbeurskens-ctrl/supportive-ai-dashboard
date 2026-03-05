@@ -47,3 +47,92 @@ const RECORDINGS: Recording[] = [
     ],
   },
 ];
+
+export function DemoPageClient() {
+  const [playing, setPlaying] = useState<string | null>(null);
+  const [progress, setProgress] = useState<Record<string, number>>({});
+  const [durations, setDurations] = useState<Record<string, number>>({});
+  const audioRefs = useRef<Record<string, HTMLAudioElement>>({});
+
+  useEffect(() => {
+    return () => { Object.values(audioRefs.current).forEach(a => a.pause()); };
+  }, []);
+
+  function togglePlay(id: string, src: string) {
+    const existing = audioRefs.current[id];
+    if (playing === id && existing) { existing.pause(); setPlaying(null); return; }
+    Object.entries(audioRefs.current).forEach(([k, el]) => { if (k !== id) el.pause(); });
+    if (!existing) {
+      const audio = new Audio(src);
+      audio.addEventListener('timeupdate', () => setProgress(p => ({ ...p, [id]: audio.currentTime / (audio.duration || 1) * 100 })));
+      audio.addEventListener('loadedmetadata', () => setDurations(d => ({ ...d, [id]: audio.duration })));
+      audio.addEventListener('ended', () => { setPlaying(null); setProgress(p => ({ ...p, [id]: 0 })); });
+      audioRefs.current[id] = audio;
+    }
+    audioRefs.current[id].play();
+    setPlaying(id);
+  }
+
+  function seekAudio(id: string, e: React.MouseEvent<HTMLDivElement>) {
+    const audio = audioRefs.current[id];
+    if (!audio) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    audio.currentTime = ((e.clientX - rect.left) / rect.width) * audio.duration;
+  }
+
+  function fmtTime(s: number) { return `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`; }
+
+  return (
+    <main className="min-h-screen bg-[#f7f5f2] py-16 px-6">
+      <div className="max-w-[760px] mx-auto">
+        <div className="text-center mb-12">
+          <h1 className="text-[36px] font-extrabold text-[#1a2e3b] mb-3">Hear it in action</h1>
+          <p className="text-[16px] text-[#5a7184]">Real calls handled by our AI agents. Not scripted. Not edited.</p>
+        </div>
+        <div className="space-y-6">
+          {RECORDINGS.map(rec => (
+            <div key={rec.id} className="bg-white rounded-2xl border border-[#e5e0da] overflow-hidden">
+              <div className="px-6 py-4 bg-[#faf9f7] border-b border-[#e5e0da] flex items-center justify-between">
+                <div>
+                  <h2 className="text-[16px] font-bold text-[#1a2e3b]">{rec.title}</h2>
+                  <p className="text-[13px] text-[#5a7184]">{rec.subtitle}</p>
+                </div>
+                <span className="text-[11px] font-semibold text-white bg-[#059669] px-2 py-0.5 rounded-full">Real call</span>
+              </div>
+              <div className="p-5 space-y-3 max-h-[300px] overflow-y-auto">
+                {rec.transcript.map((line, i) => (
+                  <div key={i} className={`flex ${line.speaker === 'Caller' ? 'justify-end' : 'justify-start'}`}>
+                    <div className={`max-w-[85%] px-3.5 py-2.5 rounded-2xl text-[13px] leading-relaxed ${
+                      line.speaker === 'Caller' ? 'bg-[#1a2e3b] text-white rounded-br-md' : 'bg-[#f0eeeb] text-[#1a2e3b] rounded-bl-md'
+                    }`}>{line.text}</div>
+                  </div>
+                ))}
+              </div>
+              <div className="px-5 pb-5">
+                <div className="flex items-center gap-3 bg-[#faf9f7] rounded-xl px-4 py-3 border border-[#e5e0da]">
+                  <button onClick={() => togglePlay(rec.id, rec.url)}
+                    className="w-8 h-8 rounded-full bg-[#e8930c] hover:bg-[#d17f00] flex items-center justify-center flex-shrink-0 cursor-pointer border-none">
+                    {playing === rec.id
+                      ? <svg width="12" height="14" viewBox="0 0 12 14" fill="white"><rect x="1" y="1" width="3" height="12" rx="1"/><rect x="8" y="1" width="3" height="12" rx="1"/></svg>
+                      : <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><polygon points="5 3 19 12 5 21 5 3"/></svg>}
+                  </button>
+                  <div className="flex-1 h-1.5 bg-[#e5e0da] rounded-full cursor-pointer" onClick={e => seekAudio(rec.id, e)}>
+                    <div className="h-full bg-[#e8930c] rounded-full transition-all" style={{ width: `${progress[rec.id] || 0}%` }} />
+                  </div>
+                  <span className="text-[11px] text-[#94a7b8] font-mono min-w-[32px]">
+                    {durations[rec.id] ? fmtTime(playing === rec.id ? (progress[rec.id] || 0) / 100 * durations[rec.id] : durations[rec.id]) : '--:--'}
+                  </span>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className="text-center mt-10">
+          <Link href="/onboarding" className="inline-block bg-[#e8930c] text-white px-8 py-4 rounded-lg text-base font-bold no-underline hover:bg-[#d17f00]">
+            Start your free trial →
+          </Link>
+        </div>
+      </div>
+    </main>
+  );
+}
