@@ -87,7 +87,7 @@ export function DemoPageClient() {
       <div className="max-w-[760px] mx-auto">
         <div className="text-center mb-12">
           <h1 className="text-[36px] font-extrabold text-[#1a2e3b] mb-3">Hear it in action</h1>
-          <p className="text-[16px] text-[#5a7184]">Real calls handled by our AI agents. Not scripted. Not edited.</p>
+          <p className="text-[16px] text-[#5a7184]">Real calls handled by our AI agents. Unedited.</p>
         </div>
         <div className="space-y-6">
           {RECORDINGS.map(rec => (

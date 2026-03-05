@@ -54,7 +54,7 @@ export function MarketingNav() {
           <Link href="/login" className="text-sm text-[#2a4a5e] font-medium no-underline hover:text-[#1a2e3b]">
             Log in
           </Link>
-          <Link href="/onboarding" className="bg-[#1a2e3b] text-white px-5 py-2.5 rounded-lg text-sm font-semibold no-underline hover:bg-[#243d4e] transition-colors">
+          <Link href="/onboarding" className="bg-[#e8930c] text-white px-5 py-2.5 rounded-lg text-sm font-semibold no-underline hover:bg-[#d17f00] transition-colors shadow-[0_2px_6px_rgba(232,147,12,0.3)]">
             Start Free Trial
           </Link>
         </div>
@@ -83,7 +83,7 @@ export function MarketingNav() {
               <Link href="/hvac" onClick={() => setMobileOpen(false)} className="flex items-center gap-2 py-2 text-[#2a4a5e] font-medium no-underline">❄️ HVAC</Link>
             </div>
             <Link href="/login" onClick={() => setMobileOpen(false)} className="block py-3 text-[#2a4a5e] font-medium no-underline border-b border-[#f0eeeb]">Log in</Link>
-            <Link href="/onboarding" onClick={() => setMobileOpen(false)} className="block mt-3 text-center bg-[#1a2e3b] text-white py-3 rounded-lg font-semibold no-underline">Start Free Trial</Link>
+            <Link href="/onboarding" onClick={() => setMobileOpen(false)} className="block mt-3 text-center bg-[#e8930c] text-white py-3 rounded-lg font-semibold no-underline hover:bg-[#d17f00] transition-colors">Start Free Trial</Link>
           </div>
         )}
       </nav>

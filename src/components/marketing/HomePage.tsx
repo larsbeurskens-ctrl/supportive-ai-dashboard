@@ -207,7 +207,7 @@ export function HomePage() {
         <div className="max-w-[860px] mx-auto">
           <div className="text-center mb-10">
             <h2 className="text-[30px] font-bold text-[#1a2e3b] mb-2.5">Hear real conversations</h2>
-            <p className="text-[15px] text-[#5a7184]">Actual calls handled by our AI agents. Not scripted. Not edited.</p>
+            <p className="text-[15px] text-[#5a7184]">Actual calls handled by our AI agents. Unedited.</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {[

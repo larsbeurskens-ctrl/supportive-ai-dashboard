@@ -235,7 +235,7 @@ export function VerticalPage({
           <div className="max-w-[820px] mx-auto">
             <div className="text-center mb-10">
               <h2 className="text-[26px] font-bold text-[#1a2e3b] mb-2">Hear it handle real {trade.toLowerCase()} calls</h2>
-              <p className="text-[15px] text-[#5a7184]">Real conversations. Not scripted. Not edited.</p>
+              <p className="text-[15px] text-[#5a7184]">Real conversations. Unedited.</p>
             </div>
             <div className={`grid grid-cols-1 ${recordings.length > 1 ? 'md:grid-cols-2' : ''} gap-5`}>
               {recordings.map(conv => (
@@ -495,6 +495,51 @@ export function VerticalPage({
                 <span className="text-[13px] text-[#5a7184] font-medium">{s}</span>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ===== FREE TRIAL MODULE ===== */}
+      <section className="py-16 px-6 md:px-10 bg-[#faf9f7] border-t border-[#e5e0da]">
+        <div className="max-w-[620px] mx-auto text-center">
+          <h2 className="text-[26px] font-bold text-[#1a2e3b] mb-3">
+            Try it free for 7 days
+          </h2>
+          <p className="text-[15px] text-[#5a7184] mb-8">
+            Pick your area code, add your details, and your AI receptionist can be answering {trade.toLowerCase()} calls in under 5 minutes.
+          </p>
+          <div className="bg-white rounded-2xl border border-[#e5e0da] p-8">
+            <div className="grid grid-cols-3 gap-3 mb-6">
+              {[
+                { value: '7 days', label: 'Free trial' },
+                { value: '50 calls', label: 'Included free' },
+                { value: '5 min', label: 'To go live' },
+              ].map((s, i) => (
+                <div key={i} className="text-center p-3 rounded-xl bg-[#faf9f7] border border-[#e5e0da]">
+                  <div className="text-[20px] font-extrabold text-[#1a2e3b]">{s.value}</div>
+                  <div className="text-[11px] text-[#5a7184] font-medium">{s.label}</div>
+                </div>
+              ))}
+            </div>
+            <div className="space-y-2 mb-6 text-left">
+              {[
+                'No credit card required to start',
+                'Your own local phone number included',
+                'Connects to Google Calendar in one click',
+                'Cancel anytime — no contracts',
+              ].map((item, i) => (
+                <div key={i} className="flex items-center gap-2.5">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                  <span className="text-[14px] text-[#2a4a5e]">{item}</span>
+                </div>
+              ))}
+            </div>
+            <Link
+              href="/onboarding"
+              className="block text-center bg-[#e8930c] text-white py-4 rounded-lg text-base font-bold no-underline hover:bg-[#d17f00] transition-colors shadow-[0_2px_8px_rgba(232,147,12,0.3)]"
+            >
+              Start free trial — no card needed
+            </Link>
           </div>
         </div>
       </section>
