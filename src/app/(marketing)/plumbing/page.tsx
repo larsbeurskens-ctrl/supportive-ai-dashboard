@@ -60,8 +60,8 @@ export default function PlumbingPage() {
     <VerticalPage
       trade="Plumbing"
       verticalSlug="plumbing"
-      headline="Never miss an emergency call again."
-      subheadline="Your AI receptionist triages urgency, qualifies the lead, and books the job — so you never lose an emergency call to voicemail again."
+      headline="The AI receptionist built for plumbers."
+      subheadline="Triages urgency, qualifies every lead, and books the job — 24/7. So you stop losing $500 emergency calls to voicemail."
       painPoints={[
         "Missed calls go straight to voicemail. The customer Googles the next plumber.",
         "You can't tell urgent from routine when you're already on a job.",

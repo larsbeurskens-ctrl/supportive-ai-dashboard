@@ -487,9 +487,9 @@ export function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {/* Self-serve setup */}
             <div className="rounded-xl border border-[#e5e0da] overflow-hidden">
-              <div className="bg-[#1a2e3b] px-6 py-4">
-                <h3 className="text-[17px] font-bold text-white">Set it up yourself</h3>
-                <p className="text-[13px] text-white/60 mt-0.5">Takes under 5 minutes</p>
+              <div className="px-6 py-4 border-b border-[#e5e0da] bg-[#faf9f7]">
+                <h3 className="text-[17px] font-bold text-[#1a2e3b]">Set it up yourself</h3>
+                <p className="text-[13px] text-[#5a7184] mt-0.5">Takes under 5 minutes</p>
               </div>
               <div className="p-6 space-y-3">
                 {[
