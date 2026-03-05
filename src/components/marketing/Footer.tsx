@@ -4,6 +4,30 @@ import { Logo } from '@/components/Logo';
 export function MarketingFooter() {
   return (
     <footer className="border-t border-[#e5e0da] bg-white">
+
+      {/* ===== Sign-up strip ===== */}
+      <div className="bg-[#1a2e3b] px-6 md:px-10 py-10">
+        <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+          <div>
+            <p className="text-[20px] font-bold text-white mb-1">Ready to stop missing calls?</p>
+            <p className="text-[14px] text-[#94a7b8]">7-day free trial · up to 50 calls · no credit card required.</p>
+          </div>
+          <div className="flex flex-col sm:flex-row gap-3 flex-shrink-0">
+            <Link
+              href="/onboarding"
+              className="bg-[#e8930c] text-white px-7 py-3.5 rounded-lg text-[15px] font-bold no-underline hover:bg-[#d17f00] transition-colors whitespace-nowrap"
+            >
+              Start free trial
+            </Link>
+            <Link
+              href="/#pricing"
+              className="bg-transparent text-white px-7 py-3.5 rounded-lg text-[15px] font-semibold no-underline border border-[#35596e] hover:bg-[#243d4e] transition-colors whitespace-nowrap"
+            >
+              See pricing
+            </Link>
+          </div>
+        </div>
+      </div>
       <div className="max-w-5xl mx-auto px-6 md:px-10 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-10">
           {/* Brand */}

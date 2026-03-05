@@ -332,7 +332,144 @@ export function VerticalPage({
 
       {/* ===== TESTIMONIAL — hidden for now ===== */}
 
-      {/* ===== FIND OUT MORE — email capture ===== */}
+      {/* ===== HOW IT WORKS ===== */}
+      <section id="how-it-works" className="py-16 px-6 md:px-10 bg-white border-t border-[#e5e0da]">
+        <div className="max-w-[820px] mx-auto">
+          <h2 className="text-[26px] font-bold text-[#1a2e3b] text-center mb-2">How it works</h2>
+          <p className="text-[15px] text-[#5a7184] text-center mb-12">Live in under 5 minutes. No tech skills needed.</p>
+          <div className="relative flex flex-col md:flex-row gap-8 md:gap-0">
+            <div className="hidden md:block absolute top-6 left-10 right-10 h-[2px] bg-[#d1ccc6] z-0" />
+            {[
+              { n: '1', title: 'Sign up & name your AI', desc: 'Create your account in 30 seconds. Pick a local area code. Your AI gets its own number.' },
+              { n: '2', title: 'Add your business details', desc: 'Tell it your pricing, services, hours, and credentials. Takes 2 minutes. No tech skills needed.' },
+              { n: '3', title: 'Test it with a real call', desc: 'Call your AI number and experience it yourself. Book a job, ask about pricing, try a reschedule.' },
+              { n: '4', title: 'Forward calls & start booking', desc: 'Dial a short code from your phone to forward missed calls. Connect Google Calendar. Done.' },
+            ].map((s, i) => (
+              <div key={i} className="flex-1 text-center relative z-[1]">
+                <div className="w-12 h-12 rounded-full bg-[#1a2e3b] text-white flex items-center justify-center mx-auto mb-4 text-lg font-bold">{s.n}</div>
+                <h3 className="text-sm font-bold text-[#1a2e3b] mb-1.5">{s.title}</h3>
+                <p className="text-[13px] text-[#5a7184] leading-snug px-2">{s.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ===== LIVE IN 5 MINUTES ===== */}
+      <section className="py-16 px-6 md:px-10 bg-[#faf9f7] border-t border-[#e5e0da]">
+        <div className="max-w-[820px] mx-auto">
+          <div className="text-center mb-10">
+            <h2 className="text-[26px] font-bold text-[#1a2e3b] mb-2">Live in 5 minutes, not 5 days</h2>
+            <p className="text-[15px] text-[#5a7184]">Set it up yourself — or we&apos;ll walk you through it.</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            {/* Self-serve */}
+            <div className="rounded-xl border border-[#e5e0da] bg-white p-6">
+              <h3 className="text-[17px] font-bold text-[#1a2e3b] mb-0.5">Set it up yourself</h3>
+              <p className="text-[13px] text-[#5a7184] mb-5">Takes under 5 minutes</p>
+              <div className="space-y-3">
+                {[
+                  { step: '1', text: 'Create your account (30 seconds)' },
+                  { step: '2', text: 'Pick your local area code — get your AI number' },
+                  { step: '3', text: 'Add your pricing, services & details (2 min)' },
+                  { step: '4', text: 'Make a test call — hear it in action' },
+                  { step: '5', text: 'Connect Google Calendar' },
+                  { step: '6', text: 'Forward calls & go live' },
+                ].map((item, i) => (
+                  <div key={i} className="flex items-center gap-3">
+                    <span className="w-6 h-6 rounded-full bg-[#1a2e3b] text-white text-[11px] font-bold flex items-center justify-center flex-shrink-0">{item.step}</span>
+                    <span className="text-[14px] text-[#2a4a5e]">{item.text}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            {/* Guided */}
+            <div className="rounded-xl border border-[#e5e0da] overflow-hidden">
+              <div className="bg-[#e8930c] px-6 py-4">
+                <h3 className="text-[17px] font-bold text-white">Need a hand? We&apos;re here.</h3>
+                <p className="text-[13px] text-white/80 mt-0.5">Free 15-minute setup call</p>
+              </div>
+              <div className="p-6 bg-white">
+                <p className="text-[14px] text-[#5a7184] leading-relaxed mb-5">
+                  Not sure about call forwarding or calendar setup? Book a quick call and we&apos;ll do it together.
+                </p>
+                {[
+                  'We walk you through every step live',
+                  'Test your AI with a real call together',
+                  'Customise how and when it picks up',
+                  'Answer any questions about your setup',
+                ].map((item, i) => (
+                  <div key={i} className="flex items-center gap-2.5 mb-2.5">
+                    <CheckIcon size={15} className="text-[#059669] flex-shrink-0" />
+                    <span className="text-[14px] text-[#2a4a5e]">{item}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ===== PRICING ===== */}
+      <section id="pricing" className="py-16 px-6 md:px-10 bg-white border-t border-[#e5e0da]">
+        <div className="max-w-[820px] mx-auto">
+          <h2 className="text-[26px] font-bold text-[#1a2e3b] text-center mb-2">Simple, honest pricing</h2>
+          <p className="text-[15px] text-[#5a7184] text-center mb-12">No hidden fees. No per-seat pricing. Everything included.</p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            {[
+              {
+                name: 'Starter', price: 149, calls: '150 calls/mo', target: 'Solo operators',
+                features: ['24/7 AI answering', 'Dashboard & call analytics', 'Route-optimised booking', 'Calendar + SMS confirmations', 'WhatsApp AI agent', 'Payment links', '1st line customer service'],
+                note: '$1.50/call overage', popular: false,
+              },
+              {
+                name: 'Pro', price: 299, calls: '500 calls/mo', target: 'Growing businesses',
+                features: ['Everything in Starter', 'Multi-crew scheduling', 'Priority support', 'Review requests'],
+                note: '$1.25/call overage', popular: true,
+              },
+              {
+                name: 'Growth', price: 499, calls: 'Unlimited calls', target: 'Established teams',
+                features: ['Everything in Pro', 'Unlimited calls', 'API access', 'Dedicated account manager', 'Custom-built features'],
+                note: null, popular: false,
+              },
+            ].map((plan) => (
+              <div key={plan.name} className={`p-7 rounded-xl relative ${plan.popular ? 'border-2 border-[#e8930c] bg-[#fffdf9]' : 'border border-[#e5e0da] bg-white'}`}>
+                {plan.popular && (
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#e8930c] text-white px-4 py-1 rounded-full text-xs font-semibold">Most popular</div>
+                )}
+                <h3 className="text-xl font-bold text-[#1a2e3b] mb-1">{plan.name}</h3>
+                <p className="text-[13px] text-[#5a7184] mb-4">{plan.target}</p>
+                <div className="mb-1">
+                  <span className="text-[40px] font-extrabold text-[#1a2e3b]">${plan.price}</span>
+                  <span className="text-[15px] text-[#5a7184]">/mo</span>
+                </div>
+                <p className="text-[13px] text-[#e8930c] font-bold mb-1">{plan.calls}</p>
+                {plan.note ? <p className="text-[11px] text-[#94a7b8] mb-5">{plan.note}</p> : <div className="mb-5" />}
+                <ul className="space-y-2 mb-6">
+                  {plan.features.map((f) => (
+                    <li key={f} className="flex items-center gap-2 text-sm text-[#2a4a5e]">
+                      <CheckIcon size={16} className="text-[#059669] flex-shrink-0" />{f}
+                    </li>
+                  ))}
+                </ul>
+                <Link
+                  href={plan.name === 'Growth' ? '/#contact' : '/onboarding'}
+                  className={`block text-center py-3 rounded-lg text-sm font-semibold no-underline transition-colors ${
+                    plan.popular
+                      ? 'bg-[#e8930c] text-white hover:bg-[#d17f00] shadow-[0_2px_8px_rgba(232,147,12,0.25)]'
+                      : 'bg-white text-[#1a2e3b] border border-[#d1ccc6] hover:bg-[#f0eeeb]'
+                  }`}
+                >
+                  {plan.name === 'Growth' ? 'Contact us' : 'Start free trial'}
+                </Link>
+              </div>
+            ))}
+          </div>
+          <p className="text-center text-[13px] text-[#94a7b8] mt-5">
+            7-day free trial on all plans (up to 50 calls). No setup fees. Cancel anytime.
+          </p>
+        </div>
+      </section>
       <section className="py-16 px-6 md:px-10 bg-[#faf9f7] border-t border-[#e5e0da]">
         <div className="max-w-[580px] mx-auto">
           <div className="text-center mb-8">

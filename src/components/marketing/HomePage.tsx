@@ -560,6 +560,49 @@ export function HomePage() {
         </div>
       </section>
 
+      {/* ===== SIGN UP MODULE ===== */}
+      <section className="py-16 px-6 md:px-10 bg-[#faf9f7] border-t border-[#e5e0da]">
+        <div className="max-w-[680px] mx-auto text-center">
+          <h2 className="text-[28px] font-bold text-[#1a2e3b] mb-3">Start your free trial today</h2>
+          <p className="text-[15px] text-[#5a7184] mb-8 max-w-[480px] mx-auto">
+            Pick your area code, add your details, and your AI receptionist can be answering calls in under 5 minutes.
+          </p>
+          <div className="bg-white rounded-2xl border border-[#e5e0da] p-8 text-left">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+              {[
+                { value: '7 days', label: 'Free trial' },
+                { value: '50 calls', label: 'Included free' },
+                { value: '5 min', label: 'To go live' },
+              ].map((s, i) => (
+                <div key={i} className="text-center p-4 rounded-xl bg-[#faf9f7] border border-[#e5e0da]">
+                  <div className="text-[24px] font-extrabold text-[#1a2e3b]">{s.value}</div>
+                  <div className="text-[12px] text-[#5a7184] font-medium">{s.label}</div>
+                </div>
+              ))}
+            </div>
+            <div className="space-y-2.5 mb-6">
+              {[
+                'No credit card required to start',
+                'Your own local phone number included',
+                'Connects to Google Calendar in one click',
+                'Cancel anytime — no contracts',
+              ].map((item, i) => (
+                <div key={i} className="flex items-center gap-2.5">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                  <span className="text-[14px] text-[#2a4a5e]">{item}</span>
+                </div>
+              ))}
+            </div>
+            <Link
+              href="/onboarding"
+              className="block text-center bg-[#e8930c] text-white py-4 rounded-lg text-base font-bold no-underline hover:bg-[#d17f00] transition-colors shadow-[0_2px_8px_rgba(232,147,12,0.3)]"
+            >
+              Start free trial — no card needed
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* ===== FINAL CTA ===== */}
       <section className="py-16 px-6 md:px-10">
         <div className="max-w-[680px] mx-auto text-center">
