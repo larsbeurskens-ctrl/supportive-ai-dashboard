@@ -193,7 +193,7 @@ export default function OutreachSendPage() {
       {/* Preview Modal */}
       {preview && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" onClick={() => setPreview(null)}>
-          <div className="bg-white rounded-2xl max-w-[640px] w-full max-h-[90vh] flex flex-col" onClick={e => e.stopPropagation()}>
+          <div className="bg-white rounded-2xl max-w-[640px] w-full max-h-[90vh] flex flex-col overflow-hidden" onClick={e => e.stopPropagation()}>
             <div className="px-6 py-4 border-b border-[#e5e0da] flex items-center justify-between">
               <div>
                 <h3 className="text-[16px] font-bold text-[#1a2e3b]">Email Preview</h3>
@@ -207,7 +207,7 @@ export default function OutreachSendPage() {
               <div className="flex gap-2 text-[13px]"><span className="text-[#94a7b8] w-16">Subject:</span><span className="text-[#1a2e3b] font-semibold">{preview.subject}</span></div>
               <div className="flex gap-2 text-[13px]"><span className="text-[#94a7b8] w-16">Link:</span><span className="text-[#3b82f6]">{preview.trackingUrl}</span></div>
             </div>
-            <div className="px-6 py-4 overflow-y-auto flex-1 min-h-0">
+            <div className="px-6 py-4 overflow-y-auto flex-1 min-h-0 max-h-[50vh]">
               <div className="border border-[#e5e0da] rounded-xl p-5" dangerouslySetInnerHTML={{ __html: preview.html }} />
             </div>
             <div className="px-6 py-4 border-t border-[#e5e0da] flex justify-end gap-3 flex-shrink-0">
