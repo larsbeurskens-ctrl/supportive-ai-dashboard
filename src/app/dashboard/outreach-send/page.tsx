@@ -207,10 +207,10 @@ export default function OutreachSendPage() {
               <div className="flex gap-2 text-[13px]"><span className="text-[#94a7b8] w-16">Subject:</span><span className="text-[#1a2e3b] font-semibold">{preview.subject}</span></div>
               <div className="flex gap-2 text-[13px]"><span className="text-[#94a7b8] w-16">Link:</span><span className="text-[#3b82f6]">{preview.trackingUrl}</span></div>
             </div>
-            <div className="px-6 py-4 overflow-y-auto flex-1 min-h-0 max-h-[50vh]">
+            <div className="px-6 py-4 overflow-y-auto flex-1 min-h-0" style={{ maxHeight: '40vh' }}>
               <div className="border border-[#e5e0da] rounded-xl p-5" dangerouslySetInnerHTML={{ __html: preview.html }} />
             </div>
-            <div className="px-6 py-4 border-t border-[#e5e0da] flex justify-end gap-3 flex-shrink-0">
+            <div className="px-6 py-4 border-t-2 border-[#e5e0da] flex justify-end gap-3 flex-shrink-0 bg-[#faf9f7]">
               <button onClick={() => setPreview(null)}
                 className="px-4 py-2 rounded-lg text-[13px] font-semibold text-[#5a7184] border border-[#d1ccc6] hover:bg-[#f0eeeb] cursor-pointer bg-white transition-colors">
                 Cancel

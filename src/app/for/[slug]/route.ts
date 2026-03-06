@@ -36,6 +36,14 @@ export async function GET(
       ? link.destination
       : `${baseUrl}${link.destination}`;
 
+    // Use HTML redirect to preserve #hash fragments (HTTP 302 strips them)
+    if (destination.includes('#')) {
+      return new NextResponse(
+        `<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0;url=${destination}"><script>window.location.href="${destination}";</script></head><body>Redirecting...</body></html>`,
+        { status: 200, headers: { 'Content-Type': 'text/html' } }
+      );
+    }
+
     return NextResponse.redirect(destination, { status: 302 });
   } catch {
     return NextResponse.redirect(new URL('/', request.url));
