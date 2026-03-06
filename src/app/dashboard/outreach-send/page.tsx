@@ -45,6 +45,12 @@ export default function OutreachSendPage() {
   const [sending, setSending] = useState<string | null>(null);
   const [importing, setImporting] = useState(false);
   const [importResult, setImportResult] = useState<string | null>(null);
+  const [preview, setPreview] = useState<{
+    contactId: string; template: string; from: string; to: string;
+    subject: string; html: string; trackingUrl: string;
+    contact: { businessName: string | null; name: string | null; vertical: string; painSignal: string | null };
+  } | null>(null);
+  const [previewing, setPreviewing] = useState<string | null>(null);
 
   useEffect(() => {
     if (authStatus === 'authenticated' && session?.user?.email !== ADMIN_EMAIL) {
@@ -80,6 +86,20 @@ export default function OutreachSendPage() {
       else { const d = await res.json(); alert(d.error || 'Send failed'); }
     } catch { alert('Send failed'); }
     finally { setSending(null); }
+  }
+
+  async function handlePreview(contactId: string, template: string) {
+    setPreviewing(contactId);
+    try {
+      const res = await fetch('/api/admin/outreach-contacts/preview', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ contactId, template }),
+      });
+      if (res.ok) { setPreview({ ...(await res.json()), contactId, template }); }
+      else { alert('Preview failed'); }
+    } catch { alert('Preview failed'); }
+    finally { setPreviewing(null); }
   }
 
   async function handleImportCSV(e: React.ChangeEvent<HTMLInputElement>) {
@@ -165,6 +185,40 @@ export default function OutreachSendPage() {
 
   return (
     <div>
+      {/* Preview Modal */}
+      {preview && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" onClick={() => setPreview(null)}>
+          <div className="bg-white rounded-2xl max-w-[640px] w-full max-h-[90vh] overflow-hidden" onClick={e => e.stopPropagation()}>
+            <div className="px-6 py-4 border-b border-[#e5e0da] flex items-center justify-between">
+              <div>
+                <h3 className="text-[16px] font-bold text-[#1a2e3b]">Email Preview</h3>
+                <p className="text-[12px] text-[#94a7b8]">{preview.template === 'follow_up' ? 'Follow-up' : preview.contact.painSignal ? 'First touch (pain signal)' : 'First touch'}</p>
+              </div>
+              <button onClick={() => setPreview(null)} className="text-[#94a7b8] hover:text-[#1a2e3b] text-xl cursor-pointer bg-transparent border-none">✕</button>
+            </div>
+            <div className="px-6 py-4 border-b border-[#e5e0da] space-y-2 bg-[#faf9f7]">
+              <div className="flex gap-2 text-[13px]"><span className="text-[#94a7b8] w-16">From:</span><span className="text-[#1a2e3b] font-medium">{preview.from}</span></div>
+              <div className="flex gap-2 text-[13px]"><span className="text-[#94a7b8] w-16">To:</span><span className="text-[#1a2e3b] font-medium">{preview.to}</span></div>
+              <div className="flex gap-2 text-[13px]"><span className="text-[#94a7b8] w-16">Subject:</span><span className="text-[#1a2e3b] font-semibold">{preview.subject}</span></div>
+              <div className="flex gap-2 text-[13px]"><span className="text-[#94a7b8] w-16">Link:</span><span className="text-[#3b82f6]">{preview.trackingUrl}</span></div>
+            </div>
+            <div className="px-6 py-4 overflow-y-auto max-h-[400px]">
+              <div className="border border-[#e5e0da] rounded-xl p-5" dangerouslySetInnerHTML={{ __html: preview.html }} />
+            </div>
+            <div className="px-6 py-4 border-t border-[#e5e0da] flex justify-end gap-3">
+              <button onClick={() => setPreview(null)}
+                className="px-4 py-2 rounded-lg text-[13px] font-semibold text-[#5a7184] border border-[#d1ccc6] hover:bg-[#f0eeeb] cursor-pointer bg-white transition-colors">
+                Cancel
+              </button>
+              <button onClick={async () => { await handleSend(preview.contactId, preview.template); setPreview(null); }}
+                disabled={sending === preview.contactId}
+                className="px-5 py-2 rounded-lg text-[13px] font-bold text-white bg-[#e8930c] hover:bg-[#d17f00] disabled:opacity-50 cursor-pointer border-none transition-colors">
+                {sending === preview.contactId ? 'Sending...' : 'Confirm & Send'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
@@ -272,14 +326,14 @@ export default function OutreachSendPage() {
                     {c.email.endsWith('@no-email.placeholder') ? (
                       <span className="text-[11px] text-[#94a7b8]">No email</span>
                     ) : c.status === 'unsent' ? (
-                      <button onClick={() => handleSend(c.id, 'first_touch')} disabled={isSending}
+                      <button onClick={() => handlePreview(c.id, 'first_touch')} disabled={previewing === c.id}
                         className="bg-[#e8930c] text-white px-3 py-1.5 rounded-lg text-[12px] font-semibold hover:bg-[#d17f00] disabled:opacity-50 cursor-pointer border-none transition-colors">
-                        {isSending ? 'Sending...' : 'Send →'}
+                        {previewing === c.id ? 'Loading...' : 'Preview →'}
                       </button>
                     ) : c.status === 'sent' ? (
-                      <button onClick={() => handleSend(c.id, 'follow_up')} disabled={isSending}
+                      <button onClick={() => handlePreview(c.id, 'follow_up')} disabled={previewing === c.id}
                         className="bg-white text-[#1a2e3b] px-3 py-1.5 rounded-lg text-[12px] font-semibold border border-[#d1ccc6] hover:bg-[#f0eeeb] disabled:opacity-50 cursor-pointer transition-colors">
-                        {isSending ? 'Sending...' : 'Follow up'}
+                        {previewing === c.id ? 'Loading...' : 'Follow up'}
                       </button>
                     ) : null}
                     {c.website && (
