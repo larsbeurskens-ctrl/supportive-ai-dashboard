@@ -88,7 +88,7 @@ export default function OutreachSendPage() {
     setImporting(true);
     setImportResult(null);
     const text = await file.text();
-    const lines = text.split('\n').filter(l => l.trim());
+    const lines = text.replace(/\r/g, '').split('\n').filter(l => l.trim());
     const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, ''));
     
     const contacts = lines.slice(1).map(line => {
@@ -106,17 +106,30 @@ export default function OutreachSendPage() {
       const row: Record<string, string> = {};
       headers.forEach((h, i) => { row[h] = vals[i] || ''; });
 
+      const email = row['email_to'] || row['email'] || '';
+      const bizName = row['name'] || row['business_name'] || row['businessName'] || '';
+      // Generate placeholder email for leads without one (won't be emailed)
+      const slug = bizName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 40);
+      const resolvedEmail = email.includes('@') ? email : `${slug || 'unknown'}@no-email.placeholder`;
+
       return {
-        email: row['email_to'] || row['email'] || '',
-        name: row['first_name'] || row['name'] || '',
-        businessName: row['name'] || row['business_name'] || row['businessName'] || '',
+        email: resolvedEmail,
+        name: row['first_name'] || '',
+        businessName: bizName,
         phone: row['phone'] || '',
         vertical: row['vertical'] || 'plumbing',
         score: parseInt(row['_score'] || row['score'] || '0') || 0,
         painSignal: row['pain_signals'] || row['painSignal'] || '',
         website: row['website'] || '',
+        notes: row['metro'] ? `Metro: ${row['metro']}` : '',
       };
-    }).filter(c => c.email && c.email.includes('@'));
+    }).filter(c => c.businessName);
+
+    if (contacts.length === 0) {
+      setImportResult('No valid contacts found in CSV. Needs a "name" column at minimum.');
+      setImporting(false);
+      return;
+    }
 
     const res = await fetch('/api/admin/outreach-contacts', {
       method: 'POST',
@@ -124,7 +137,11 @@ export default function OutreachSendPage() {
       body: JSON.stringify({ contacts }),
     });
     const data = await res.json();
-    setImportResult(`Imported ${data.imported}, skipped ${data.skipped} (of ${data.total})`);
+    if (data.error) {
+      setImportResult(`Error: ${data.error}`);
+    } else {
+      setImportResult(`Imported ${data.imported}, skipped ${data.skipped} (of ${data.total})`);
+    }
     setImporting(false);
     await fetchContacts();
     e.target.value = '';
@@ -238,7 +255,9 @@ export default function OutreachSendPage() {
                     {c.painSignal && <div className="text-[11px] text-[#e8930c] mt-0.5">🔥 {c.painSignal}</div>}
                   </td>
                   <td className="px-4 py-3">
-                    <div className="text-[13px] text-[#1a2e3b] truncate max-w-[200px]">{c.email}</div>
+                    <div className="text-[13px] text-[#1a2e3b] truncate max-w-[200px]">
+                      {c.email.endsWith('@no-email.placeholder') ? <span className="text-[#94a7b8] italic">needs email</span> : c.email}
+                    </div>
                     {c.phone && <div className="text-[11px] text-[#94a7b8]">{c.phone}</div>}
                   </td>
                   <td className="px-4 py-3 text-[12px] text-[#5a7184]">{VERTICAL_LABELS[c.vertical] || c.vertical}</td>
@@ -250,17 +269,22 @@ export default function OutreachSendPage() {
                     {c.sentAt && <div className="text-[10px] text-[#94a7b8] mt-0.5">{timeAgo(c.sentAt)}</div>}
                   </td>
                   <td className="px-4 py-3">
-                    {c.status === 'unsent' && (
+                    {c.email.endsWith('@no-email.placeholder') ? (
+                      <span className="text-[11px] text-[#94a7b8]">No email</span>
+                    ) : c.status === 'unsent' ? (
                       <button onClick={() => handleSend(c.id, 'first_touch')} disabled={isSending}
                         className="bg-[#e8930c] text-white px-3 py-1.5 rounded-lg text-[12px] font-semibold hover:bg-[#d17f00] disabled:opacity-50 cursor-pointer border-none transition-colors">
                         {isSending ? 'Sending...' : 'Send →'}
                       </button>
-                    )}
-                    {c.status === 'sent' && (
+                    ) : c.status === 'sent' ? (
                       <button onClick={() => handleSend(c.id, 'follow_up')} disabled={isSending}
                         className="bg-white text-[#1a2e3b] px-3 py-1.5 rounded-lg text-[12px] font-semibold border border-[#d1ccc6] hover:bg-[#f0eeeb] disabled:opacity-50 cursor-pointer transition-colors">
                         {isSending ? 'Sending...' : 'Follow up'}
                       </button>
+                    ) : null}
+                    {c.website && (
+                      <a href={c.website.startsWith('http') ? c.website : `https://${c.website}`} target="_blank" rel="noopener"
+                        className="text-[11px] text-[#3b82f6] hover:underline ml-2">site</a>
                     )}
                     {c.trackingSlug && (
                       <a href={`https://supportive-ai.com/for/${c.trackingSlug}`} target="_blank" rel="noopener"
