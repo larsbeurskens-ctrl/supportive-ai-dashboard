@@ -45,6 +45,9 @@ export default function OutreachSendPage() {
   const [sending, setSending] = useState<string | null>(null);
   const [importing, setImporting] = useState(false);
   const [importResult, setImportResult] = useState<string | null>(null);
+  const [page, setPage] = useState(0);
+  const [total, setTotal] = useState(0);
+  const PAGE_SIZE = 50;
   const [preview, setPreview] = useState<{
     contactId: string; template: string; from: string; to: string;
     subject: string; html: string; trackingUrl: string;
@@ -62,15 +65,17 @@ export default function OutreachSendPage() {
     const params = new URLSearchParams();
     if (filterVertical) params.set('vertical', filterVertical);
     if (filterStatus) params.set('status', filterStatus);
-    params.set('limit', '200');
+    params.set('limit', String(PAGE_SIZE));
+    params.set('offset', String(page * PAGE_SIZE));
     const res = await fetch(`/api/admin/outreach-contacts?${params}`);
     if (res.ok) {
       const data = await res.json();
       setContacts(data.contacts);
       setPipeline(data.pipeline);
+      setTotal(data.total);
     }
     setLoading(false);
-  }, [filterVertical, filterStatus]);
+  }, [filterVertical, filterStatus, page]);
 
   useEffect(() => { fetchContacts(); }, [fetchContacts]);
 
@@ -188,7 +193,7 @@ export default function OutreachSendPage() {
       {/* Preview Modal */}
       {preview && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" onClick={() => setPreview(null)}>
-          <div className="bg-white rounded-2xl max-w-[640px] w-full max-h-[90vh] overflow-hidden" onClick={e => e.stopPropagation()}>
+          <div className="bg-white rounded-2xl max-w-[640px] w-full max-h-[90vh] flex flex-col" onClick={e => e.stopPropagation()}>
             <div className="px-6 py-4 border-b border-[#e5e0da] flex items-center justify-between">
               <div>
                 <h3 className="text-[16px] font-bold text-[#1a2e3b]">Email Preview</h3>
@@ -202,10 +207,10 @@ export default function OutreachSendPage() {
               <div className="flex gap-2 text-[13px]"><span className="text-[#94a7b8] w-16">Subject:</span><span className="text-[#1a2e3b] font-semibold">{preview.subject}</span></div>
               <div className="flex gap-2 text-[13px]"><span className="text-[#94a7b8] w-16">Link:</span><span className="text-[#3b82f6]">{preview.trackingUrl}</span></div>
             </div>
-            <div className="px-6 py-4 overflow-y-auto max-h-[400px]">
+            <div className="px-6 py-4 overflow-y-auto flex-1 min-h-0">
               <div className="border border-[#e5e0da] rounded-xl p-5" dangerouslySetInnerHTML={{ __html: preview.html }} />
             </div>
-            <div className="px-6 py-4 border-t border-[#e5e0da] flex justify-end gap-3">
+            <div className="px-6 py-4 border-t border-[#e5e0da] flex justify-end gap-3 flex-shrink-0">
               <button onClick={() => setPreview(null)}
                 className="px-4 py-2 rounded-lg text-[13px] font-semibold text-[#5a7184] border border-[#d1ccc6] hover:bg-[#f0eeeb] cursor-pointer bg-white transition-colors">
                 Cancel
@@ -268,14 +273,14 @@ export default function OutreachSendPage() {
 
       {/* Filters */}
       <div className="flex gap-3 mb-4">
-        <select value={filterVertical} onChange={e => setFilterVertical(e.target.value)}
+        <select value={filterVertical} onChange={e => { setFilterVertical(e.target.value); setPage(0); }}
           className="px-3 py-2 rounded-lg border border-[#d1ccc6] text-[13px] text-[#1a2e3b] bg-white">
           <option value="">All verticals</option>
           <option value="plumbing">Plumbing</option>
           <option value="window_cleaning">Window Cleaning</option>
           <option value="hvac">HVAC</option>
         </select>
-        <select value={filterStatus} onChange={e => setFilterStatus(e.target.value)}
+        <select value={filterStatus} onChange={e => { setFilterStatus(e.target.value); setPage(0); }}
           className="px-3 py-2 rounded-lg border border-[#d1ccc6] text-[13px] text-[#1a2e3b] bg-white">
           <option value="">All statuses</option>
           <option value="unsent">Unsent</option>
@@ -356,6 +361,28 @@ export default function OutreachSendPage() {
           </div>
         )}
       </div>
+
+      {/* Pagination */}
+      {total > PAGE_SIZE && (
+        <div className="flex items-center justify-between mt-4">
+          <span className="text-[13px] text-[#94a7b8]">
+            Showing {page * PAGE_SIZE + 1}-{Math.min((page + 1) * PAGE_SIZE, total)} of {total}
+          </span>
+          <div className="flex gap-2">
+            <button onClick={() => setPage(p => Math.max(0, p - 1))} disabled={page === 0}
+              className="px-3 py-1.5 rounded-lg text-[13px] font-semibold border border-[#d1ccc6] bg-white text-[#1a2e3b] hover:bg-[#f0eeeb] disabled:opacity-40 cursor-pointer transition-colors">
+              ← Prev
+            </button>
+            <span className="px-3 py-1.5 text-[13px] text-[#5a7184]">
+              Page {page + 1} of {Math.ceil(total / PAGE_SIZE)}
+            </span>
+            <button onClick={() => setPage(p => p + 1)} disabled={(page + 1) * PAGE_SIZE >= total}
+              className="px-3 py-1.5 rounded-lg text-[13px] font-semibold border border-[#d1ccc6] bg-white text-[#1a2e3b] hover:bg-[#f0eeeb] disabled:opacity-40 cursor-pointer transition-colors">
+              Next →
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
