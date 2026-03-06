@@ -11,7 +11,13 @@ export async function GET(
     const link = await prisma.trackedLink.findUnique({ where: { slug } });
 
     if (!link) {
-      return NextResponse.redirect(new URL('/', request.url));
+      // Unknown slug — redirect to homepage hear-it section as fallback
+      const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://supportive-ai.com';
+      const fallback = `${baseUrl}/#hear-it`;
+      return new NextResponse(
+        `<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0;url=${fallback}"><script>window.location.href="${fallback}";</script></head><body>Redirecting...</body></html>`,
+        { status: 200, headers: { 'Content-Type': 'text/html' } }
+      );
     }
 
     // Log the click fire-and-forget
@@ -36,16 +42,16 @@ export async function GET(
       ? link.destination
       : `${baseUrl}${link.destination}`;
 
-    // Use HTML redirect to preserve #hash fragments (HTTP 302 strips them)
-    if (destination.includes('#')) {
-      return new NextResponse(
-        `<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0;url=${destination}"><script>window.location.href="${destination}";</script></head><body>Redirecting...</body></html>`,
-        { status: 200, headers: { 'Content-Type': 'text/html' } }
-      );
-    }
-
-    return NextResponse.redirect(destination, { status: 302 });
+    // Always use HTML redirect — HTTP 302 strips #hash fragments
+    return new NextResponse(
+      `<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0;url=${destination}"><script>window.location.href="${destination}";</script></head><body>Redirecting...</body></html>`,
+      { status: 200, headers: { 'Content-Type': 'text/html' } }
+    );
   } catch {
-    return NextResponse.redirect(new URL('/', request.url));
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://supportive-ai.com';
+    return new NextResponse(
+      `<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0;url=${baseUrl}"><script>window.location.href="${baseUrl}";</script></head><body>Redirecting...</body></html>`,
+      { status: 200, headers: { 'Content-Type': 'text/html' } }
+    );
   }
 }
