@@ -37,9 +37,7 @@ const STYLE = `font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sa
 const SIG_STYLE = `color:#5a7184;font-size:13px;`;
 const LINK = `color:#1a6dca;`;
 
-function greeting(name: string | null | undefined, businessName: string | null | undefined): string {
-  if (name && name.trim() && !name.includes("@")) return `Hi ${name.split(" ")[0]},`;
-  if (businessName && businessName.trim()) return `Hi ${businessName} Team,`;
+function greeting(): string {
   return "Hi there,";
 }
 
@@ -63,7 +61,7 @@ export function buildEmail(
   const demoPhone = DEMO_PHONES[contact.vertical] || "(845) 209-2401";
   const trade = VERTICAL_TRADE[contact.vertical] || "home service businesses";
   const pain = PAIN_OPENERS[contact.vertical] || PAIN_OPENERS.plumbing;
-  const greet = greeting(contact.name, contact.businessName);
+  const greet = greeting();
 
   // === FOLLOW-UP ===
   if (template === "follow_up") {
