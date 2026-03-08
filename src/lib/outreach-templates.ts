@@ -66,7 +66,7 @@ export function buildEmail(
   // === FOLLOW-UP ===
   if (template === "follow_up") {
     return {
-      subject: `Re: 24/7 answering + booking for ${biz}`,
+      subject: `Re: 24/7 answering + booking for ${vLabel}`,
       html: `<div style="${STYLE}">
 <p>${greet}</p>
 <p>Just following up - I know ${vLabel} work keeps you busy (which is exactly why I built this).</p>
@@ -85,7 +85,7 @@ export function buildEmail(
 
   // === FIRST TOUCH ===
   return {
-    subject: `24/7 answering + booking for ${biz}`,
+    subject: `24/7 answering + booking for ${vLabel}`,
     html: `<div style="${STYLE}">
 <p>${greet}</p>
 
