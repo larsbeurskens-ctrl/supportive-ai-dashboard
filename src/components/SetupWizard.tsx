@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { useSession } from 'next-auth/react';
 import { 
   getProvisionStatus, provisionBusiness, getProvisionOptions,
   saveBusinessDetails, goLive, connectStripe,
@@ -68,6 +69,7 @@ const VERTICAL_LABELS: Record<string, {
 };
 
 export default function SetupWizard() {
+  const { data: session } = useSession();
   const [step, setStep] = useState<WizardStep>('loading');
   const [status, setStatus] = useState<ProvisionStatus | null>(null);
   const [error, setError] = useState('');
@@ -794,7 +796,7 @@ export default function SetupWizard() {
               <p className="text-[14px] font-bold text-[#1a2e3b]">Need a hand? We&apos;ll set it up with you.</p>
               <p className="text-[12px] text-[#5a7184] mt-0.5">Free 15-minute call — no tech skills needed.</p>
             </div>
-            <a href="https://cal.com/lars-beurskens-g1aaqy/15min" target="_blank" rel="noopener noreferrer"
+            <a href={`https://cal.com/lars-beurskens-g1aaqy/15min${session?.user?.email ? `?email=${encodeURIComponent(session.user.email)}&name=${encodeURIComponent(session.user.name || '')}` : ''}`} target="_blank" rel="noopener noreferrer"
               className="inline-flex items-center gap-2 text-[14px] font-bold text-white bg-[#2a4a5e] px-5 py-2.5 rounded-xl no-underline hover:bg-[#1a2e3b] transition-colors flex-shrink-0 shadow-sm">
               📞 Book free setup call
             </a>

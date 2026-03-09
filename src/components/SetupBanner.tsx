@@ -126,7 +126,7 @@ export function SetupBanner() {
           {/* CTAs */}
           <div className="flex flex-col sm:flex-row gap-3">
             <a
-              href="https://cal.com/supportive-ai/setup"
+              href={`https://cal.com/lars-beurskens-g1aaqy/15min${session?.user?.email ? `?email=${encodeURIComponent(session.user.email)}&name=${encodeURIComponent(session.user.name || '')}` : ''}`}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 bg-[#e8930c] text-white px-6 py-3 rounded-xl text-[14px] font-bold no-underline hover:bg-[#d17f00] transition-colors shadow-[0_2px_8px_rgba(232,147,12,0.25)]"
