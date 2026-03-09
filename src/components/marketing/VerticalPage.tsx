@@ -147,6 +147,53 @@ export function VerticalPage({
         </div>
       </section>
 
+      {/* ===== KEEP YOUR NUMBER ===== */}
+      <section className="py-12 px-6 md:px-10 bg-[#faf9f7] border-t border-[#e5e0da]">
+        <div className="max-w-[820px] mx-auto">
+          <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
+            <div className="flex-shrink-0 w-full md:w-[280px]">
+              <div className="bg-white rounded-2xl border border-[#e5e0da] p-6 text-center">
+                <div className="bg-white rounded-xl border border-[#e5e0da] p-4 mb-3">
+                  <p className="text-[20px] font-extrabold text-[#1a2e3b] tracking-tight">281.398.1700</p>
+                  <p className="text-[11px] text-[#94a7b8] mt-1">on the van, the cards, the Google listing</p>
+                </div>
+                <div className="flex items-center justify-center gap-2">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                  <p className="text-[13px] font-semibold text-[#059669]">Stays exactly the same</p>
+                </div>
+              </div>
+            </div>
+            <div className="flex-1">
+              <h2 className="text-[26px] md:text-[28px] font-bold text-[#1a2e3b] mb-3 leading-tight">
+                Keep your number.<br />You control everything.
+              </h2>
+              <p className="text-[15px] text-[#5a7184] leading-relaxed mb-5">
+                Your number stays on the van, the yard signs, the Google listing — nothing changes for your customers.
+                You decide when the AI answers. You set your hours, pricing, and service area. Configure it yourself from your dashboard.
+              </p>
+              <div className="space-y-2.5">
+                {[
+                  { mode: 'After 4 rings', desc: 'You get first crack. AI catches what you miss.', dot: '#e8930c' },
+                  { mode: 'After hours only', desc: 'You answer during the day. AI handles nights & weekends.', dot: '#3b82f6' },
+                  { mode: 'Always on', desc: 'AI answers every call. Urgent ones get forwarded to you instantly.', dot: '#059669' },
+                ].map((item, i) => (
+                  <div key={i} className="flex items-start gap-3 p-3 rounded-xl bg-white border border-[#e5e0da]">
+                    <span className="w-2.5 h-2.5 rounded-full mt-1.5 flex-shrink-0" style={{ backgroundColor: item.dot }} />
+                    <div>
+                      <span className="text-[13px] font-bold text-[#1a2e3b]">{item.mode}</span>
+                      <span className="text-[13px] text-[#5a7184] ml-1.5">{item.desc}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <p className="text-[12px] text-[#94a7b8] mt-3">
+                Set up call forwarding yourself — one short code from your phone. No tech needed.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ===== REAL RECORDINGS ===== */}
       {recordings.length > 0 && (
         <section id="hear-it" className="py-14 px-6 md:px-10 bg-white border-t border-b border-[#e5e0da]" style={{ scrollMarginTop: '5rem' }}>
@@ -249,66 +296,6 @@ export function VerticalPage({
       </section>
 
       {/* ===== TESTIMONIAL — hidden for now ===== */}
-
-      {/* ===== KEEP YOUR NUMBER ===== */}
-      <section className="py-16 px-6 md:px-10 bg-white border-t border-[#e5e0da]">
-        <div className="max-w-[820px] mx-auto">
-          <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
-            {/* Visual */}
-            <div className="flex-shrink-0 w-full md:w-[300px]">
-              <div className="bg-[#faf9f7] rounded-2xl border border-[#e5e0da] p-6 text-center">
-                <div className="mb-4">
-                  <svg width="56" height="56" viewBox="0 0 56 56" fill="none" className="mx-auto">
-                    <rect x="4" y="18" width="48" height="24" rx="4" fill="#1a2e3b"/>
-                    <rect x="36" y="12" width="16" height="12" rx="2" fill="#243d4e"/>
-                    <rect x="38" y="14" width="12" height="8" rx="1" fill="#6b8fa3" opacity="0.5"/>
-                    <circle cx="16" cy="42" r="5" fill="#1a2e3b" stroke="#e5e0da" strokeWidth="2"/>
-                    <circle cx="40" cy="42" r="5" fill="#1a2e3b" stroke="#e5e0da" strokeWidth="2"/>
-                    <rect x="10" y="24" width="22" height="8" rx="1" fill="#e8930c" opacity="0.9"/>
-                  </svg>
-                </div>
-                <div className="bg-white rounded-xl border border-[#e5e0da] p-4 mb-3">
-                  <p className="text-[20px] font-extrabold text-[#1a2e3b] tracking-tight">281.398.1700</p>
-                  <p className="text-[11px] text-[#94a7b8] mt-1">on the van, the cards, the Google listing</p>
-                </div>
-                <div className="flex items-center justify-center gap-2">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                  <p className="text-[13px] font-semibold text-[#059669]">Stays exactly the same</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Copy */}
-            <div className="flex-1">
-              <h2 className="text-[26px] md:text-[28px] font-bold text-[#1a2e3b] mb-3 leading-tight">
-                Keep your number.<br />We just answer it.
-              </h2>
-              <p className="text-[15px] text-[#5a7184] leading-relaxed mb-5">
-                Your number is everywhere — the van, yard signs, Google, Angie&apos;s List. You&apos;re not changing it, and you don&apos;t have to.
-                Customers call the same number they always have. Supportive AI picks up when you can&apos;t.
-              </p>
-              <div className="space-y-3">
-                {[
-                  { mode: 'After 4 rings', desc: 'You get first crack. AI catches what you miss.', dot: '#e8930c' },
-                  { mode: 'After hours only', desc: 'You answer during the day. AI handles nights & weekends.', dot: '#3b82f6' },
-                  { mode: 'Always on', desc: 'AI answers every call. Urgent ones get forwarded to you instantly.', dot: '#059669' },
-                ].map((item, i) => (
-                  <div key={i} className="flex items-start gap-3 p-3 rounded-xl bg-[#faf9f7] border border-[#e5e0da]">
-                    <span className="w-2.5 h-2.5 rounded-full mt-1.5 flex-shrink-0" style={{ backgroundColor: item.dot }} />
-                    <div>
-                      <span className="text-[13px] font-bold text-[#1a2e3b]">{item.mode}</span>
-                      <span className="text-[13px] text-[#5a7184] ml-1.5">{item.desc}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <p className="text-[12px] text-[#94a7b8] mt-3">
-                Setup takes 5 minutes — just dial a short code from your phone.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* ===== HOW IT WORKS ===== */}
       <section id="how-it-works" className="py-16 px-6 md:px-10 bg-white border-t border-[#e5e0da]">
