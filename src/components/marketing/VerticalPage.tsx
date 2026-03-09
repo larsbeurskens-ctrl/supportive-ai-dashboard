@@ -382,18 +382,18 @@ export function VerticalPage({
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {[
               {
-                name: 'Starter', price: 89, calls: '40 calls/mo', target: 'Solo operators',
+                name: 'Starter', price: 89, calls: '40 calls/mo', target: 'One-man crews',
                 features: ['24/7 AI answering', 'Google Calendar booking', 'SMS confirmations', 'Keep your existing number', 'Emergency escalation', 'Call recordings & transcripts'],
                 note: '$2.00/call overage', popular: false,
               },
               {
-                name: 'Pro', price: 149, calls: '100 calls/mo', target: 'Busy one-man crews',
+                name: 'Standard', price: 149, calls: '125 calls/mo', target: 'Busy trades businesses',
                 features: ['Everything in Starter', 'WhatsApp AI agent', 'Payment links (Stripe)', 'Dashboard & call analytics'],
                 note: '$1.50/call overage', popular: true,
               },
               {
                 name: 'Business', price: 299, calls: '250 calls/mo', target: 'Multi-van operations',
-                features: ['Everything in Pro', 'Priority support', 'Multi-crew scheduling', 'Review requests'],
+                features: ['Everything in Standard', 'Priority support', 'Multi-crew scheduling', 'Review requests'],
                 note: '$1.25/call overage', popular: false,
               },
             ].map((plan) => (

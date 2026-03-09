@@ -128,8 +128,8 @@ const faqSections: { title: string; items: FAQItem[] }[] = [
             <p className="mb-3">Three plans, all with a 7-day free trial (up to 50 calls):</p>
             <div className="space-y-2">
               <div className="flex items-baseline gap-2"><strong className="text-[#1a2e3b]">Starter — $89/mo</strong><span>40 calls/month. 24/7 answering, calendar booking, SMS confirmations, keep your number.</span></div>
-              <div className="flex items-baseline gap-2"><strong className="text-[#1a2e3b]">Pro — $149/mo</strong><span>100 calls/month. Everything in Starter plus WhatsApp AI agent and payment links.</span></div>
-              <div className="flex items-baseline gap-2"><strong className="text-[#1a2e3b]">Business — $299/mo</strong><span>250 calls/month. Everything in Pro plus priority support and multi-crew scheduling.</span></div>
+              <div className="flex items-baseline gap-2"><strong className="text-[#1a2e3b]">Standard — $149/mo</strong><span>125 calls/month. Everything in Starter plus WhatsApp AI agent and payment links.</span></div>
+              <div className="flex items-baseline gap-2"><strong className="text-[#1a2e3b]">Business — $299/mo</strong><span>250 calls/month. Everything in Standard plus priority support and multi-crew scheduling.</span></div>
             </div>
             <p className="mt-3">No setup fees. No per-seat charges. Cancel anytime.</p>
           </div>
@@ -141,7 +141,7 @@ const faqSections: { title: string; items: FAQItem[] }[] = [
       },
       {
         question: 'What happens if I exceed my call limit?',
-        answer: 'We keep answering your calls — we\'ll never cut a customer off mid-month. Overage calls are billed at the end of the month at your plan rate (Starter: $2.00/call, Pro: $1.50/call, Business: $1.25/call).',
+        answer: 'We keep answering your calls — we\'ll never cut a customer off mid-month. Overage calls are billed at the end of the month at your plan rate (Starter: $2.00/call, Standard: $1.50/call, Business: $1.25/call).',
       },
       {
         question: 'What counts as a "call"?',
@@ -167,7 +167,7 @@ const faqSections: { title: string; items: FAQItem[] }[] = [
     items: [
       {
         question: 'Is there a WhatsApp AI agent too?',
-        answer: 'Yes — Pro and Business plans include a WhatsApp AI agent at no extra cost. Customers who prefer to message rather than call can reach you on WhatsApp. The same AI handles it — same knowledge of your pricing, services, and availability, same ability to book appointments.',
+        answer: 'Yes — Standard and Business plans include a WhatsApp AI agent at no extra cost. Customers who prefer to message rather than call can reach you on WhatsApp. The same AI handles it — same knowledge of your pricing, services, and availability, same ability to book appointments.',
       },
       {
         question: 'Do I need to do anything extra to set up WhatsApp?',

@@ -339,9 +339,9 @@ export function HomePage() {
             </div>
           </div>
           <div className="text-center md:text-left">
-            <h3 className="text-[16px] font-bold text-[#1a2e3b] mb-1">WhatsApp AI agent included on Pro & Business</h3>
+            <h3 className="text-[16px] font-bold text-[#1a2e3b] mb-1">WhatsApp AI agent included on Standard & Business</h3>
             <p className="text-[14px] text-[#5a7184] leading-relaxed">
-              Customers can call <em>or</em> text. Same AI, same intelligence — in a chat. Included on Pro and Business plans at no extra cost.
+              Customers can call <em>or</em> text. Same AI, same intelligence — in a chat. Included on Standard and Business plans at no extra cost.
             </p>
           </div>
         </div>
@@ -525,16 +525,16 @@ export function HomePage() {
                 name: 'Starter',
                 price: 89,
                 calls: '40 calls/mo',
-                target: 'Solo operators',
+                target: 'One-man crews',
                 features: ['24/7 AI answering', 'Google Calendar booking', 'SMS confirmations', 'Keep your existing number', 'Emergency escalation', 'Call recordings & transcripts'],
                 note: '$2.00/call overage',
                 popular: false,
               },
               {
-                name: 'Pro',
+                name: 'Standard',
                 price: 149,
-                calls: '100 calls/mo',
-                target: 'Busy one-man crews',
+                calls: '125 calls/mo',
+                target: 'Busy trades businesses',
                 features: ['Everything in Starter', 'WhatsApp AI agent', 'Payment links (Stripe)', 'Dashboard & call analytics'],
                 note: '$1.50/call overage',
                 popular: true,
@@ -544,7 +544,7 @@ export function HomePage() {
                 price: 299,
                 calls: '250 calls/mo',
                 target: 'Multi-van operations',
-                features: ['Everything in Pro', 'Priority support', 'Multi-crew scheduling', 'Review requests'],
+                features: ['Everything in Standard', 'Priority support', 'Multi-crew scheduling', 'Review requests'],
                 note: '$1.25/call overage',
                 popular: false,
               },
