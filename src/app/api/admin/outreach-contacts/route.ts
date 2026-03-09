@@ -25,11 +25,11 @@ export async function GET(req: Request) {
   if (status) where.status = status;
 
   const orderBy = sort === "last_contact"
-    ? [{ lastContactedAt: "desc" as const }, { score: "desc" as const }]
+    ? [{ lastContactedAt: { sort: "desc" as const, nulls: "last" as const } }, { score: "desc" as const }]
     : { score: "desc" as const };
 
   const now = new Date();
-  const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+  const fourDaysAgo = new Date(now.getTime() - 4 * 24 * 60 * 60 * 1000);
   const threeDaysAgo = new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000);
 
   const [contacts, total, stats, emailFollowUps, callFollowUps] = await Promise.all([
@@ -53,11 +53,11 @@ export async function GET(req: Request) {
         COUNT(CASE WHEN status = 'signed_up' THEN 1 END) as signed_up
       FROM "OutreachContact"
     ` as Promise<Array<Record<string, bigint>>>,
-    // Email follow-ups: sent 7+ days ago, no activity since
+    // Email follow-ups: sent 4+ days ago, no activity since
     prisma.outreachContact.findMany({
       where: {
         status: "sent",
-        sentAt: { lt: sevenDaysAgo },
+        sentAt: { lt: fourDaysAgo },
       },
       orderBy: { sentAt: "asc" },
       take: 20,
