@@ -173,7 +173,7 @@ export default function SetupWizard() {
     } catch (err: any) {
       const msg = err?.message || '';
       if (msg.includes('already provisioned')) window.location.reload();
-      else if (msg.includes('area code')) setError('No numbers available in that area code. Try a nearby one.');
+      else if (msg.includes('area code') || msg.includes('phone number') || msg.includes('not available')) setError('No numbers available for that area code. Try a nearby one (e.g. 346, 813, 404, 980).');
       else setError('Something went wrong. Our team has been notified.');
     } finally { setProvisioning(false); }
   }
