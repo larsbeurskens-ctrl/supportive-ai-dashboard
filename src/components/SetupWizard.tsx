@@ -72,7 +72,12 @@ export default function SetupWizard() {
   const [status, setStatus] = useState<ProvisionStatus | null>(null);
   const [error, setError] = useState('');
 
-  // Step 1: Create agent
+  // Step 1: Phone setup
+  const [phoneChoice, setPhoneChoice] = useState<'keep' | 'new' | ''>('');
+  const [existingPhone, setExistingPhone] = useState('');
+  const [pickupAfterHours, setPickupAfterHours] = useState(true);
+  const [pickupMissedCalls, setPickupMissedCalls] = useState(false);
+  const [pickupAlwaysOn, setPickupAlwaysOn] = useState(false);
   const [areaCode, setAreaCode] = useState('');
   const [agentName, setAgentName] = useState('');
   const [nameSuggestions, setNameSuggestions] = useState<string[]>([]);
@@ -162,19 +167,32 @@ export default function SetupWizard() {
 
   // === Handlers ===
   async function handleProvision() {
-    if (areaCode.length !== 3) { setError('Enter a 3-digit area code'); return; }
     if (!agentName.trim()) { setError('Give your AI a name'); return; }
+    if (phoneChoice === 'new' && areaCode.length !== 3) { setError('Enter a 3-digit area code'); return; }
+    if (phoneChoice === 'keep' && !existingPhone.trim()) { setError('Enter your business phone number'); return; }
     setProvisioning(true); setError('');
     try {
-      const res = await provisionBusiness(areaCode, agentName.trim());
+      // For "keep" flow, extract area code from their number, or use 845 as fallback
+      const effectiveAreaCode = phoneChoice === 'new' ? areaCode : (existingPhone.replace(/\D/g, '').slice(0, 3) || '845');
+      const res = await provisionBusiness(effectiveAreaCode, agentName.trim());
       setProvisionResult(res);
+      // Store phone preferences
+      await saveBusinessDetails({
+        phoneSetup: phoneChoice,
+        existingBusinessPhone: phoneChoice === 'keep' ? existingPhone.trim() : null,
+        pickupRules: {
+          afterHours: pickupAfterHours,
+          missedCalls: pickupMissedCalls,
+          alwaysOn: pickupAlwaysOn,
+        },
+      });
       await refreshStatus();
       setStep('business-details');
     } catch (err: any) {
-      const msg = err?.message || '';
+      const msg = err?.message || String(err) || '';
       if (msg.includes('already provisioned')) window.location.reload();
-      else if (msg.includes('area code') || msg.includes('phone number') || msg.includes('not available')) setError('No numbers available for that area code. Try a nearby one (e.g. 346, 813, 404, 980).');
-      else setError('Something went wrong. Our team has been notified.');
+      else if (msg.includes('area code') || msg.includes('phone number') || msg.includes('not available') || msg.includes('Unable') || msg.includes('Twilio') || msg.includes('AvailablePhoneNumber')) setError('No numbers available for that area code. Try a nearby one (e.g. 346, 813, 404, 980).');
+      else setError(`Something went wrong: ${msg || 'Unknown error'}. Try a different area code.`);
     } finally { setProvisioning(false); }
   }
 
@@ -246,7 +264,7 @@ export default function SetupWizard() {
     );
   }
 
-  const stepLabels = ['Create AI', 'Business details', 'Test call', 'Go live'];
+  const stepLabels = ['Phone setup', 'Business details', 'Test call', 'Go live'];
   const currentStepNum = step === 'create-agent' ? 1 : step === 'business-details' ? 2 : step === 'test-call' ? 3 : 4;
 
   return (
@@ -262,7 +280,7 @@ export default function SetupWizard() {
           ))}
         </div>
         <h2 className="text-[18px] font-bold text-white">
-          {step === 'create-agent' && 'Create your AI receptionist'}
+          {step === 'create-agent' && 'Set up your phone'}
           {step === 'business-details' && `Tell ${displayName} about your business`}
           {step === 'test-call' && `Test ${displayName}`}
           {step === 'checklist' && 'Ready to go live'}
@@ -271,12 +289,13 @@ export default function SetupWizard() {
 
       <div className="p-6">
 
-        {/* ====== STEP 1: Create Agent ====== */}
+        {/* ====== STEP 1: Phone Setup ====== */}
         {step === 'create-agent' && (
           <div className="space-y-5">
-            <p className="text-[14px] text-[#5a7184] leading-relaxed">
-              We&apos;ll create your AI phone assistant with a local number. Live in 5 minutes.
-            </p>
+            <div className="bg-[#eff6ff] rounded-xl p-3 text-center">
+              <p className="text-[13px] text-[#1e40af] font-medium">🔒 Nothing goes live until you say so. Set up at your own pace.</p>
+            </div>
+
             {/* Agent name */}
             <div>
               <label className="block text-sm font-semibold text-[#1a2e3b] mb-1.5">Name your AI receptionist</label>
@@ -290,29 +309,104 @@ export default function SetupWizard() {
                 ))}
               </div>
             </div>
-            {/* Area code */}
+
+            {/* Phone choice */}
             <div>
-              <label className="block text-sm font-semibold text-[#1a2e3b] mb-1.5">Pick your local area code</label>
-              <div className="flex gap-3 items-start">
-                <div className="relative">
-                  <input type="text" value={areaCode}
-                    onChange={e => { setAreaCode(e.target.value.replace(/[^0-9]/g, '').slice(0, 3)); setError(''); }}
-                    placeholder="845" maxLength={3}
-                    className="w-[120px] px-4 py-3 border border-[#e5e0da] rounded-xl text-[18px] font-bold text-center text-[#1a2e3b] placeholder:text-[#d1ccc6] focus:outline-none focus:ring-2 focus:ring-[#0d9488]" />
-                  {areaHint && <p className="absolute -bottom-5 left-0 text-[11px] text-[#059669] font-medium whitespace-nowrap">{areaHint}</p>}
-                </div>
-                <button onClick={handleProvision}
-                  disabled={areaCode.length !== 3 || !agentName.trim() || provisioning}
-                  className="flex-1 bg-[#0d9488] text-white py-3 rounded-xl text-[15px] font-bold hover:bg-[#0b7c72] transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
-                  {provisioning ? (
-                    <span className="flex items-center justify-center gap-2">
-                      <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                      Creating {agentName || 'your AI'}...
-                    </span>
-                  ) : `Create ${agentName || 'my AI'} →`}
+              <label className="block text-sm font-semibold text-[#1a2e3b] mb-2">How do you want to set up your phone?</label>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <button onClick={() => setPhoneChoice('keep')}
+                  className={`text-left p-4 rounded-xl border-2 transition-all cursor-pointer ${phoneChoice === 'keep' ? 'border-[#0d9488] bg-[#f0fdf4]' : 'border-[#e5e0da] bg-white hover:border-[#94a7b8]'}`}>
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="text-[16px]">📱</span>
+                    <span className="text-[14px] font-bold text-[#1a2e3b]">Keep my existing number</span>
+                  </div>
+                  <p className="text-[12px] text-[#5a7184] leading-relaxed">Customers call the same number they always have. We answer when you can&apos;t.</p>
+                  {phoneChoice === 'keep' && <span className="inline-block mt-2 text-[11px] font-semibold text-[#0d9488] bg-[#ecfdf5] px-2 py-0.5 rounded">Recommended</span>}
+                </button>
+                <button onClick={() => setPhoneChoice('new')}
+                  className={`text-left p-4 rounded-xl border-2 transition-all cursor-pointer ${phoneChoice === 'new' ? 'border-[#0d9488] bg-[#f0fdf4]' : 'border-[#e5e0da] bg-white hover:border-[#94a7b8]'}`}>
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="text-[16px]">🆕</span>
+                    <span className="text-[14px] font-bold text-[#1a2e3b]">Get a new number</span>
+                  </div>
+                  <p className="text-[12px] text-[#5a7184] leading-relaxed">We&apos;ll create a new local number for your AI. Good if you don&apos;t have a business line yet.</p>
                 </button>
               </div>
             </div>
+
+            {/* Keep existing: enter number */}
+            {phoneChoice === 'keep' && (
+              <div>
+                <label className="block text-sm font-semibold text-[#1a2e3b] mb-1.5">Your business phone number</label>
+                <input type="tel" value={existingPhone} onChange={e => setExistingPhone(e.target.value)}
+                  placeholder="(555) 123-4567"
+                  className="w-full px-4 py-3 border border-[#e5e0da] rounded-xl text-[15px] text-[#1a2e3b] placeholder:text-[#d1ccc6] focus:outline-none focus:ring-2 focus:ring-[#0d9488]" />
+                <p className="text-[11px] text-[#94a7b8] mt-1">We&apos;ll set up call forwarding from this number later. Nothing changes until you&apos;re ready.</p>
+              </div>
+            )}
+
+            {/* New number: area code */}
+            {phoneChoice === 'new' && (
+              <div>
+                <label className="block text-sm font-semibold text-[#1a2e3b] mb-1.5">Pick your local area code</label>
+                <div className="relative">
+                  <input type="text" value={areaCode}
+                    onChange={e => { setAreaCode(e.target.value.replace(/[^0-9]/g, '').slice(0, 3)); setError(''); }}
+                    placeholder="e.g. 845, 713, 404" maxLength={3}
+                    className="w-[160px] px-4 py-3 border border-[#e5e0da] rounded-xl text-[18px] font-bold text-center text-[#1a2e3b] placeholder:text-[#d1ccc6] focus:outline-none focus:ring-2 focus:ring-[#0d9488]" />
+                  {areaHint && <span className="ml-3 text-[13px] text-[#059669] font-medium">{areaHint}</span>}
+                </div>
+              </div>
+            )}
+
+            {/* Pickup rules */}
+            {phoneChoice && (
+              <div>
+                <label className="block text-sm font-semibold text-[#1a2e3b] mb-2">When should your AI pick up?</label>
+                <p className="text-[12px] text-[#94a7b8] mb-3">Select all that apply — you can change this anytime.</p>
+                <div className="space-y-2.5">
+                  <label className={`flex items-start gap-3 p-3.5 rounded-xl border-2 cursor-pointer transition-all ${pickupAfterHours ? 'border-[#0d9488] bg-[#f0fdf4]' : 'border-[#e5e0da] bg-white hover:border-[#94a7b8]'}`}>
+                    <input type="checkbox" checked={pickupAfterHours} onChange={e => setPickupAfterHours(e.target.checked)}
+                      className="w-5 h-5 rounded border-[#d1ccc6] text-[#0d9488] focus:ring-[#0d9488] mt-0.5 flex-shrink-0" />
+                    <div>
+                      <span className="text-[14px] font-bold text-[#1a2e3b]">After hours</span>
+                      <p className="text-[12px] text-[#5a7184] mt-0.5">AI answers outside your business hours — evenings, weekends, holidays.</p>
+                    </div>
+                  </label>
+                  <label className={`flex items-start gap-3 p-3.5 rounded-xl border-2 cursor-pointer transition-all ${pickupMissedCalls ? 'border-[#0d9488] bg-[#f0fdf4]' : 'border-[#e5e0da] bg-white hover:border-[#94a7b8]'}`}>
+                    <input type="checkbox" checked={pickupMissedCalls} onChange={e => setPickupMissedCalls(e.target.checked)}
+                      className="w-5 h-5 rounded border-[#d1ccc6] text-[#0d9488] focus:ring-[#0d9488] mt-0.5 flex-shrink-0" />
+                    <div>
+                      <span className="text-[14px] font-bold text-[#1a2e3b]">When I miss a call</span>
+                      <p className="text-[12px] text-[#5a7184] mt-0.5">Your phone rings first. After 4 rings, the AI catches it. You never lose a call.</p>
+                    </div>
+                  </label>
+                  <label className={`flex items-start gap-3 p-3.5 rounded-xl border-2 cursor-pointer transition-all ${pickupAlwaysOn ? 'border-[#0d9488] bg-[#f0fdf4]' : 'border-[#e5e0da] bg-white hover:border-[#94a7b8]'}`}>
+                    <input type="checkbox" checked={pickupAlwaysOn} onChange={e => setPickupAlwaysOn(e.target.checked)}
+                      className="w-5 h-5 rounded border-[#d1ccc6] text-[#0d9488] focus:ring-[#0d9488] mt-0.5 flex-shrink-0" />
+                    <div>
+                      <span className="text-[14px] font-bold text-[#1a2e3b]">Always on</span>
+                      <p className="text-[12px] text-[#5a7184] mt-0.5">AI answers every call. Urgent ones get forwarded to you instantly.</p>
+                    </div>
+                  </label>
+                </div>
+              </div>
+            )}
+
+            {/* Submit */}
+            {phoneChoice && (pickupAfterHours || pickupMissedCalls || pickupAlwaysOn) && (
+              <button onClick={handleProvision}
+                disabled={provisioning || !agentName.trim() || (phoneChoice === 'new' && areaCode.length !== 3)}
+                className="w-full bg-[#0d9488] text-white py-3 rounded-xl text-[15px] font-bold hover:bg-[#0b7c72] transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                {provisioning ? (
+                  <span className="flex items-center justify-center gap-2">
+                    <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    Setting up {agentName || 'your AI'}...
+                  </span>
+                ) : `Continue →`}
+              </button>
+            )}
+
             {error && <div className="bg-red-50 text-red-700 p-3 rounded-xl text-[13px]">{error}</div>}
           </div>
         )}
