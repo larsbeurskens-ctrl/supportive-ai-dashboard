@@ -37,7 +37,7 @@ interface VerticalPageProps {
   painPoints: string[];
   capabilities: Capability[];
   stats: Stat[];
-  testimonial: Testimonial;
+  testimonial?: Testimonial;
   phoneNumber: string | null;
   accentColor: string;
   available: boolean;
@@ -303,7 +303,7 @@ export function VerticalPage({
                 ))}
               </div>
               <p className="text-[12px] text-[#94a7b8] mt-3">
-                Setup takes 30 seconds — just dial a short code from your phone.
+                Setup takes 5 minutes — just dial a short code from your phone.
               </p>
             </div>
           </div>
@@ -318,7 +318,7 @@ export function VerticalPage({
           <div className="relative flex flex-col md:flex-row gap-8 md:gap-0">
             <div className="hidden md:block absolute top-6 left-10 right-10 h-[2px] bg-[#d1ccc6] z-0" />
             {[
-              { n: '1', title: 'Sign up & name your AI', desc: 'Create your account in 30 seconds. Pick a local area code. Your AI gets its own number.' },
+              { n: '1', title: 'Sign up & name your AI', desc: 'Create your account in under 5 minutes. Pick a local area code. Your AI gets its own number.' },
               { n: '2', title: 'Add your business details', desc: 'Tell it your pricing, services, hours, and credentials. Takes 2 minutes. No tech skills needed.' },
               { n: '3', title: 'Test it with a real call', desc: 'Call your AI number and experience it yourself. Book a job, ask about pricing, try a reschedule.' },
               { n: '4', title: 'Forward your existing number', desc: 'Keep the number on your van, your cards, everywhere. One short code forwards missed calls to your AI.' },
@@ -347,7 +347,7 @@ export function VerticalPage({
               <p className="text-[13px] text-[#5a7184] mb-5">Takes under 5 minutes</p>
               <div className="space-y-3">
                 {[
-                  { step: '1', text: 'Create your account (30 seconds)' },
+                  { step: '1', text: 'Create your account' },
                   { step: '2', text: 'Pick your local area code — get your AI number' },
                   { step: '3', text: 'Add your pricing, services & details (2 min)' },
                   { step: '4', text: 'Make a test call — hear it in action' },
@@ -484,7 +484,7 @@ export function VerticalPage({
             Try it free for 7 days
           </h2>
           <p className="text-[15px] text-[#5a7184] mb-8">
-            Pick your area code, add your details, and your AI receptionist can be answering {trade.toLowerCase()} calls in under 5 minutes.
+            Pick your area code, add your details, and you can be answering {trade.toLowerCase()} calls in under 5 minutes.
           </p>
           <div className="bg-white rounded-2xl border border-[#e5e0da] p-8">
             <div className="grid grid-cols-3 gap-3 mb-6">

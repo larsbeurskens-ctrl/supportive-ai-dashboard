@@ -58,8 +58,8 @@ export default function PlumbingPage() {
     <VerticalPage
       trade="Plumbing"
       verticalSlug="plumbing"
-      headline="The AI receptionist built for plumbers."
-      subheadline="Triages urgency, qualifies every lead, and books the job — 24/7. So you stop losing $500 emergency calls to voicemail."
+      headline="Stop losing plumbing jobs to voicemail."
+      subheadline="Every missed call is a lost job. We answer your phone 24/7, book the job, and text you — so you never miss another customer. Keep your existing number."
       demoConfig={{
         label: 'Plumbing Demo',
         phone: '(240) 301-1473',
@@ -90,12 +90,6 @@ export default function PlumbingPage() {
         { value: '24/7', label: 'Always answering' },
         { value: '< 1s', label: 'Pickup time' },
       ]}
-      testimonial={{
-        quote: "The AI actually knows plumbing. It asks about water shut-off, property type, the right things. My customers think they're talking to a real receptionist.",
-        name: 'Sarah Chen',
-        title: 'S. Chen Plumbing',
-        stars: 5,
-      }}
       recordings={plumbingRecordings}
       phoneNumber="(240) 301-1473"
       accentColor="#e8930c"

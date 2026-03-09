@@ -39,7 +39,7 @@ function Accordion({ item }: { item: FAQItem }) {
 }
 
 const gettingStartedSteps = [
-  { n: '1', title: 'Sign up for your free trial', desc: 'Create your account — no credit card needed. Pick your AI\'s name and a local area code. Your AI phone number is ready in 30 seconds.' },
+  { n: '1', title: 'Sign up for your free trial', desc: 'Create your account — no credit card needed. Pick your AI\'s name and a local area code. Takes under 5 minutes to be fully set up.' },
   { n: '2', title: 'Add your business details', desc: 'Tell your AI your pricing, services, service area, credentials, and any discounts you offer. Takes about 2 minutes. This is what makes it sound like your business — not a generic answering service.' },
   { n: '3', title: 'Make a test call', desc: 'Call your new AI number from your phone. Book a fake job, ask about pricing, try to reschedule — put it through its paces. Adjust anything before going live.' },
   { n: '4', title: 'Connect your Google Calendar', desc: 'One click to authorise Google Calendar access. Your AI can now see your real availability and book directly into open slots — no double-bookings.' },
@@ -222,7 +222,7 @@ const faqSections: { title: string; items: FAQItem[] }[] = [
     items: [
       {
         question: 'Do I need any technical skills to set up?',
-        answer: 'None. The entire setup takes about 15 minutes and is guided step-by-step. If you can use a smartphone and a calendar app, you can set up Supportive AI.',
+        answer: 'None. The entire setup takes about 5 minutes and is guided step-by-step. If you can use a smartphone and a calendar app, you can set up Supportive AI.',
       },
       {
         question: 'What if I have issues or need help?',
@@ -254,7 +254,7 @@ export function FAQPage() {
       <section className="pb-12 px-6 md:px-10 max-w-[860px] mx-auto">
         <div className="bg-white rounded-2xl border border-[#e5e0da] p-8 md:p-10">
           <h2 className="text-[24px] font-bold text-[#1a2e3b] mb-2">Getting started</h2>
-          <p className="text-sm text-[#5a7184] mb-8">Up and running in 15 minutes. Here&apos;s the process:</p>
+          <p className="text-sm text-[#5a7184] mb-8">Up and running in 5 minutes. Here&apos;s the process:</p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-6">
             {gettingStartedSteps.map((step) => (
               <div key={step.n} className="flex gap-4">
@@ -275,7 +275,7 @@ export function FAQPage() {
             >
               Start Your Free Trial
             </Link>
-            <span className="text-[13px] text-[#94a7b8]">14-day free trial · No credit card · Cancel anytime</span>
+            <span className="text-[13px] text-[#94a7b8]">7-day free trial · No credit card · Cancel anytime</span>
           </div>
         </div>
       </section>

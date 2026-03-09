@@ -275,7 +275,7 @@ export default function SetupWizard() {
         {step === 'create-agent' && (
           <div className="space-y-5">
             <p className="text-[14px] text-[#5a7184] leading-relaxed">
-              We&apos;ll create your AI phone assistant with a local number. Takes about 30 seconds.
+              We&apos;ll create your AI phone assistant with a local number. Live in 5 minutes.
             </p>
             {/* Agent name */}
             <div>

@@ -85,9 +85,9 @@ export function HomePage() {
           <br className="hidden md:block" /> afford to miss a call.
         </h1>
         <p className="text-lg md:text-[19px] text-[#5a7184] leading-relaxed max-w-[600px] mx-auto mb-9">
-          The AI receptionist that knows your trade inside out. Answers every call,
-          books jobs into your live calendar, and sends payment links — so you stop
-          doing admin and start doing the work.
+          Every missed call is a lost job. We answer your phone 24/7,
+          book jobs into your live calendar, and send confirmations — so you stop
+          losing customers and stop doing admin at night. Keep your existing number.
         </p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center mb-3">
           <Link
@@ -249,7 +249,7 @@ export function HomePage() {
                 ))}
               </div>
               <p className="text-[13px] text-[#94a7b8] mt-4">
-                Setup takes 30 seconds — just dial a short code from your phone. No tech needed.
+                Setup takes 5 minutes — just dial a short code from your phone. No tech needed.
               </p>
             </div>
           </div>
@@ -505,7 +505,7 @@ export function HomePage() {
               </div>
               <div className="p-6">
                 <p className="text-[14px] text-[#5a7184] leading-relaxed mb-5">
-                  Not sure about call forwarding or calendar setup? No worries — book a quick call and we&apos;ll do it together. We&apos;ve helped hundreds of trades businesses get set up.
+                  Not sure about call forwarding or calendar setup? No worries — book a quick call and we&apos;ll walk you through it in 5 minutes.
                 </p>
                 {[
                   'We walk you through every step live',
@@ -669,7 +669,7 @@ export function HomePage() {
         <div className="max-w-[680px] mx-auto text-center">
           <h2 className="text-[28px] font-bold text-[#1a2e3b] mb-3">Start your free trial today</h2>
           <p className="text-[15px] text-[#5a7184] mb-8 max-w-[480px] mx-auto">
-            Pick your area code, add your details, and your AI receptionist can be answering calls in under 5 minutes.
+            Pick your area code, add your details, and you can be live in under 5 minutes.
           </p>
           <div className="bg-white rounded-2xl border border-[#e5e0da] p-8 text-left">
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
@@ -714,8 +714,8 @@ export function HomePage() {
             Ready to stop missing calls?
           </h2>
           <p className="text-base text-[#5a7184] mb-8">
-            Sign up, pick your area code, and your AI receptionist
-            <br className="hidden md:block" /> can be answering calls in under 5 minutes.
+            Sign up, pick your area code, and you can be live
+            <br className="hidden md:block" /> in under 5 minutes. Keep your existing number.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link

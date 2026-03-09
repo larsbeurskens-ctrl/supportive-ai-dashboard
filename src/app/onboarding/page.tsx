@@ -9,12 +9,6 @@ const TRADES = [
   { value: 'window_cleaning', label: 'Window Cleaning' },
   { value: 'plumbing', label: 'Plumbing' },
   { value: 'hvac', label: 'HVAC' },
-  { value: 'pest_control', label: 'Pest Control' },
-  { value: 'electrician', label: 'Electrician' },
-  { value: 'cleaning', label: 'Cleaning / Janitorial' },
-  { value: 'roofing', label: 'Roofing' },
-  { value: 'landscaping', label: 'Landscaping' },
-  { value: 'other', label: 'Other Home Service' },
 ];
 
 export default function OnboardingPage() {
@@ -85,7 +79,7 @@ export default function OnboardingPage() {
               Get your AI receptionist
             </h1>
             <p className="text-[16px] text-[#5a7184]">
-              Takes 30 seconds. No credit card required.
+              Live in 5 minutes. No credit card required.
             </p>
           </div>
 

@@ -58,8 +58,8 @@ export default function WindowCleaningPage() {
     <VerticalPage
       trade="Window Cleaning"
       verticalSlug="window-cleaning"
-      headline="The AI receptionist built for window cleaners."
-      subheadline="Answers every call while you're on a ladder. Books the job, sends confirmation, handles reschedules — so you never lose a customer to voicemail."
+      headline="Stop losing jobs while you're on a ladder."
+      subheadline="Every missed call goes to the next company. We answer your phone 24/7, book the job, and send confirmation — so you never lose another customer. Keep your existing number."
       demoConfig={{
         label: 'Window Cleaning Demo',
         phone: '(845) 209-2401',
@@ -90,12 +90,6 @@ export default function WindowCleaningPage() {
         { value: '< 1s', label: 'Average pickup' },
         { value: '66%', label: 'Call-to-booking rate' },
       ]}
-      testimonial={{
-        quote: "I used to miss 4-5 calls a day while I was up a ladder. Now every call gets answered and booked. My revenue went up 30% in the first month.",
-        name: 'Mike Reynolds',
-        title: 'Owner, Crystal Clear Windows',
-        stars: 5,
-      }}
       recordings={windowCleaningRecordings}
       phoneNumber="(845) 209-2401"
       accentColor="#e8930c"

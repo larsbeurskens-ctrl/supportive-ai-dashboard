@@ -12,8 +12,8 @@ export default function HVACPage() {
       trade="HVAC"
       verticalSlug="hvac"
       recordings={[]}
-      headline="Peak season? We've got your phones covered."
-      subheadline="When the AC dies in July or the heater quits in January, every call matters. Your AI handles the surge."
+      headline="Stop losing HVAC calls during peak season."
+      subheadline="When the AC dies in July or the heater quits in January, every call matters. We answer your phone 24/7, book the job, and text you. Keep your existing number."
       painPoints={[
         "Call volume triples in summer and winter. You physically can't answer them all.",
         "Hiring temp receptionists for peak season is expensive and unreliable.",
@@ -33,12 +33,6 @@ export default function HVACPage() {
         { value: '$0 extra', label: 'Per additional call' },
         { value: '100%', label: 'Calls handled' },
       ]}
-      testimonial={{
-        quote: "Peak season used to mean hiring a temp receptionist for $3K/month. Now the AI handles the surge and I save that money. Best investment I've made.",
-        name: 'James Whitfield',
-        title: 'Whitfield HVAC Services',
-        stars: 5,
-      }}
       phoneNumber={null}
       accentColor="#e8930c"
       available={false}
