@@ -82,7 +82,7 @@ export default function RootLayout({
               "url": "https://supportive-ai.com",
               "offers": {
                 "@type": "Offer",
-                "price": "149",
+                "price": "89",
                 "priceCurrency": "USD",
                 "priceValidUntil": "2026-12-31",
               },

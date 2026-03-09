@@ -382,19 +382,19 @@ export function VerticalPage({
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {[
               {
-                name: 'Starter', price: 149, calls: '150 calls/mo', target: 'Solo operators',
-                features: ['24/7 AI answering', 'Dashboard & call analytics', 'Route-optimised booking', 'Calendar + SMS confirmations', 'WhatsApp AI agent', 'Payment links', '1st line customer service'],
-                note: '$1.50/call overage', popular: false,
+                name: 'Starter', price: 89, calls: '40 calls/mo', target: 'Solo operators',
+                features: ['24/7 AI answering', 'Google Calendar booking', 'SMS confirmations', 'Keep your existing number', 'Emergency escalation', 'Call recordings & transcripts'],
+                note: '$2.00/call overage', popular: false,
               },
               {
-                name: 'Pro', price: 299, calls: '500 calls/mo', target: 'Growing businesses',
-                features: ['Everything in Starter', 'Multi-crew scheduling', 'Priority support', 'Review requests'],
-                note: '$1.25/call overage', popular: true,
+                name: 'Pro', price: 149, calls: '100 calls/mo', target: 'Busy one-man crews',
+                features: ['Everything in Starter', 'WhatsApp AI agent', 'Payment links (Stripe)', 'Dashboard & call analytics'],
+                note: '$1.50/call overage', popular: true,
               },
               {
-                name: 'Growth', price: 499, calls: 'Unlimited calls', target: 'Established teams',
-                features: ['Everything in Pro', 'Unlimited calls', 'API access', 'Dedicated account manager', 'Custom-built features'],
-                note: null, popular: false,
+                name: 'Business', price: 299, calls: '250 calls/mo', target: 'Multi-van operations',
+                features: ['Everything in Pro', 'Priority support', 'Multi-crew scheduling', 'Review requests'],
+                note: '$1.25/call overage', popular: false,
               },
             ].map((plan) => (
               <div key={plan.name} className={`p-7 rounded-xl relative ${plan.popular ? 'border-2 border-[#e8930c] bg-[#fffdf9]' : 'border border-[#e5e0da] bg-white'}`}>
@@ -417,14 +417,14 @@ export function VerticalPage({
                   ))}
                 </ul>
                 <Link
-                  href={plan.name === 'Growth' ? '/#contact' : '/onboarding'}
+                  href="/onboarding"
                   className={`block text-center py-3 rounded-lg text-sm font-semibold no-underline transition-colors ${
                     plan.popular
                       ? 'bg-[#e8930c] text-white hover:bg-[#d17f00] shadow-[0_2px_8px_rgba(232,147,12,0.25)]'
                       : 'bg-white text-[#1a2e3b] border border-[#d1ccc6] hover:bg-[#f0eeeb]'
                   }`}
                 >
-                  {plan.name === 'Growth' ? 'Contact us' : 'Start free trial'}
+                  Start free trial
                 </Link>
               </div>
             ))}
@@ -477,7 +477,7 @@ export function VerticalPage({
               {[
                 { value: '7 days', label: 'Free trial' },
                 { value: '50 calls', label: 'Included free' },
-                { value: '5 min', label: 'To go live' },
+                { value: '$89/mo', label: 'Starting price' },
               ].map((s, i) => (
                 <div key={i} className="text-center p-3 rounded-xl bg-[#faf9f7] border border-[#e5e0da]">
                   <div className="text-[20px] font-extrabold text-[#1a2e3b]">{s.value}</div>

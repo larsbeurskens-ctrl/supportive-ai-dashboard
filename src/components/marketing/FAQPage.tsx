@@ -127,9 +127,9 @@ const faqSections: { title: string; items: FAQItem[] }[] = [
           <div>
             <p className="mb-3">Three plans, all with a 7-day free trial (up to 50 calls):</p>
             <div className="space-y-2">
-              <div className="flex items-baseline gap-2"><strong className="text-[#1a2e3b]">Starter — $149/mo</strong><span>150 calls/month. Everything you need to get started. Includes WhatsApp AI agent.</span></div>
-              <div className="flex items-baseline gap-2"><strong className="text-[#1a2e3b]">Pro — $299/mo</strong><span>500 calls/month. Multi-crew scheduling, priority support, review requests.</span></div>
-              <div className="flex items-baseline gap-2"><strong className="text-[#1a2e3b]">Growth — $499/mo</strong><span>Unlimited calls. API access, dedicated account manager, custom-built features.</span></div>
+              <div className="flex items-baseline gap-2"><strong className="text-[#1a2e3b]">Starter — $89/mo</strong><span>40 calls/month. 24/7 answering, calendar booking, SMS confirmations, keep your number.</span></div>
+              <div className="flex items-baseline gap-2"><strong className="text-[#1a2e3b]">Pro — $149/mo</strong><span>100 calls/month. Everything in Starter plus WhatsApp AI agent and payment links.</span></div>
+              <div className="flex items-baseline gap-2"><strong className="text-[#1a2e3b]">Business — $299/mo</strong><span>250 calls/month. Everything in Pro plus priority support and multi-crew scheduling.</span></div>
             </div>
             <p className="mt-3">No setup fees. No per-seat charges. Cancel anytime.</p>
           </div>
@@ -141,7 +141,7 @@ const faqSections: { title: string; items: FAQItem[] }[] = [
       },
       {
         question: 'What happens if I exceed my call limit?',
-        answer: 'We keep answering your calls — we\'ll never cut a customer off mid-month. Overage calls are billed at the end of the month at your plan rate (Starter: $1.50/call, Pro: $1.25/call). Growth is unlimited with no overage.',
+        answer: 'We keep answering your calls — we\'ll never cut a customer off mid-month. Overage calls are billed at the end of the month at your plan rate (Starter: $2.00/call, Pro: $1.50/call, Business: $1.25/call).',
       },
       {
         question: 'What counts as a "call"?',
@@ -167,7 +167,7 @@ const faqSections: { title: string; items: FAQItem[] }[] = [
     items: [
       {
         question: 'Is there a WhatsApp AI agent too?',
-        answer: 'Yes — every plan includes a WhatsApp AI agent at no extra cost. Customers who prefer to message rather than call can reach you on WhatsApp. The same AI handles it — same knowledge of your pricing, services, and availability, same ability to book appointments.',
+        answer: 'Yes — Pro and Business plans include a WhatsApp AI agent at no extra cost. Customers who prefer to message rather than call can reach you on WhatsApp. The same AI handles it — same knowledge of your pricing, services, and availability, same ability to book appointments.',
       },
       {
         question: 'Do I need to do anything extra to set up WhatsApp?',
@@ -226,7 +226,7 @@ const faqSections: { title: string; items: FAQItem[] }[] = [
       },
       {
         question: 'What if I have issues or need help?',
-        answer: 'Pro and Growth plans include priority support. All plans have email support. We\'re a small team and we actually respond quickly — usually within a few hours.',
+        answer: 'Business plans include priority support. All plans have email support. We\'re a small team and we actually respond quickly — usually within a few hours.',
       },
       {
         question: 'Does it work with landlines?',
