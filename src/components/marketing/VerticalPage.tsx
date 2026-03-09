@@ -383,12 +383,12 @@ export function VerticalPage({
             {[
               {
                 name: 'Starter', price: 89, calls: '40 calls/mo', target: 'One-man crews',
-                features: ['24/7 AI answering', 'Google Calendar booking', 'SMS confirmations', 'Keep your existing number', 'Emergency escalation', 'Call recordings & transcripts'],
-                note: '$2.00/call overage', popular: false,
+                features: ['AI answering — ideal for after-hours & missed calls', 'Google Calendar booking', 'SMS confirmations', 'Keep your existing number', 'Emergency escalation', 'Dashboard & call history', 'Call recordings & transcripts'],
+                note: '$2.50/call overage', popular: false,
               },
               {
                 name: 'Standard', price: 149, calls: '125 calls/mo', target: 'Busy trades businesses',
-                features: ['Everything in Starter', 'WhatsApp AI agent', 'Payment links (Stripe)', 'Dashboard & call analytics'],
+                features: ['Everything in Starter', 'WhatsApp AI agent', 'Payment links (Stripe)', 'Detailed call analytics'],
                 note: '$1.50/call overage', popular: true,
               },
               {

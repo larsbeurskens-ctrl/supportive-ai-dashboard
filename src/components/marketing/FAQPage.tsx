@@ -127,7 +127,7 @@ const faqSections: { title: string; items: FAQItem[] }[] = [
           <div>
             <p className="mb-3">Three plans, all with a 7-day free trial (up to 50 calls):</p>
             <div className="space-y-2">
-              <div className="flex items-baseline gap-2"><strong className="text-[#1a2e3b]">Starter — $89/mo</strong><span>40 calls/month. 24/7 answering, calendar booking, SMS confirmations, keep your number.</span></div>
+              <div className="flex items-baseline gap-2"><strong className="text-[#1a2e3b]">Starter — $89/mo</strong><span>40 calls/month. Ideal for after-hours & missed calls. Calendar booking, SMS, dashboard, keep your number.</span></div>
               <div className="flex items-baseline gap-2"><strong className="text-[#1a2e3b]">Standard — $149/mo</strong><span>125 calls/month. Everything in Starter plus WhatsApp AI agent and payment links.</span></div>
               <div className="flex items-baseline gap-2"><strong className="text-[#1a2e3b]">Business — $299/mo</strong><span>250 calls/month. Everything in Standard plus priority support and multi-crew scheduling.</span></div>
             </div>
@@ -141,7 +141,7 @@ const faqSections: { title: string; items: FAQItem[] }[] = [
       },
       {
         question: 'What happens if I exceed my call limit?',
-        answer: 'We keep answering your calls — we\'ll never cut a customer off mid-month. Overage calls are billed at the end of the month at your plan rate (Starter: $2.00/call, Standard: $1.50/call, Business: $1.25/call).',
+        answer: 'We keep answering your calls — we\'ll never cut a customer off mid-month. Overage calls are billed at the end of the month at your plan rate (Starter: $2.50/call, Standard: $1.50/call, Business: $1.25/call).',
       },
       {
         question: 'What counts as a "call"?',
