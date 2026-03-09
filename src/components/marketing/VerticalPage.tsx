@@ -419,7 +419,7 @@ export function VerticalPage({
                   ))}
                 </ul>
                 <Link
-                  href="/onboarding"
+                  href={`/onboarding?plan=${plan.name.toLowerCase()}`}
                   className={`block text-center py-3 rounded-lg text-sm font-semibold no-underline transition-colors ${
                     plan.popular
                       ? 'bg-[#e8930c] text-white hover:bg-[#d17f00] shadow-[0_2px_8px_rgba(232,147,12,0.25)]'

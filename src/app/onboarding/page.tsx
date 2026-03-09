@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Logo } from '@/components/Logo';
 import Turnstile from '@/components/Turnstile';
@@ -11,7 +12,23 @@ const TRADES = [
   { value: 'hvac', label: 'HVAC' },
 ];
 
+const PLAN_LABELS: Record<string, string> = {
+  starter: 'Starter — $89/mo',
+  standard: 'Standard — $149/mo',
+  business: 'Business — $299/mo',
+};
+
 export default function OnboardingPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[#faf9f7] flex items-center justify-center"><div className="w-6 h-6 border-2 border-[#e8930c] border-t-transparent rounded-full animate-spin" /></div>}>
+      <OnboardingForm />
+    </Suspense>
+  );
+}
+
+function OnboardingForm() {
+  const searchParams = useSearchParams();
+  const planFromUrl = searchParams.get('plan') || 'starter';
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [company, setCompany] = useState('');
@@ -36,6 +53,7 @@ export default function OnboardingPage() {
       // Store signup data for after email verification
       localStorage.setItem('supportive_signup', JSON.stringify({
         name, email, company, trade,
+        plan: planFromUrl,
         createdAt: new Date().toISOString(),
       }));
 
@@ -81,6 +99,11 @@ export default function OnboardingPage() {
             <p className="text-[16px] text-[#5a7184]">
               Live in 5 minutes. No credit card required.
             </p>
+            {PLAN_LABELS[planFromUrl] && (
+              <div className="inline-block mt-3 px-4 py-1.5 bg-[#eff6ff] text-[#1e40af] text-[13px] font-semibold rounded-full">
+                Selected plan: {PLAN_LABELS[planFromUrl]}
+              </div>
+            )}
           </div>
 
           {/* Form card */}

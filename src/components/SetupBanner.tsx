@@ -11,13 +11,14 @@ type SetupStatus = {
   hasCalendar: boolean;
   hasTestCall: boolean;
   isComplete: boolean;
+  selectedPlan: string;
 };
 
 export function SetupBanner() {
   const { data: session } = useSession();
   const [dismissed, setDismissed] = useState(false);
   const [status, setStatus] = useState<SetupStatus>({
-    hasPhone: false, hasCalendar: false, hasTestCall: false, isComplete: false,
+    hasPhone: false, hasCalendar: false, hasTestCall: false, isComplete: false, selectedPlan: 'starter',
   });
   const [loading, setLoading] = useState(true);
 
@@ -34,14 +35,15 @@ export function SetupBanner() {
         return;
       }
       try {
-        const res = await fetch(`${API_BASE}/api/business/${session.user.businessId}/status`);
+        const res = await fetch(`${API_BASE}/api/businesses/${session.user.businessId}/provision-status`);
         if (res.ok) {
           const data = await res.json();
           setStatus({
-            hasPhone: !!data.twilioPhoneNumber,
-            hasCalendar: !!data.googleCalendarId,
-            hasTestCall: (data.totalCalls || 0) > 0,
-            isComplete: !!data.twilioPhoneNumber && !!data.googleCalendarId && (data.totalCalls || 0) > 0,
+            hasPhone: !!data.phoneNumber,
+            hasCalendar: !!data.checklist?.calendarConnected,
+            hasTestCall: !!data.checklist?.testCallMade,
+            isComplete: !!data.phoneNumber && !!data.checklist?.calendarConnected && !!data.checklist?.testCallMade,
+            selectedPlan: data.selectedPlan || 'starter',
           });
         }
       } catch { /* show banner by default */ }
@@ -146,7 +148,10 @@ export function SetupBanner() {
 
         {/* Trial info card */}
         <div className="bg-[#faf9f7] rounded-xl border border-[#e5e0da] p-5 md:w-[220px] flex-shrink-0">
-          <h4 className="text-[13px] font-bold text-[#1a2e3b] mb-3">Your free trial</h4>
+          <h4 className="text-[13px] font-bold text-[#1a2e3b] mb-1.5">Your free trial</h4>
+          <div className="inline-block mb-3 px-3 py-1 bg-[#eff6ff] text-[#1e40af] text-[12px] font-semibold rounded-full">
+            {{ starter: 'Starter — $89/mo', standard: 'Standard — $149/mo', business: 'Business — $299/mo' }[status.selectedPlan] || 'Starter — $89/mo'}
+          </div>
           <div className="space-y-2.5 text-[12px] text-[#5a7184]">
             <div className="flex items-start gap-2">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2" className="flex-shrink-0 mt-0.5"><path d="M20 6L9 17l-5-5"/></svg>
@@ -154,11 +159,11 @@ export function SetupBanner() {
             </div>
             <div className="flex items-start gap-2">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2" className="flex-shrink-0 mt-0.5"><path d="M20 6L9 17l-5-5"/></svg>
-              <span>You choose when AI picks up: always, after 4 rings, or after hours only</span>
+              <span>Up to 50 calls included</span>
             </div>
             <div className="flex items-start gap-2">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2" className="flex-shrink-0 mt-0.5"><path d="M20 6L9 17l-5-5"/></svg>
-              <span>Personal setup — we configure it together</span>
+              <span>You choose when AI picks up</span>
             </div>
             <div className="flex items-start gap-2">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2" className="flex-shrink-0 mt-0.5"><path d="M20 6L9 17l-5-5"/></svg>

@@ -36,6 +36,7 @@ export default function WelcomePage() {
               ownerName: data.name,
               timezone: 'America/New_York',
               serviceRadius: '30',
+              selectedPlan: data.plan || 'starter',
             }),
           });
 
