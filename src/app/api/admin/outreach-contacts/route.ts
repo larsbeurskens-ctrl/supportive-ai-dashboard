@@ -26,14 +26,18 @@ export async function GET(req: Request) {
   const [contacts, total, stats] = await Promise.all([
     prisma.outreachContact.findMany({
       where, orderBy: { score: "desc" }, take: limit, skip: offset,
+      include: { _count: { select: { activities: true } } },
     }),
     prisma.outreachContact.count({ where }),
     prisma.$queryRaw`
       SELECT 
         COUNT(*) as total,
         COUNT(CASE WHEN status = 'unsent' THEN 1 END) as unsent,
-        COUNT(CASE WHEN status = 'sent' THEN 1 END) as sent,
-        COUNT(CASE WHEN status = 'clicked' THEN 1 END) as clicked,
+        COUNT(CASE WHEN status IN ('sent', 'clicked') THEN 1 END) as sent,
+        COUNT(CASE WHEN status IN ('called', 'voicemail') THEN 1 END) as called,
+        COUNT(CASE WHEN status IN ('spoke', 'demo_played') THEN 1 END) as spoke,
+        COUNT(CASE WHEN status = 'interested' THEN 1 END) as interested,
+        COUNT(CASE WHEN status = 'not_interested' THEN 1 END) as not_interested,
         COUNT(CASE WHEN status = 'signed_up' THEN 1 END) as signed_up
       FROM "OutreachContact"
     ` as Promise<Array<Record<string, bigint>>>,
@@ -47,7 +51,10 @@ export async function GET(req: Request) {
       total: Number(pipeline.total),
       unsent: Number(pipeline.unsent),
       sent: Number(pipeline.sent),
-      clicked: Number(pipeline.clicked),
+      called: Number(pipeline.called),
+      spoke: Number(pipeline.spoke),
+      interested: Number(pipeline.interested),
+      not_interested: Number(pipeline.not_interested),
       signed_up: Number(pipeline.signed_up),
     },
   });
