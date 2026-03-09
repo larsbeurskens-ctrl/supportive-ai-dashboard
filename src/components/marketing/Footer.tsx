@@ -63,33 +63,35 @@ export function MarketingFooter() {
 
           {/* Contact */}
           <div>
-            <h4 className="text-xs font-bold text-[#1a2e3b] uppercase tracking-wider mb-4">Try it</h4>
-            <p className="text-[12px] text-[#94a7b8] mb-2">Call our demo agents:</p>
+            <h4 className="text-xs font-bold text-[#1a2e3b] uppercase tracking-wider mb-4">Get in touch</h4>
+            <div className="space-y-2.5">
+              <a href="mailto:lars@supportive-ai.com" className="block text-sm text-[#5a7184] no-underline hover:text-[#1a2e3b]">lars@supportive-ai.com</a>
+              <a href="tel:+18323466405" className="block text-sm text-[#5a7184] no-underline hover:text-[#1a2e3b]">(832) 346-6405</a>
+            </div>
+            <p className="text-[12px] text-[#94a7b8] mt-4 mb-2">Try our demo agents:</p>
             <div className="space-y-1.5">
               <div>
-                <a href="tel:+18452092401" className="text-[15px] font-bold text-[#1a2e3b] no-underline hover:text-[#e8930c]">(845) 209-2401</a>
+                <a href="tel:+18452092401" className="text-[14px] font-bold text-[#1a2e3b] no-underline hover:text-[#e8930c]">(845) 209-2401</a>
                 <span className="text-[11px] text-[#94a7b8] ml-1.5">Window Cleaning</span>
               </div>
               <div>
-                <a href="tel:+12403011473" className="text-[15px] font-bold text-[#1a2e3b] no-underline hover:text-[#e8930c]">(240) 301-1473</a>
+                <a href="tel:+12403011473" className="text-[14px] font-bold text-[#1a2e3b] no-underline hover:text-[#e8930c]">(240) 301-1473</a>
                 <span className="text-[11px] text-[#94a7b8] ml-1.5">Plumbing</span>
               </div>
             </div>
-            <p className="text-[10px] text-[#b8c4ce] mt-2">Standard call rates apply</p>
           </div>
         </div>
 
         <div className="border-t border-[#e5e0da] pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-xs text-[#94a7b8]">
-            © 2026 Supportive AI. All rights reserved.
+            © 2026 Supportive AI LLC. All rights reserved.
           </p>
           <div className="flex items-center gap-4">
-            <span className="text-xs text-[#94a7b8]">Integrates with</span>
-            <span className="text-xs font-semibold text-[#5a7184]">Google Calendar</span>
-            <span className="text-xs text-[#94a7b8]">·</span>
-            <span className="text-xs font-semibold text-[#5a7184]">Stripe</span>
-            <span className="text-xs text-[#94a7b8]">·</span>
-            <span className="text-xs font-semibold text-[#5a7184]">Twilio</span>
+            <Link href="/privacy" className="text-xs text-[#94a7b8] no-underline hover:text-[#5a7184]">Privacy Policy</Link>
+            <span className="text-xs text-[#d1ccc6]">·</span>
+            <Link href="/terms" className="text-xs text-[#94a7b8] no-underline hover:text-[#5a7184]">Terms of Service</Link>
+            <span className="text-xs text-[#d1ccc6]">·</span>
+            <a href="mailto:lars@supportive-ai.com" className="text-xs text-[#94a7b8] no-underline hover:text-[#5a7184]">Support</a>
           </div>
         </div>
       </div>
