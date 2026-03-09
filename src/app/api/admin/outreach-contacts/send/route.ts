@@ -47,7 +47,7 @@ export async function POST(req: Request) {
 
   try {
     await resend.emails.send({
-      from: "Lars from Supportive AI <lars@supportive-ai.com>",
+      from: "Lars Beurskens <lars@supportive-ai.com>",
       to: contact.email,
       subject,
       html,

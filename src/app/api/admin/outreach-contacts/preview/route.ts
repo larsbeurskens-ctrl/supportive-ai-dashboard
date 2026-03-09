@@ -21,7 +21,7 @@ export async function POST(req: Request) {
   const { subject, html } = buildEmail(contact, trackingUrl, template);
 
   return Response.json({
-    from: "Lars from Supportive AI <lars@supportive-ai.com>",
+    from: "Lars Beurskens <lars@supportive-ai.com>",
     to: contact.email,
     subject,
     html,

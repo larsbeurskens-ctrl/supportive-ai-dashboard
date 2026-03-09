@@ -1,5 +1,5 @@
 // Outreach email templates — one per vertical + universal follow-up
-// All emails send from: Lars from Supportive AI <lars@supportive-ai.com>
+// All emails send from: Lars Beurskens <lars@supportive-ai.com>
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://supportive-ai.com";
 
