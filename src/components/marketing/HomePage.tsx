@@ -112,15 +112,14 @@ export function HomePage() {
       <section className="py-12 px-6 md:px-10 bg-[#faf9f7] border-t border-[#e5e0da]">
         <div className="max-w-[860px] mx-auto">
           <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
-            <div className="flex-shrink-0 w-full md:w-[300px]">
+            <div className="flex-shrink-0 w-full md:w-[280px]">
               <div className="bg-white rounded-2xl border border-[#e5e0da] p-6 text-center">
-                <div className="bg-white rounded-xl border border-[#e5e0da] p-4 mb-3">
-                  <p className="text-[22px] font-extrabold text-[#1a2e3b] tracking-tight">281.398.1700</p>
-                  <p className="text-[12px] text-[#94a7b8] mt-1">on your van, your cards, your Google listing</p>
-                </div>
-                <div className="flex items-center justify-center gap-2">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                  <p className="text-[14px] font-semibold text-[#059669]">Stays exactly the same</p>
+                <p className="text-[11px] font-semibold text-[#94a7b8] uppercase tracking-wider mb-2">Your number</p>
+                <p className="text-[26px] font-extrabold text-[#1a2e3b] tracking-tight mb-1">281.398.1700</p>
+                <p className="text-[12px] text-[#94a7b8] mb-4">on your van, your cards, your Google listing</p>
+                <div className="flex items-center justify-center gap-2 bg-[#ecfdf5] rounded-lg py-2 px-4">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                  <p className="text-[13px] font-semibold text-[#059669]">Stays exactly the same</p>
                 </div>
               </div>
             </div>
