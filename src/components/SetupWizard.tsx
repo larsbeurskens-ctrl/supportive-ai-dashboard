@@ -76,7 +76,7 @@ export default function SetupWizard() {
   const [phoneChoice, setPhoneChoice] = useState<'keep' | 'new' | ''>('');
   const [existingPhone, setExistingPhone] = useState('');
   const [pickupAfterHours, setPickupAfterHours] = useState(true);
-  const [pickupMissedCalls, setPickupMissedCalls] = useState(false);
+  const [pickupMissedCalls, setPickupMissedCalls] = useState(true);
   const [pickupAlwaysOn, setPickupAlwaysOn] = useState(false);
   const [areaCode, setAreaCode] = useState('');
   const [agentName, setAgentName] = useState('');
@@ -94,7 +94,7 @@ export default function SetupWizard() {
   const [state, setState] = useState('');
   const [serviceRadius, setServiceRadius] = useState('30');
   const [diagnosticFee, setDiagnosticFee] = useState('');
-  const [services, setServices] = useState('');
+  const [feeDeductible, setFeeDeductible] = useState(false);  const [services, setServices] = useState('');
   const [isLicensed, setIsLicensed] = useState(true);
   const [isInsured, setIsInsured] = useState(true);
   const [yearsExperience, setYearsExperience] = useState('');
@@ -128,6 +128,7 @@ export default function SetupWizard() {
     if (o.city) setCity(o.city);
     if (o.state) setState(o.state);
     if (o.diagnosticFee) setDiagnosticFee(o.diagnosticFee);
+    if (o.feeDeductible !== undefined) setFeeDeductible(o.feeDeductible);
     if (o.services) setServices(o.services);
     if (o.customFAQ) setCustomFAQ(o.customFAQ);
     if (o.yearsExperience) setYearsExperience(o.yearsExperience);
@@ -191,8 +192,8 @@ export default function SetupWizard() {
     } catch (err: any) {
       const msg = err?.message || String(err) || '';
       if (msg.includes('already provisioned')) window.location.reload();
-      else if (msg.includes('area code') || msg.includes('phone number') || msg.includes('not available') || msg.includes('Unable') || msg.includes('Twilio') || msg.includes('AvailablePhoneNumber')) setError('No numbers available for that area code. Try a nearby one (e.g. 346, 813, 404, 980).');
-      else setError(`Something went wrong: ${msg || 'Unknown error'}. Try a different area code.`);
+      else if (msg.includes('area code') || msg.includes('phone number') || msg.includes('not available') || msg.includes('Unable') || msg.includes('Twilio') || msg.includes('AvailablePhoneNumber')) setError(`No phone numbers available for area code ${areaCode || 'entered'}. Try a real US area code like 713 (Houston), 404 (Atlanta), or 845 (Hudson Valley).`);
+      else setError(`Something went wrong: ${msg || 'Provisioning failed'}. Try a different area code.`);
     } finally { setProvisioning(false); }
   }
 
@@ -206,7 +207,7 @@ export default function SetupWizard() {
         city: city.trim(), state: state.trim(),
         serviceRadius: parseInt(serviceRadius) || 30,
         diagnosticFee: diagnosticFee.trim(),
-        services: services.trim(), customFAQ: customFAQ.trim(),
+        feeDeductible,        services: services.trim(), customFAQ: customFAQ.trim(),
         isLicensed, isInsured,
         yearsExperience: yearsExperience.trim(),
         emergencyAvailability: emergencyService,
@@ -419,8 +420,8 @@ export default function SetupWizard() {
               <div className="bg-[#f0fdf4] rounded-xl p-4 flex items-start gap-3">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2" className="flex-shrink-0 mt-0.5"><path d="M20 6L9 17l-5-5"/></svg>
                 <div>
-                  <p className="text-[13px] font-semibold text-[#059669]">{displayName} is set up!</p>
-                  <p className="text-[13px] text-[#5a7184]">Number: <span className="font-bold text-[#1a2e3b]">{displayPhone}</span> — only you can call it until you go live.</p>
+                  <p className="text-[13px] font-semibold text-[#059669]">{displayName} is ready to test!</p>
+                  <p className="text-[13px] text-[#5a7184]">Test number: <span className="font-bold text-[#1a2e3b]">{displayPhone}</span> — call it to hear your AI in action. Nothing is live until you say so.</p>
                 </div>
               </div>
             )}
@@ -442,10 +443,10 @@ export default function SetupWizard() {
                   </div>
                   <div>
                     <label className="block text-sm font-semibold text-[#1a2e3b] mb-1">Your mobile <span className="text-red-500">*</span></label>
-                    <p className="text-[11px] text-[#94a7b8] mb-1">We text you when calls come in</p>
                     <input type="tel" value={ownerPhone} onChange={e => setOwnerPhone(e.target.value)}
                       placeholder="(555) 123-4567"
                       className="w-full px-4 py-2.5 border border-[#e5e0da] rounded-xl text-[14px] text-[#1a2e3b] focus:outline-none focus:ring-2 focus:ring-[#0d9488]" />
+                    <p className="text-[11px] text-[#94a7b8] mt-1">We text you when calls come in</p>
                   </div>
                 </div>
               </div>
@@ -510,6 +511,11 @@ export default function SetupWizard() {
                   <input type="text" value={diagnosticFee} onChange={e => setDiagnosticFee(e.target.value)}
                     placeholder={labels.feePlaceholder}
                     className="w-full px-4 py-2.5 border border-[#e5e0da] rounded-xl text-[14px] text-[#1a2e3b] focus:outline-none focus:ring-2 focus:ring-[#0d9488]" />
+                  <label className="flex items-center gap-2 mt-2 cursor-pointer">
+                    <input type="checkbox" checked={feeDeductible} onChange={e => setFeeDeductible(e.target.checked)}
+                      className="w-4 h-4 rounded border-[#e5e0da] text-[#0d9488] focus:ring-[#0d9488]" />
+                    <span className="text-[12px] text-[#5a7184]">Fee is deducted from the cost of work if customer proceeds</span>
+                  </label>
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-[#1a2e3b] mb-1">Services you offer</label>
