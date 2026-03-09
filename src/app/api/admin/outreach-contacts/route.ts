@@ -16,6 +16,7 @@ export async function GET(req: Request) {
   const url = new URL(req.url);
   const vertical = url.searchParams.get("vertical");
   const status = url.searchParams.get("status");
+  const sort = url.searchParams.get("sort") || "score"; // score | last_contact
   const limit = parseInt(url.searchParams.get("limit") || "100");
   const offset = parseInt(url.searchParams.get("offset") || "0");
 
@@ -23,10 +24,21 @@ export async function GET(req: Request) {
   if (vertical) where.vertical = vertical;
   if (status) where.status = status;
 
-  const [contacts, total, stats] = await Promise.all([
+  const orderBy = sort === "last_contact"
+    ? [{ lastContactedAt: "desc" as const }, { score: "desc" as const }]
+    : { score: "desc" as const };
+
+  const now = new Date();
+  const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+  const threeDaysAgo = new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000);
+
+  const [contacts, total, stats, emailFollowUps, callFollowUps] = await Promise.all([
     prisma.outreachContact.findMany({
-      where, orderBy: { score: "desc" }, take: limit, skip: offset,
-      include: { _count: { select: { activities: true } } },
+      where, orderBy, take: limit, skip: offset,
+      include: {
+        _count: { select: { activities: true } },
+        activities: { orderBy: { createdAt: "desc" }, take: 1 },
+      },
     }),
     prisma.outreachContact.count({ where }),
     prisma.$queryRaw`
@@ -41,6 +53,26 @@ export async function GET(req: Request) {
         COUNT(CASE WHEN status = 'signed_up' THEN 1 END) as signed_up
       FROM "OutreachContact"
     ` as Promise<Array<Record<string, bigint>>>,
+    // Email follow-ups: sent 7+ days ago, no activity since
+    prisma.outreachContact.findMany({
+      where: {
+        status: "sent",
+        sentAt: { lt: sevenDaysAgo },
+      },
+      orderBy: { sentAt: "asc" },
+      take: 20,
+      include: { _count: { select: { activities: true } } },
+    }),
+    // Call follow-ups: last activity was no_answer/voicemail 3+ days ago
+    prisma.outreachContact.findMany({
+      where: {
+        status: { in: ["called", "voicemail"] },
+        lastContactedAt: { lt: threeDaysAgo },
+      },
+      orderBy: { lastContactedAt: "asc" },
+      take: 20,
+      include: { _count: { select: { activities: true } } },
+    }),
   ]);
 
   const pipeline = stats[0];
@@ -56,6 +88,10 @@ export async function GET(req: Request) {
       interested: Number(pipeline.interested),
       not_interested: Number(pipeline.not_interested),
       signed_up: Number(pipeline.signed_up),
+    },
+    followUps: {
+      email: emailFollowUps,
+      call: callFollowUps,
     },
   });
 }

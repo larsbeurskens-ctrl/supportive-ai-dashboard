@@ -31,6 +31,7 @@ interface Contact {
   emailTemplate: string | null;
   notes: string | null;
   _count: { activities: number };
+  activities: Activity[];
 }
 
 interface Pipeline { total: number; unsent: number; sent: number; called: number; spoke: number; interested: number; not_interested: number; signed_up: number; }
@@ -78,7 +79,8 @@ export default function OutreachSendPage() {
   const [loading, setLoading] = useState(true);
   const [filterVertical, setFilterVertical] = useState('');
   const [filterStatus, setFilterStatus] = useState('');
-  const [sending, setSending] = useState<string | null>(null);
+  const [sortBy, setSortBy] = useState('score');
+  const [followUps, setFollowUps] = useState<{ email: Contact[]; call: Contact[] }>({ email: [], call: [] });  const [sending, setSending] = useState<string | null>(null);
   const [importing, setImporting] = useState(false);
   const [importResult, setImportResult] = useState<string | null>(null);
   const [page, setPage] = useState(0);
@@ -110,6 +112,7 @@ export default function OutreachSendPage() {
     const params = new URLSearchParams();
     if (filterVertical) params.set('vertical', filterVertical);
     if (filterStatus) params.set('status', filterStatus);
+    params.set('sort', sortBy);
     params.set('limit', String(PAGE_SIZE));
     params.set('offset', String(page * PAGE_SIZE));
     const res = await fetch(`/api/admin/outreach-contacts?${params}`);
@@ -118,9 +121,10 @@ export default function OutreachSendPage() {
       setContacts(data.contacts);
       setPipeline(data.pipeline);
       setTotal(data.total);
+      if (data.followUps) setFollowUps(data.followUps);
     }
     setLoading(false);
-  }, [filterVertical, filterStatus, page]);
+  }, [filterVertical, filterStatus, sortBy, page]);
 
   useEffect(() => { fetchContacts(); }, [fetchContacts]);
 
@@ -236,7 +240,7 @@ export default function OutreachSendPage() {
           <div className="bg-white rounded-2xl max-w-[440px] w-full" onClick={e => e.stopPropagation()}>
             <div className="px-6 py-4 border-b border-[#e5e0da]">
               <h3 className="text-[16px] font-bold text-[#1a2e3b]">Log call</h3>
-              <p className="text-[12px] text-[#94a7b8]">{contacts.find(c => c.id === logCallId)?.businessName}</p>
+              <p className="text-[12px] text-[#94a7b8]">{[...contacts, ...followUps.email, ...followUps.call].find(c => c.id === logCallId)?.businessName}</p>
             </div>
             <div className="px-6 py-4 space-y-4">
               <div>
@@ -322,7 +326,64 @@ export default function OutreachSendPage() {
           </div>
         ))}
       </div>
-      {/* Filters */}
+      {/* Follow-ups Due */}
+      {(followUps.email.length > 0 || followUps.call.length > 0) && (
+        <div className="mb-6 space-y-3">
+          {followUps.call.length > 0 && (
+            <div className="bg-[#fef3e0] border border-[#f59e0b] rounded-xl p-4">
+              <h3 className="text-[13px] font-bold text-[#92400e] mb-3">📞 Call-backs due ({followUps.call.length})</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+                {followUps.call.map(c => (
+                  <div key={c.id} className="bg-white rounded-lg px-3 py-2 flex items-center justify-between gap-2">
+                    <div className="min-w-0">
+                      <div className="text-[13px] font-semibold text-[#1a2e3b] truncate">{c.businessName}</div>
+                      <div className="text-[11px] text-[#94a7b8]">
+                        {c.status === 'voicemail' ? 'Left VM' : 'No answer'} · {c.lastContactedAt ? `${Math.floor((Date.now() - new Date(c.lastContactedAt).getTime()) / 86400000)}d ago` : ''}
+                      </div>
+                      {c.phone && <div className="text-[11px] text-[#5a7184]">{c.phone}</div>}
+                    </div>
+                    <button onClick={() => { setLogCallId(c.id); setLogOutcome('no_answer'); setLogNotes(''); }}
+                      className="bg-[#1a2e3b] text-white px-2.5 py-1 rounded-lg text-[11px] font-semibold hover:bg-[#243d4e] cursor-pointer border-none transition-colors flex-shrink-0">
+                      📞 Call
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+          {followUps.email.length > 0 && (
+            <div className="bg-[#eff6ff] border border-[#3b82f6] rounded-xl p-4">
+              <h3 className="text-[13px] font-bold text-[#1e40af] mb-3">✉️ Email follow-ups due ({followUps.email.length})</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+                {followUps.email.map(c => (
+                  <div key={c.id} className="bg-white rounded-lg px-3 py-2 flex items-center justify-between gap-2">
+                    <div className="min-w-0">
+                      <div className="text-[13px] font-semibold text-[#1a2e3b] truncate">{c.businessName}</div>
+                      <div className="text-[11px] text-[#94a7b8]">
+                        Emailed {c.sentAt ? `${Math.floor((Date.now() - new Date(c.sentAt).getTime()) / 86400000)}d ago` : ''} · no response
+                      </div>
+                    </div>
+                    <div className="flex gap-1.5 flex-shrink-0">
+                      {c.phone && (
+                        <button onClick={() => { setLogCallId(c.id); setLogOutcome('no_answer'); setLogNotes(''); }}
+                          className="bg-[#1a2e3b] text-white px-2.5 py-1 rounded-lg text-[11px] font-semibold hover:bg-[#243d4e] cursor-pointer border-none transition-colors">
+                          📞
+                        </button>
+                      )}
+                      <button onClick={() => handlePreview(c.id, 'follow_up')}
+                        className="bg-white text-[#1a2e3b] px-2.5 py-1 rounded-lg text-[11px] font-semibold border border-[#d1ccc6] hover:bg-[#f0eeeb] cursor-pointer transition-colors">
+                        Follow up
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Filters + Sort */}
       <div className="flex gap-3 mb-4">
         <select value={filterVertical} onChange={e => { setFilterVertical(e.target.value); setPage(0); }}
           className="px-3 py-2 rounded-lg border border-[#d1ccc6] text-[13px] text-[#1a2e3b] bg-white">
@@ -344,6 +405,17 @@ export default function OutreachSendPage() {
           <option value="not_interested">Not interested</option>
           <option value="signed_up">Signed up</option>
         </select>
+        <div className="ml-auto flex items-center gap-1.5">
+          <span className="text-[11px] text-[#94a7b8] font-medium">Sort:</span>
+          <button onClick={() => { setSortBy('score'); setPage(0); }}
+            className={`px-2.5 py-1.5 rounded-lg text-[12px] font-semibold cursor-pointer border transition-colors ${sortBy === 'score' ? 'bg-[#1a2e3b] text-white border-[#1a2e3b]' : 'bg-white text-[#5a7184] border-[#d1ccc6] hover:bg-[#f0eeeb]'}`}>
+            By score
+          </button>
+          <button onClick={() => { setSortBy('last_contact'); setPage(0); }}
+            className={`px-2.5 py-1.5 rounded-lg text-[12px] font-semibold cursor-pointer border transition-colors ${sortBy === 'last_contact' ? 'bg-[#1a2e3b] text-white border-[#1a2e3b]' : 'bg-white text-[#5a7184] border-[#d1ccc6] hover:bg-[#f0eeeb]'}`}>
+            By last contact
+          </button>
+        </div>
       </div>
 
       {/* Contacts Table */}
@@ -371,6 +443,7 @@ export default function OutreachSendPage() {
                       onClick={() => toggleExpand(c.id)}>{c.businessName || '—'}</div>
                     {c.painSignal && <div className="text-[11px] text-[#e8930c] mt-0.5">🔥 {c.painSignal}</div>}
                     {c.lastContactedAt && <div className="text-[10px] text-[#94a7b8] mt-0.5">Last contact: {timeAgo(c.lastContactedAt)}</div>}
+                    {c.activities?.[0]?.notes && <div className="text-[10px] text-[#5a7184] mt-0.5 italic truncate max-w-[200px]">&ldquo;{c.activities[0].notes}&rdquo;</div>}
                     {c._count.activities > 0 && <div className="text-[10px] text-[#94a7b8]">{c._count.activities} interaction{c._count.activities !== 1 ? 's' : ''}</div>}
                   </td>
                   <td className="px-4 py-3 align-top">
