@@ -70,7 +70,7 @@ export async function POST(req: Request) {
     });
 
     // 4. Build callback URL (matches NextAuth's email callback format)
-    const baseUrl = process.env.NEXTAUTH_URL || (process.env.VERCEL_URL
+    const baseUrl = process.env.AUTH_URL || process.env.NEXTAUTH_URL || (process.env.VERCEL_URL
       ? `https://${process.env.VERCEL_URL}`
       : "http://localhost:3000");
     const params = new URLSearchParams({
