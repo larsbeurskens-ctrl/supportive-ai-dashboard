@@ -686,51 +686,21 @@ export default function SetupWizard() {
               </div>
             </div>
 
-            {/* Activate agent — based on their step 1 choice */}
+            {/* What happens when you go live */}
             <div className="border-t border-[#f0eeeb] pt-4">
               {(() => {
                 const rules = (status as any).pickupRules || { afterHours: true, missedCalls: true, alwaysOn: false };
-                const isAlwaysOn = rules.alwaysOn;
-                const ruleLabels: string[] = [];
-                if (rules.afterHours) ruleLabels.push('after hours');
-                if (rules.missedCalls) ruleLabels.push('when you miss a call');
-                if (rules.alwaysOn) ruleLabels.push('every call');
-                const ruleText = ruleLabels.join(' and ');
-                const phoneNum = status.phoneNumber?.replace('+1', '') || '';
+                const parts: string[] = [];
+                if (rules.afterHours) parts.push('after hours');
+                if (rules.missedCalls) parts.push('when you miss a call');
+                if (rules.alwaysOn) parts.push('on every call');
+                const ruleText = parts.join(' and ');
                 return (
                   <>
-                    <h3 className="text-[13px] font-bold text-[#1a2e3b] mb-1">📱 Activate {displayName}</h3>
-                    <div className="bg-[#eff6ff] rounded-xl p-3 mb-4">
-                      <p className="text-[13px] text-[#1e40af] font-medium">Your setting: {displayName} will pick up <strong>{ruleText}</strong></p>
+                    <div className="bg-[#eff6ff] rounded-xl p-4 mb-4">
+                      <p className="text-[14px] text-[#1e40af]"><strong>When you go live:</strong> {displayName} will pick up <strong>{ruleText}</strong>.</p>
+                      <p className="text-[12px] text-[#3b82f6] mt-1">You can change this anytime from <a href="/dashboard/setup" className="underline">Call Settings</a>.</p>
                     </div>
-                    <p className="text-[13px] text-[#5a7184] mb-4">
-                      Dial this code from your business phone to connect {displayName}. One step — takes 5 seconds.
-                    </p>
-
-                    {/* Active option */}
-                    <div className="bg-[#f0fdf4] rounded-xl p-4 border-2 border-[#0d9488] mb-3">
-                      <div className="flex items-center gap-2 mb-1">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2"><path d="M20 6L9 17l-5-5"/></svg>
-                        <p className="text-[13px] font-semibold text-[#059669]">{isAlwaysOn ? 'Forward all calls' : 'Forward unanswered calls'} — your selection</p>
-                      </div>
-                      <p className="text-[12px] text-[#5a7184] mt-0.5 ml-6">{isAlwaysOn ? `Every call goes straight to ${displayName}. Your phone won't ring.` : `Your phone rings first. If you don't pick up, ${displayName} answers. Works for both missed calls during the day and after-hours.`}</p>
-                      <div className="mt-2.5 ml-6">
-                        <p className="text-[14px] text-[#1a2e3b]">
-                          Dial <code className="bg-white px-2 py-1 rounded text-[#1a2e3b] font-bold text-[16px] border border-[#d1ccc6]">{isAlwaysOn ? '*72' : '*71'}{phoneNum}</code> from your phone
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Gray alternative */}
-                    <div className="bg-[#faf9f7] rounded-xl p-4 border border-[#e5e0da] opacity-60">
-                      <p className="text-[12px] font-semibold text-[#94a7b8]">{isAlwaysOn ? 'Or forward unanswered only' : 'Or forward all calls'}</p>
-                      <p className="text-[11px] text-[#94a7b8] mt-0.5">{isAlwaysOn ? 'If you change your mind and want your phone to ring first.' : 'If you want every call to go straight to the AI.'}</p>
-                      <p className="text-[11px] text-[#94a7b8] mt-1.5">Dial <code className="bg-[#e5e0da] px-1 py-0.5 rounded text-[#94a7b8] font-semibold">{isAlwaysOn ? '*71' : '*72'}{phoneNum}</code></p>
-                    </div>
-
-                    <p className="text-[11px] text-[#94a7b8] mt-3">
-                      To disconnect {displayName}, dial <code className="bg-[#e5e0da] px-1 py-0.5 rounded text-[#94a7b8] font-semibold">*73</code> from your phone. Works for most US carriers.
-                    </p>
                   </>
                 );
               })()}
