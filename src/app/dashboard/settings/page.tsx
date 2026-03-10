@@ -159,6 +159,50 @@ export default function SettingsPage() {
         </div>
       </div>
 
+      {/* Plan & subscription */}
+      {status && (() => {
+        const planLabels: Record<string, string> = { starter: 'Starter', standard: 'Standard', business: 'Business' };
+        const planPrices: Record<string, string> = { starter: '$89/mo', standard: '$149/mo', business: '$299/mo' };
+        const plan = (status as any).selectedPlan || 'starter';
+        const tier = (status as any).subscriptionTier || 'trial';
+        const liveSince = typeof window !== 'undefined' ? localStorage.getItem('agent_live_since') : null;
+        const daysLeft = liveSince ? Math.max(0, 7 - Math.floor((Date.now() - new Date(liveSince).getTime()) / (1000 * 60 * 60 * 24))) : null;
+        const expired = daysLeft !== null && daysLeft <= 0;
+
+        return (
+          <div className={`rounded-xl border p-5 ${expired ? 'bg-[#fef2f2] border-[#fecaca]' : 'bg-white border-[#e5e0da]'}`}>
+            <div className="flex items-center justify-between">
+              <div>
+                <div className="flex items-center gap-2 mb-1">
+                  <h2 className="text-[15px] font-bold text-[#1a2e3b]">Your plan</h2>
+                  <span className={`text-[11px] font-bold px-2 py-0.5 rounded-full ${
+                    expired ? 'bg-[#fecaca] text-[#991b1b]' : tier === 'trial' ? 'bg-[#dbeafe] text-[#1e40af]' : 'bg-[#d1fae5] text-[#065f46]'
+                  }`}>
+                    {expired ? 'Trial ended' : tier === 'trial' ? 'Free trial' : 'Active'}
+                  </span>
+                </div>
+                <p className="text-[14px] text-[#1a2e3b]">
+                  <strong>{planLabels[plan] || 'Starter'}</strong> — {planPrices[plan] || '$89/mo'}
+                  {daysLeft !== null && !expired && (
+                    <span className="text-[#5a7184] ml-1">· {daysLeft} day{daysLeft !== 1 ? 's' : ''} left on trial</span>
+                  )}
+                </p>
+              </div>
+              {expired ? (
+                <a href="https://cal.com/lars-beurskens-g1aaqy/15min" target="_blank" rel="noopener noreferrer"
+                  className="px-4 py-2 bg-[#e8930c] text-white text-[13px] font-bold rounded-lg no-underline hover:bg-[#d17f00]">
+                  Set up billing →
+                </a>
+              ) : (
+                <a href="/#pricing" className="text-[13px] text-[#0d9488] font-semibold no-underline hover:underline">
+                  Compare plans
+                </a>
+              )}
+            </div>
+          </div>
+        );
+      })()}
+
       {/* Pricing — the main event */}
       <div className="bg-white rounded-xl border border-[#e5e0da] p-6">
         <div className="flex items-center gap-2.5 mb-1">

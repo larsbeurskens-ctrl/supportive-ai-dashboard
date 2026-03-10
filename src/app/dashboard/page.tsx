@@ -64,6 +64,8 @@ export default function DashboardPage() {
   const [agentPhone, setAgentPhone] = useState('');
   const [pickupRulesText, setPickupRulesText] = useState('');
   const [showLiveBanner, setShowLiveBanner] = useState(false);
+  const [trialDaysLeft, setTrialDaysLeft] = useState<number | null>(null);
+  const [selectedPlan, setSelectedPlan] = useState('');
 
   useEffect(() => {
     async function fetchData() {
@@ -91,11 +93,20 @@ export default function DashboardPage() {
             if (rules.missedCalls) parts.push('after 4 rings');
             if (rules.alwaysOn) parts.push('on every call');
             setPickupRulesText(parts.join(' and '));
-            // Track dashboard visits since going live — show banner for first 5
+            // Plan info
+            setSelectedPlan((status as any).selectedPlan || 'starter');
+            // Calculate trial days remaining (7-day trial from createdAt)
+            const liveSince = localStorage.getItem('agent_live_since');
+            if (liveSince) {
+              const daysSinceLive = Math.floor((Date.now() - new Date(liveSince).getTime()) / (1000 * 60 * 60 * 24));
+              const daysLeft = Math.max(0, 7 - daysSinceLive);
+              setTrialDaysLeft(daysLeft);
+            }
+            // Show banner for first 10 days
             const key = 'dashboard_live_visits';
             const visits = parseInt(localStorage.getItem(key) || '0') + 1;
             localStorage.setItem(key, String(visits));
-            if (visits <= 5) setShowLiveBanner(true);
+            setShowLiveBanner(true); // Always show when live during trial
           }
         } catch { /* not provisioned yet */ }
       } catch (err) {
@@ -144,20 +155,54 @@ export default function DashboardPage() {
         <p className="text-[13px] text-[#94a7b8] mt-1">{isDemo && !loading ? 'Get your AI receptionist set up' : 'Last 7 days overview'}</p>
       </div>
 
-      {/* Live agent banner — shows for first 5 dashboard visits after going live */}
-      {showLiveBanner && !loading && (
-        <div className="bg-[#f0fdf4] rounded-2xl border border-[#bbf7d0] p-5 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-3 h-3 bg-[#22c55e] rounded-full animate-pulse" />
-            <div>
-              <p className="text-[15px] font-bold text-[#0f172a]">{agentName} is live — picking up {pickupRulesText || 'your calls'}</p>
-              <p className="text-[13px] text-[#64748b]">{agentPhone}</p>
+      {/* Live agent banner — evolves over trial period */}
+      {showLiveBanner && !loading && (() => {
+        const planLabels: Record<string, string> = { starter: 'Starter — $89/mo', standard: 'Standard — $149/mo', business: 'Business — $299/mo' };
+        const planLabel = planLabels[selectedPlan] || 'Starter — $89/mo';
+        const trialExpired = trialDaysLeft !== null && trialDaysLeft <= 0;
+        const trialUrgent = trialDaysLeft !== null && trialDaysLeft <= 2 && !trialExpired;
+
+        if (trialExpired) {
+          return (
+            <div className="bg-[#fef2f2] rounded-2xl border border-[#fecaca] p-5">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-[15px] font-bold text-[#991b1b]">Your 7-day trial has ended</p>
+                  <p className="text-[13px] text-[#dc2626] mt-0.5">Add your payment details to keep {agentName} running. Your plan: {planLabel}.</p>
+                </div>
+                <a href="https://cal.com/lars-beurskens-g1aaqy/15min" target="_blank" rel="noopener noreferrer"
+                  className="px-5 py-2.5 bg-[#e8930c] text-white text-[13px] font-bold rounded-xl no-underline hover:bg-[#d17f00] flex-shrink-0">
+                  Set up billing →
+                </a>
+              </div>
             </div>
+          );
+        }
+
+        return (
+          <div className={`rounded-2xl border p-5 flex items-center justify-between ${trialUrgent ? 'bg-[#fef8f0] border-[#f0dcc0]' : 'bg-[#f0fdf4] border-[#bbf7d0]'}`}>
+            <div className="flex items-center gap-3">
+              <div className={`w-3 h-3 rounded-full animate-pulse ${trialUrgent ? 'bg-[#d97706]' : 'bg-[#22c55e]'}`} />
+              <div>
+                <p className="text-[15px] font-bold text-[#0f172a]">
+                  {agentName} is live — picking up {pickupRulesText || 'your calls'}
+                </p>
+                <p className="text-[13px] text-[#64748b]">
+                  {agentPhone}
+                  {trialDaysLeft !== null && (
+                    <span className={`ml-2 font-semibold ${trialUrgent ? 'text-[#d97706]' : 'text-[#059669]'}`}>
+                      · {trialDaysLeft} day{trialDaysLeft !== 1 ? 's' : ''} left on free trial
+                      {trialUrgent ? ' — add payment to continue' : ''}
+                    </span>
+                  )}
+                </p>
+              </div>
+            </div>
+            <button onClick={() => setShowLiveBanner(false)}
+              className="text-[#94a7b8] hover:text-[#5a7184] bg-transparent border-none cursor-pointer text-lg px-2">×</button>
           </div>
-          <button onClick={() => setShowLiveBanner(false)}
-            className="text-[#94a7b8] hover:text-[#5a7184] bg-transparent border-none cursor-pointer text-lg px-2">×</button>
-        </div>
-      )}
+        );
+      })()}
 
       {error && (
         <div className="bg-[#fef2f2] text-[#991b1b] p-4 rounded-xl text-sm font-medium">{error}</div>

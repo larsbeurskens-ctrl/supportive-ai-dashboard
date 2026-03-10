@@ -775,7 +775,7 @@ export default function SetupWizard() {
                           <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
                           Going live...
                         </span>
-                      ) : `🚀 Go live — start receiving real calls`}
+                      ) : `🚀 Go live — start your 7-day free trial`}
                     </button>
                     {!canGoLive && requiredDone && isKeepNumber && !selectedCarrier && (
                       <p className="text-[12px] text-[#94a7b8] text-center mt-2">Select your carrier and dial the code above to go live</p>
