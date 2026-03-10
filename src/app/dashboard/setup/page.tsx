@@ -12,6 +12,23 @@ const CARRIER_CODES: Record<string, { noAnswer: string; all: string; disable: st
   'Landline': { noAnswer: '*92{NUM}', all: '*72{NUM}', disable: '*73' },
 };
 
+function Toggle({ enabled, onChange, label, description }: { 
+  enabled: boolean; onChange: (v: boolean) => void; label: string; description: string 
+}) {
+  return (
+    <div className={`flex items-center justify-between p-4 rounded-xl border-2 transition-all ${enabled ? 'border-[#0d9488] bg-[#f0fdf4]' : 'border-[#e5e0da] bg-white'}`}>
+      <div className="flex-1 mr-4">
+        <p className="text-[14px] font-bold text-[#1a2e3b]">{label}</p>
+        <p className="text-[12px] text-[#5a7184] mt-0.5">{description}</p>
+      </div>
+      <button onClick={() => onChange(!enabled)}
+        className={`relative w-12 h-7 rounded-full transition-colors cursor-pointer border-none flex-shrink-0 ${enabled ? 'bg-[#0d9488]' : 'bg-[#d1ccc6]'}`}>
+        <span className={`absolute top-0.5 w-6 h-6 bg-white rounded-full shadow transition-all ${enabled ? 'left-[22px]' : 'left-0.5'}`} />
+      </button>
+    </div>
+  );
+}
+
 export default function CallSettingsPage() {
   const [status, setStatus] = useState<ProvisionStatus | null>(null);
   const [loading, setLoading] = useState(true);
@@ -20,8 +37,6 @@ export default function CallSettingsPage() {
   const [goingLive, setGoingLive] = useState(false);
   const [selectedCarrier, setSelectedCarrier] = useState('');
   const [showCarrierCodes, setShowCarrierCodes] = useState(false);
-
-  // Pickup rules state
   const [afterHours, setAfterHours] = useState(true);
   const [missedCalls, setMissedCalls] = useState(true);
   const [alwaysOn, setAlwaysOn] = useState(false);
@@ -34,7 +49,7 @@ export default function CallSettingsPage() {
       setAfterHours(rules.afterHours ?? true);
       setMissedCalls(rules.missedCalls ?? true);
       setAlwaysOn(rules.alwaysOn ?? false);
-    } catch { /* not provisioned */ }
+    } catch { /* */ }
     setLoading(false);
   }, []);
 
@@ -43,6 +58,13 @@ export default function CallSettingsPage() {
   const agentName = status?.agentName || 'your AI';
   const phoneNum = status?.phoneNumber?.replace('+1', '') || '';
   const isLive = status?.isLive || false;
+
+  // Build human-readable status
+  const activeRules: string[] = [];
+  if (afterHours) activeRules.push('after hours');
+  if (missedCalls) activeRules.push('after 4 rings');
+  if (alwaysOn) activeRules.push('on every call');
+  const rulesText = activeRules.length > 0 ? activeRules.join(' and ') : 'not configured';
 
   async function handleSaveRules() {
     setSaving(true); setSaved(false);
@@ -58,10 +80,6 @@ export default function CallSettingsPage() {
     setGoingLive(true);
     try {
       if (isLive) {
-        // Disable — set isLive to false via backend
-        const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'https://supportive-ai-backend-production.up.railway.app';
-        await fetch(`${API_BASE}/api/businesses/${(status as any)?.checklist ? 'go-offline' : 'go-offline'}`, { method: 'POST' });
-        // Fallback: use saveBusinessDetails
         await saveBusinessDetails({ agentDisabled: true });
       } else {
         await goLive();
@@ -72,20 +90,10 @@ export default function CallSettingsPage() {
   }
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center py-20">
-        <div className="w-6 h-6 border-2 border-[#0d9488] border-t-transparent rounded-full animate-spin" />
-      </div>
-    );
+    return <div className="flex items-center justify-center py-20"><div className="w-6 h-6 border-2 border-[#0d9488] border-t-transparent rounded-full animate-spin" /></div>;
   }
-
   if (!status?.provisioned) {
-    return (
-      <div className="space-y-4">
-        <h1 className="text-[22px] font-bold text-[#1a2e3b]">Call Settings</h1>
-        <p className="text-[14px] text-[#5a7184]">Complete your setup first to configure call settings.</p>
-      </div>
-    );
+    return <div className="space-y-4"><h1 className="text-[22px] font-bold text-[#1a2e3b]">Call Settings</h1><p className="text-[14px] text-[#5a7184]">Complete your setup first to configure call settings.</p></div>;
   }
 
   const carrier = CARRIER_CODES[selectedCarrier];
@@ -99,64 +107,44 @@ export default function CallSettingsPage() {
         <p className="text-[14px] text-[#5a7184] mt-1">Control when and how {agentName} answers your calls.</p>
       </div>
 
-      {/* Agent status */}
+      {/* Agent status — prominent */}
       <div className={`rounded-xl border-2 p-5 ${isLive ? 'bg-[#f0fdf4] border-[#86efac]' : 'bg-[#fef8f0] border-[#f0dcc0]'}`}>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className={`w-3 h-3 rounded-full ${isLive ? 'bg-[#22c55e] animate-pulse' : 'bg-[#d97706]'}`} />
             <div>
               <p className="text-[15px] font-bold text-[#1a2e3b]">
-                {isLive ? `${agentName} is live` : `${agentName} is paused`}
+                {isLive ? `${agentName} is live — picking up ${rulesText}` : `${agentName} is paused`}
               </p>
               <p className="text-[13px] text-[#5a7184]">
-                {isLive ? `Answering calls at ${status?.phoneNumber || ''}` : 'Not answering calls right now'}
+                {isLive ? `Answering at ${status?.phoneNumber || ''}` : 'Not answering calls right now'}
               </p>
             </div>
           </div>
-          <button
-            onClick={handleToggleLive}
-            disabled={goingLive}
+          <button onClick={handleToggleLive} disabled={goingLive}
             className={`px-5 py-2.5 rounded-xl text-[13px] font-bold transition-colors cursor-pointer border-none ${
-              isLive
-                ? 'bg-[#fef2f2] text-[#dc2626] hover:bg-[#fee2e2]'
-                : 'bg-[#22c55e] text-white hover:bg-[#16a34a]'
-            }`}
-          >
+              isLive ? 'bg-[#fef2f2] text-[#dc2626] hover:bg-[#fee2e2]' : 'bg-[#22c55e] text-white hover:bg-[#16a34a]'
+            }`}>
             {goingLive ? 'Updating...' : isLive ? 'Pause agent' : 'Enable agent'}
           </button>
         </div>
       </div>
 
-      {/* Pickup rules */}
+      {/* Pickup rules — toggles */}
       <div className="bg-white rounded-xl border border-[#e5e0da] p-6">
-        <h2 className="text-[15px] font-bold text-[#1a2e3b] mb-1">When should {agentName} answer?</h2>
-        <p className="text-[13px] text-[#94a7b8] mb-4">Select all that apply — you can change this anytime.</p>
+        <h2 className="text-[15px] font-bold text-[#1a2e3b] mb-1">{agentName} picks up when:</h2>
+        <p className="text-[13px] text-[#94a7b8] mb-4">Toggle on/off — changes take effect immediately after saving.</p>
 
-        <div className="space-y-2.5 mb-5">
-          <label className={`flex items-start gap-3 p-3.5 rounded-xl border-2 cursor-pointer transition-all ${afterHours ? 'border-[#0d9488] bg-[#f0fdf4]' : 'border-[#e5e0da] bg-white'}`}>
-            <input type="checkbox" checked={afterHours} onChange={e => setAfterHours(e.target.checked)}
-              className="w-5 h-5 rounded border-[#d1ccc6] text-[#0d9488] focus:ring-[#0d9488] mt-0.5 flex-shrink-0" />
-            <div>
-              <span className="text-[14px] font-bold text-[#1a2e3b]">After hours</span>
-              <p className="text-[12px] text-[#5a7184] mt-0.5">Evenings, weekends, holidays — when you&apos;re off the clock.</p>
-            </div>
-          </label>
-          <label className={`flex items-start gap-3 p-3.5 rounded-xl border-2 cursor-pointer transition-all ${missedCalls ? 'border-[#0d9488] bg-[#f0fdf4]' : 'border-[#e5e0da] bg-white'}`}>
-            <input type="checkbox" checked={missedCalls} onChange={e => setMissedCalls(e.target.checked)}
-              className="w-5 h-5 rounded border-[#d1ccc6] text-[#0d9488] focus:ring-[#0d9488] mt-0.5 flex-shrink-0" />
-            <div>
-              <span className="text-[14px] font-bold text-[#1a2e3b]">When I miss a call</span>
-              <p className="text-[12px] text-[#5a7184] mt-0.5">Your phone rings first. After 4 rings, {agentName} picks up.</p>
-            </div>
-          </label>
-          <label className={`flex items-start gap-3 p-3.5 rounded-xl border-2 cursor-pointer transition-all ${alwaysOn ? 'border-[#0d9488] bg-[#f0fdf4]' : 'border-[#e5e0da] bg-white'}`}>
-            <input type="checkbox" checked={alwaysOn} onChange={e => setAlwaysOn(e.target.checked)}
-              className="w-5 h-5 rounded border-[#d1ccc6] text-[#0d9488] focus:ring-[#0d9488] mt-0.5 flex-shrink-0" />
-            <div>
-              <span className="text-[14px] font-bold text-[#1a2e3b]">Always on</span>
-              <p className="text-[12px] text-[#5a7184] mt-0.5">{agentName} answers every call. Urgent ones get forwarded to you.</p>
-            </div>
-          </label>
+        <div className="space-y-3 mb-5">
+          <Toggle enabled={afterHours} onChange={setAfterHours}
+            label="After hours"
+            description="Evenings, weekends, holidays — when you're off the clock." />
+          <Toggle enabled={missedCalls} onChange={setMissedCalls}
+            label="When I miss a call"
+            description={`Your phone rings first. After 4 rings, ${agentName} picks up.`} />
+          <Toggle enabled={alwaysOn} onChange={setAlwaysOn}
+            label="Always on"
+            description={`${agentName} answers every call. Urgent ones get forwarded to you.`} />
         </div>
 
         <div className="flex items-center gap-3">
@@ -177,14 +165,11 @@ export default function CallSettingsPage() {
             <p className="text-[13px] text-[#94a7b8]">Carrier-specific codes to connect your phone to {agentName}</p>
           </div>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94a7b8" strokeWidth="2"
-            className={`transition-transform ${showCarrierCodes ? 'rotate-180' : ''}`}>
-            <path d="M6 9l6 6 6-6"/>
-          </svg>
+            className={`transition-transform ${showCarrierCodes ? 'rotate-180' : ''}`}><path d="M6 9l6 6 6-6"/></svg>
         </button>
-
         {showCarrierCodes && (
           <div className="mt-4 pt-4 border-t border-[#f0eeeb]">
-            <p className="text-[13px] text-[#5a7184] mb-3">Select your carrier to see the dial code:</p>
+            <p className="text-[13px] text-[#5a7184] mb-3">Select your carrier:</p>
             <div className="flex flex-wrap gap-2 mb-4">
               {Object.keys(CARRIER_CODES).map(name => (
                 <button key={name} onClick={() => setSelectedCarrier(name)}
@@ -193,16 +178,15 @@ export default function CallSettingsPage() {
                   }`}>{name}</button>
               ))}
             </div>
-
             {carrier && (
               <div className="space-y-3">
                 <div className="bg-[#f0fdf4] rounded-xl p-4 border border-[#86efac]">
-                  <p className="text-[12px] font-semibold text-[#059669] mb-1">To connect {agentName} to your phone:</p>
+                  <p className="text-[12px] font-semibold text-[#059669] mb-1">To connect {agentName}:</p>
                   <p className="text-[18px] font-bold text-[#1a2e3b] font-mono">{dialCode}</p>
-                  <p className="text-[11px] text-[#5a7184] mt-1">Dial this from your business phone, wait for the tone, then hang up.</p>
+                  <p className="text-[11px] text-[#5a7184] mt-1">Dial from your phone, wait for the tone, hang up.</p>
                 </div>
                 <div className="bg-[#faf9f7] rounded-xl p-4 border border-[#e5e0da]">
-                  <p className="text-[12px] font-semibold text-[#94a7b8] mb-1">To disconnect (pause {agentName}):</p>
+                  <p className="text-[12px] font-semibold text-[#94a7b8] mb-1">To disconnect {agentName}:</p>
                   <p className="text-[16px] font-bold text-[#94a7b8] font-mono">{disableCode}</p>
                 </div>
               </div>
