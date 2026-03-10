@@ -60,6 +60,10 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isLive, setIsLive] = useState(false);
+  const [agentName, setAgentName] = useState('');
+  const [agentPhone, setAgentPhone] = useState('');
+  const [pickupRulesText, setPickupRulesText] = useState('');
+  const [showLiveBanner, setShowLiveBanner] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
@@ -75,7 +79,24 @@ export default function DashboardPage() {
         try {
           const { getProvisionStatus } = await import('@/lib/api');
           const status = await getProvisionStatus();
-          setIsLive(status.isLive || false);
+          const live = status.isLive || false;
+          setIsLive(live);
+          setAgentName(status.agentName || '');
+          setAgentPhone(status.phoneNumber || '');
+          if (live) {
+            // Build pickup rules text
+            const rules = (status as any).pickupRules || { afterHours: true, missedCalls: true };
+            const parts: string[] = [];
+            if (rules.afterHours) parts.push('after hours');
+            if (rules.missedCalls) parts.push('after 4 rings');
+            if (rules.alwaysOn) parts.push('on every call');
+            setPickupRulesText(parts.join(' and '));
+            // Track dashboard visits since going live — show banner for first 5
+            const key = 'dashboard_live_visits';
+            const visits = parseInt(localStorage.getItem(key) || '0') + 1;
+            localStorage.setItem(key, String(visits));
+            if (visits <= 5) setShowLiveBanner(true);
+          }
         } catch { /* not provisioned yet */ }
       } catch (err) {
         console.error('Failed to fetch dashboard data:', err);
@@ -122,6 +143,21 @@ export default function DashboardPage() {
         <h1 className="text-[22px] font-bold text-[#1a2e3b]">{isDemo && !loading ? 'Onboarding' : 'Dashboard'}</h1>
         <p className="text-[13px] text-[#94a7b8] mt-1">{isDemo && !loading ? 'Get your AI receptionist set up' : 'Last 7 days overview'}</p>
       </div>
+
+      {/* Live agent banner — shows for first 5 dashboard visits after going live */}
+      {showLiveBanner && !loading && (
+        <div className="bg-[#f0fdf4] rounded-2xl border border-[#bbf7d0] p-5 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-3 h-3 bg-[#22c55e] rounded-full animate-pulse" />
+            <div>
+              <p className="text-[15px] font-bold text-[#0f172a]">{agentName} is live — picking up {pickupRulesText || 'your calls'}</p>
+              <p className="text-[13px] text-[#64748b]">{agentPhone}</p>
+            </div>
+          </div>
+          <button onClick={() => setShowLiveBanner(false)}
+            className="text-[#94a7b8] hover:text-[#5a7184] bg-transparent border-none cursor-pointer text-lg px-2">×</button>
+        </div>
+      )}
 
       {error && (
         <div className="bg-[#fef2f2] text-[#991b1b] p-4 rounded-xl text-sm font-medium">{error}</div>
