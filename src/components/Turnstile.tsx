@@ -22,21 +22,27 @@ interface TurnstileProps {
 export default function Turnstile({ onVerify, onError, onExpire }: TurnstileProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const widgetIdRef = useRef<string | null>(null);
+  const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
 
   const renderWidget = useCallback(() => {
-    if (!containerRef.current || !window.turnstile || widgetIdRef.current) return;
-    widgetIdRef.current = window.turnstile.render(containerRef.current, {
-      sitekey: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY,
-      callback: onVerify,
-      'error-callback': onError,
-      'expired-callback': onExpire,
-      size: 'invisible',
-      theme: 'light',
-    });
-  }, [onVerify, onError, onExpire]);
+    if (!containerRef.current || !window.turnstile || widgetIdRef.current || !siteKey) return;
+    try {
+      widgetIdRef.current = window.turnstile.render(containerRef.current, {
+        sitekey: siteKey,
+        callback: onVerify,
+        'error-callback': onError,
+        'expired-callback': onExpire,
+        size: 'invisible',
+        theme: 'light',
+      });
+    } catch (e) {
+      console.error('[Turnstile] Render failed:', e);
+    }
+  }, [onVerify, onError, onExpire, siteKey]);
 
   useEffect(() => {
-    // Load Turnstile script if not present
+    // Skip if no site key configured
+    if (!siteKey) return;
     if (!document.querySelector('script[src*="turnstile"]')) {
       const script = document.createElement('script');
       script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onTurnstileLoad';

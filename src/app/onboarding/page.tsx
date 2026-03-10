@@ -1,10 +1,39 @@
 'use client';
 
-import { useState, useCallback, Suspense } from 'react';
+import { useState, useCallback, Suspense, Component, type ReactNode } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Logo } from '@/components/Logo';
 import Turnstile from '@/components/Turnstile';
+
+// Error boundary to catch client-side crashes
+class OnboardingErrorBoundary extends Component<{ children: ReactNode }, { hasError: boolean; error: string }> {
+  constructor(props: { children: ReactNode }) {
+    super(props);
+    this.state = { hasError: false, error: '' };
+  }
+  static getDerivedStateFromError(error: Error) {
+    return { hasError: true, error: error.message };
+  }
+  componentDidCatch(error: Error) {
+    console.error('[Onboarding] Client error:', error);
+  }
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="min-h-screen bg-[#faf9f7] flex items-center justify-center px-6">
+          <div className="text-center max-w-md">
+            <h1 className="text-2xl font-bold text-[#1a2e3b] mb-3">Something went wrong</h1>
+            <p className="text-[#5a7184] mb-4">We hit a snag loading the signup page. Try refreshing.</p>
+            <p className="text-xs text-red-400 mb-6 font-mono">{this.state.error}</p>
+            <a href="/onboarding" className="bg-[#e8930c] text-white px-6 py-3 rounded-lg font-bold no-underline">Try again</a>
+          </div>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
 
 const TRADES = [
   { value: 'window_cleaning', label: 'Window Cleaning' },
@@ -20,9 +49,11 @@ const PLAN_LABELS: Record<string, string> = {
 
 export default function OnboardingPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-[#faf9f7] flex items-center justify-center"><div className="w-6 h-6 border-2 border-[#e8930c] border-t-transparent rounded-full animate-spin" /></div>}>
-      <OnboardingForm />
-    </Suspense>
+    <OnboardingErrorBoundary>
+      <Suspense fallback={<div className="min-h-screen bg-[#faf9f7] flex items-center justify-center"><div className="w-6 h-6 border-2 border-[#e8930c] border-t-transparent rounded-full animate-spin" /></div>}>
+        <OnboardingForm />
+      </Suspense>
+    </OnboardingErrorBoundary>
   );
 }
 
