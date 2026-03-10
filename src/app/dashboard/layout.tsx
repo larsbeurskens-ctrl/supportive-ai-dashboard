@@ -18,7 +18,7 @@ const navItems = [
   { href: '/dashboard/bookings', label: 'Bookings', icon: CalendarIcon },
   { href: '/dashboard/invoices', label: 'Invoices', icon: DollarIcon },
   { href: '/dashboard/customers', label: 'Customers', icon: UsersIcon },
-  { href: '/dashboard/setup', label: 'Call Forwarding', icon: PhoneIcon },
+  { href: '/dashboard/setup', label: 'Call Settings', icon: PhoneIcon },
   { href: '/dashboard/settings', label: 'Settings', icon: SettingsIcon },
 ];
 

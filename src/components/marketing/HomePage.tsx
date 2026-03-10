@@ -149,7 +149,7 @@ export function HomePage() {
                 ))}
               </div>
               <p className="text-[13px] text-[#94a7b8] mt-3">
-                Set up call forwarding yourself — takes one short code from your phone. No tech needed.
+                Connect your phone yourself — one short code, takes 5 seconds. No tech needed.
               </p>
             </div>
           </div>
@@ -473,7 +473,7 @@ export function HomePage() {
               </div>
               <div className="p-6">
                 <p className="text-[14px] text-[#5a7184] leading-relaxed mb-5">
-                  Not sure about call forwarding or calendar setup? No worries — book a quick call and we&apos;ll walk you through it in 5 minutes.
+                  Not sure about connecting your phone or calendar setup? No worries — book a quick call and we&apos;ll walk you through it in 5 minutes.
                 </p>
                 {[
                   'We walk you through every step live',

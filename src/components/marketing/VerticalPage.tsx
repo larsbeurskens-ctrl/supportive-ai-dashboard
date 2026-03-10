@@ -188,7 +188,7 @@ export function VerticalPage({
                 ))}
               </div>
               <p className="text-[12px] text-[#94a7b8] mt-3">
-                Set up call forwarding yourself — one short code from your phone. No tech needed.
+                Connect your phone yourself — one short code, takes 5 seconds. No tech needed.
               </p>
             </div>
           </div>
@@ -357,7 +357,7 @@ export function VerticalPage({
               </div>
               <div className="p-6 bg-white">
                 <p className="text-[14px] text-[#5a7184] leading-relaxed mb-5">
-                  Not sure about call forwarding or calendar setup? Book a quick call and we&apos;ll do it together.
+                  Not sure about connecting your phone or calendar setup? Book a quick call and we&apos;ll do it together.
                 </p>
                 {[
                   'We walk you through every step live',

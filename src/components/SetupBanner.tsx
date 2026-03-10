@@ -90,7 +90,7 @@ export function SetupBanner() {
           </h2>
           <p className="text-[14px] text-[#5a7184] leading-relaxed mb-5">
             Book a free 15-minute setup call and we&apos;ll configure everything together — your AI, phone number,
-            calendar, and call forwarding. Or chat with us anytime using the bubble below.
+            calendar, and call settings. Or chat with us anytime using the bubble below.
           </p>
 
           {/* Progress bar */}
@@ -142,7 +142,7 @@ export function SetupBanner() {
             </button>
           </div>
           <Link href="/dashboard/setup" className="text-[12px] text-[#5a7184] no-underline hover:text-[#1a2e3b] mt-2 inline-block">
-            Already have a number? Set up call forwarding →
+            Already have a number? Connect it to your AI →
           </Link>
         </div>
 

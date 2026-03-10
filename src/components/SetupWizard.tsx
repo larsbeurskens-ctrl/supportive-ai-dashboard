@@ -252,8 +252,12 @@ export default function SetupWizard() {
     );
   }
 
-  // If live, show minimal status with pickup rules
+  // If live, show minimal status with pickup rules — persist for returning visits
   if (status?.isLive) {
+    // Track when they first saw the live state
+    if (typeof window !== 'undefined' && !localStorage.getItem('agent_live_since')) {
+      localStorage.setItem('agent_live_since', new Date().toISOString());
+    }
     const rules = (status as any).pickupRules || { afterHours: true, missedCalls: true, alwaysOn: false };
     const ruleLabels: string[] = [];
     if (rules.afterHours) ruleLabels.push('after hours');
@@ -271,6 +275,15 @@ export default function SetupWizard() {
         </div>
       </div>
     );
+  }
+
+  // Show the live banner if agent went live recently (within 7 days) even if page was navigated away
+  if (typeof window !== 'undefined' && !status?.isLive) {
+    const liveSince = localStorage.getItem('agent_live_since');
+    if (liveSince) {
+      const daysSince = (Date.now() - new Date(liveSince).getTime()) / (1000 * 60 * 60 * 24);
+      if (daysSince > 7) localStorage.removeItem('agent_live_since');
+    }
   }
 
   const stepLabels = ['Phone setup', 'Business details', 'Test call', 'Go live'];
@@ -661,7 +674,7 @@ export default function SetupWizard() {
               </div>
             </div>
 
-            {/* Call forwarding — based on their step 1 choice */}
+            {/* Activate agent — based on their step 1 choice */}
             <div className="border-t border-[#f0eeeb] pt-4">
               {(() => {
                 const rules = (status as any).pickupRules || { afterHours: true, missedCalls: true, alwaysOn: false };
@@ -679,7 +692,7 @@ export default function SetupWizard() {
                       <p className="text-[13px] text-[#1e40af] font-medium">Your setting: {displayName} will pick up <strong>{ruleText}</strong></p>
                     </div>
                     <p className="text-[13px] text-[#5a7184] mb-4">
-                      Dial this code from your business phone to start forwarding calls to {displayName}. One step — takes 5 seconds.
+                      Dial this code from your business phone to connect {displayName}. One step — takes 5 seconds.
                     </p>
 
                     {/* Active option */}
@@ -704,7 +717,7 @@ export default function SetupWizard() {
                     </div>
 
                     <p className="text-[11px] text-[#94a7b8] mt-3">
-                      To turn off forwarding, dial <code className="bg-[#e5e0da] px-1 py-0.5 rounded text-[#94a7b8] font-semibold">*73</code> from your phone. Works for most US carriers.
+                      To disconnect {displayName}, dial <code className="bg-[#e5e0da] px-1 py-0.5 rounded text-[#94a7b8] font-semibold">*73</code> from your phone. Works for most US carriers.
                     </p>
                   </>
                 );
