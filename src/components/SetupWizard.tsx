@@ -202,6 +202,7 @@ export default function SetupWizard() {
 
   async function handleSaveDetails() {
     if (!ownerName.trim()) { setError('We need your name so your AI knows who to refer customers to'); return; }
+    if (!status?.overrides?.ownerPhone && !ownerPhone.trim()) { setError('Your phone number is required for emergency escalations and appointment texts'); return; }
     setSaving(true); setError('');
     try {
       await saveBusinessDetails({
@@ -455,12 +456,23 @@ export default function SetupWizard() {
             <div className="border-t border-[#f0eeeb] pt-4">
               <h3 className="text-[13px] font-bold text-[#94a7b8] uppercase tracking-wider mb-3">About you</h3>
               <div className="space-y-3">
-                <div>
-                  <label className="block text-sm font-semibold text-[#1a2e3b] mb-1">Your name <span className="text-red-500">*</span></label>
-                  <input type="text" value={ownerName} onChange={e => setOwnerName(e.target.value)}
-                    placeholder="e.g. Mike Johnson"
-                    className="w-full px-4 py-2.5 border border-[#e5e0da] rounded-xl text-[14px] text-[#1a2e3b] focus:outline-none focus:ring-2 focus:ring-[#0d9488]" />
-                  <p className="text-[11px] text-[#94a7b8] mt-1">Your AI will refer customers to you by name — e.g. &quot;I&apos;ll have {ownerName || 'Mike'} call you back.&quot;</p>
+                <div className={`grid ${!status?.overrides?.ownerPhone ? 'grid-cols-2' : ''} gap-3`}>
+                  <div>
+                    <label className="block text-sm font-semibold text-[#1a2e3b] mb-1">Your name <span className="text-red-500">*</span></label>
+                    <input type="text" value={ownerName} onChange={e => setOwnerName(e.target.value)}
+                      placeholder="e.g. Mike Johnson"
+                      className="w-full px-4 py-2.5 border border-[#e5e0da] rounded-xl text-[14px] text-[#1a2e3b] focus:outline-none focus:ring-2 focus:ring-[#0d9488]" />
+                    <p className="text-[11px] text-[#94a7b8] mt-1">Your AI will refer customers to you by name — e.g. &quot;I&apos;ll have {ownerName || 'Mike'} call you back.&quot;</p>
+                  </div>
+                  {!status?.overrides?.ownerPhone && (
+                    <div>
+                      <label className="block text-sm font-semibold text-[#1a2e3b] mb-1">Your mobile <span className="text-red-500">*</span></label>
+                      <input type="tel" value={ownerPhone} onChange={e => setOwnerPhone(e.target.value)}
+                        placeholder="(555) 123-4567"
+                        className="w-full px-4 py-2.5 border border-[#e5e0da] rounded-xl text-[14px] text-[#1a2e3b] focus:outline-none focus:ring-2 focus:ring-[#0d9488]" />
+                      <p className="text-[11px] text-[#94a7b8] mt-1">For emergency escalations and appointment text confirmations.</p>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -590,7 +602,7 @@ export default function SetupWizard() {
               </div>
             </div>
 
-            <button onClick={handleSaveDetails} disabled={saving || !ownerName.trim()}
+            <button onClick={handleSaveDetails} disabled={saving || !ownerName.trim() || (!status?.overrides?.ownerPhone && !ownerPhone.trim())}
               className="w-full bg-[#0d9488] text-white py-3 rounded-xl text-[15px] font-bold hover:bg-[#0b7c72] transition-colors disabled:opacity-50">
               {saving ? (
                 <span className="flex items-center justify-center gap-2">
