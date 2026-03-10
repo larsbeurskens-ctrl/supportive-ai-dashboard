@@ -7,7 +7,7 @@ import { useState, useEffect } from 'react';
 import { Logo } from '@/components/Logo';
 import {
   PhoneIcon, CalendarIcon, UsersIcon, SettingsIcon,
-  TrendUpIcon, DollarIcon, LinkIcon,
+  TrendUpIcon, DollarIcon, LinkIcon, MessageIcon,
 } from '@/components/marketing/Icons';
 
 const ADMIN_EMAIL = 'larsbeurskens@gmail.com';
@@ -23,6 +23,7 @@ const navItems = [
 ];
 
 const adminOnlyItems = [
+  { href: '/dashboard/sms', label: 'Messages', icon: MessageIcon },
   { href: '/dashboard/outreach-send', label: 'Outreach', icon: TrendUpIcon },
   { href: '/dashboard/users', label: 'Signups', icon: UsersIcon },
   { href: '/dashboard/outreach', label: 'Tracking links', icon: LinkIcon },

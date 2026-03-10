@@ -265,3 +265,51 @@ export async function cancelInvoice(invoiceId: string): Promise<{ success: boole
     method: 'POST',
   });
 }
+
+
+// ==========================================
+// SMS Outreach
+// ==========================================
+export interface SMSConversation {
+  id: string;
+  fromNumber: string;
+  toNumber: string;
+  toName: string | null;
+  toCompany: string | null;
+  vertical: string | null;
+  lastMessage: string | null;
+  lastAt: string | null;
+  unread: boolean;
+  createdAt: string;
+  _count?: { messages: number };
+  messages?: SMSMessage[];
+}
+
+export interface SMSMessage {
+  id: string;
+  conversationId: string;
+  direction: 'outbound' | 'inbound';
+  body: string;
+  status: string;
+  createdAt: string;
+}
+
+export async function getSMSConversations(): Promise<SMSConversation[]> {
+  return fetchWithAuth('/api/sms/conversations');
+}
+
+export async function getSMSConversation(id: string): Promise<SMSConversation> {
+  return fetchWithAuth(`/api/sms/conversations/${id}`);
+}
+
+export async function sendSMS(data: { to: string; body: string; name?: string; company?: string; vertical?: string }): Promise<{ success: boolean; messageId: string; conversationId: string }> {
+  return fetchWithAuth('/api/sms/send', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+}
+
+export async function getSMSTemplates(): Promise<Array<{ id: string; name: string; body: string; variables: string[] }>> {
+  return fetchWithAuth('/api/sms/templates');
+}
