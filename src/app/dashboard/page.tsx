@@ -59,6 +59,7 @@ export default function DashboardPage() {
   const [recentCalls, setRecentCalls] = useState<Call[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isLive, setIsLive] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
@@ -70,6 +71,12 @@ export default function DashboardPage() {
         setMetrics(metricsData);
         setTodaysJobs(jobsData);
         setRecentCalls(callsData);
+        // Check if business is live
+        try {
+          const { getProvisionStatus } = await import('@/lib/api');
+          const status = await getProvisionStatus();
+          setIsLive(status.isLive || false);
+        } catch { /* not provisioned yet */ }
       } catch (err) {
         console.error('Failed to fetch dashboard data:', err);
         setError('Failed to load dashboard data');
@@ -97,7 +104,7 @@ export default function DashboardPage() {
     { id: 'demo-c4', customer: { firstName: 'Test Caller' } as any, startTime: new Date(Date.now() - 28800000).toISOString(), createdAt: new Date().toISOString(), status: 'inquiry', duration: 67, phoneNumber: '(555) 456-7890' } as any,
   ];
 
-  const isDemo = !metrics || (metrics.callsLast7Days === 0 && metrics.bookingsLast7Days === 0);
+  const isDemo = !isLive && (!metrics || (metrics.callsLast7Days === 0 && metrics.bookingsLast7Days === 0));
   const displayJobs = todaysJobs.length > 0 ? todaysJobs : (isDemo ? demoJobs : []);
   const displayCalls = recentCalls.length > 0 ? recentCalls : (isDemo ? demoCalls : []);
 

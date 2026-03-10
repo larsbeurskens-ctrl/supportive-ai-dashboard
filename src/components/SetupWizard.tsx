@@ -25,20 +25,20 @@ const VERTICAL_LABELS: Record<string, {
   showGasLine?: boolean; showCleaningMethod?: boolean; feeFieldName: string;
 }> = {
   plumbing: {
-    feeLabel: 'Call-out / diagnostic fee',
-    feePlaceholder: 'e.g. $89, free estimates, varies by job',
+    feeLabel: 'What do you charge for a service call?',
+    feePlaceholder: 'e.g. $89 service call fee, $0 — free estimates, $69 diagnostic waived with repair',
     servicesPlaceholder: 'e.g. drain cleaning, water heater repair, emergency plumbing, bathroom remodels...',
     showGasLine: true, feeFieldName: 'diagnosticFee',
   },
   window_cleaning: {
-    feeLabel: 'Starting price / estimate range',
-    feePlaceholder: 'e.g. from $150 for a standard home, free quotes',
+    feeLabel: 'What do you charge for a typical job?',
+    feePlaceholder: 'e.g. from $150 for a standard home, $5 per pane, free quotes available',
     servicesPlaceholder: 'e.g. interior/exterior windows, screens, tracks, skylights, pressure washing, gutter cleaning...',
     showCleaningMethod: true, feeFieldName: 'diagnosticFee',
   },
   hvac: {
-    feeLabel: 'Service call fee',
-    feePlaceholder: 'e.g. $79 diagnostic, waived with repair',
+    feeLabel: 'What do you charge for a service call?',
+    feePlaceholder: 'e.g. $79 diagnostic fee — waived if you go ahead with the repair',
     servicesPlaceholder: 'e.g. AC repair, furnace install, duct cleaning, thermostat replacement...',
     feeFieldName: 'serviceCallFee',
   },
@@ -183,6 +183,7 @@ export default function SetupWizard() {
       await saveBusinessDetails({
         phoneSetup: phoneChoice,
         existingBusinessPhone: phoneChoice === 'keep' ? existingPhone.trim() : null,
+        ownerPhone: phoneChoice === 'keep' ? existingPhone.trim() : null,
         pickupRules: {
           afterHours: pickupAfterHours,
           missedCalls: pickupMissedCalls,
@@ -200,7 +201,6 @@ export default function SetupWizard() {
   }
 
   async function handleSaveDetails() {
-    if (!ownerPhone.trim()) { setError('Your phone number is required — we text you when calls come in'); return; }
     if (!ownerName.trim()) { setError('We need your name so your AI knows who to refer customers to'); return; }
     setSaving(true); setError('');
     try {
@@ -252,14 +252,20 @@ export default function SetupWizard() {
     );
   }
 
-  // If live, show minimal status
+  // If live, show minimal status with pickup rules
   if (status?.isLive) {
+    const rules = (status as any).pickupRules || { afterHours: true, missedCalls: true, alwaysOn: false };
+    const ruleLabels: string[] = [];
+    if (rules.afterHours) ruleLabels.push('after hours');
+    if (rules.missedCalls) ruleLabels.push('when you miss a call');
+    if (rules.alwaysOn) ruleLabels.push('on every call');
+    const ruleText = ruleLabels.length > 0 ? ruleLabels.join(' and ') : 'when you need it';
     return (
       <div className="bg-[#f0fdf4] rounded-2xl border border-[#bbf7d0] p-6">
         <div className="flex items-center gap-3">
           <div className="w-3 h-3 bg-[#22c55e] rounded-full animate-pulse" />
           <div>
-            <p className="text-[15px] font-bold text-[#0f172a]">{displayName} is live and answering calls</p>
+            <p className="text-[15px] font-bold text-[#0f172a]">{displayName} is live — picks up {ruleText}</p>
             <p className="text-[13px] text-[#64748b]">{displayPhone}</p>
           </div>
         </div>
@@ -344,7 +350,7 @@ export default function SetupWizard() {
                 <input type="tel" value={existingPhone} onChange={e => setExistingPhone(e.target.value)}
                   placeholder="(555) 123-4567"
                   className="w-full px-4 py-3 border border-[#e5e0da] rounded-xl text-[15px] text-[#1a2e3b] placeholder:text-[#d1ccc6] focus:outline-none focus:ring-2 focus:ring-[#0d9488]" />
-                <p className="text-[11px] text-[#94a7b8] mt-1">We&apos;ll set up call forwarding from this number later. Nothing changes until you&apos;re ready.</p>
+                <p className="text-[11px] text-[#94a7b8] mt-1">We&apos;ll use this number for emergency escalations and appointment text confirmations.</p>
               </div>
             )}
 
@@ -436,20 +442,12 @@ export default function SetupWizard() {
             <div className="border-t border-[#f0eeeb] pt-4">
               <h3 className="text-[13px] font-bold text-[#94a7b8] uppercase tracking-wider mb-3">About you</h3>
               <div className="space-y-3">
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <label className="block text-sm font-semibold text-[#1a2e3b] mb-1">Your name <span className="text-red-500">*</span></label>
-                    <input type="text" value={ownerName} onChange={e => setOwnerName(e.target.value)}
-                      placeholder="e.g. Mike Johnson"
-                      className="w-full px-4 py-2.5 border border-[#e5e0da] rounded-xl text-[14px] text-[#1a2e3b] focus:outline-none focus:ring-2 focus:ring-[#0d9488]" />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-semibold text-[#1a2e3b] mb-1">Your mobile <span className="text-red-500">*</span></label>
-                    <input type="tel" value={ownerPhone} onChange={e => setOwnerPhone(e.target.value)}
-                      placeholder="(555) 123-4567"
-                      className="w-full px-4 py-2.5 border border-[#e5e0da] rounded-xl text-[14px] text-[#1a2e3b] focus:outline-none focus:ring-2 focus:ring-[#0d9488]" />
-                    <p className="text-[11px] text-[#94a7b8] mt-1">We text you when calls come in</p>
-                  </div>
+                <div>
+                  <label className="block text-sm font-semibold text-[#1a2e3b] mb-1">Your name <span className="text-red-500">*</span></label>
+                  <input type="text" value={ownerName} onChange={e => setOwnerName(e.target.value)}
+                    placeholder="e.g. Mike Johnson"
+                    className="w-full px-4 py-2.5 border border-[#e5e0da] rounded-xl text-[14px] text-[#1a2e3b] focus:outline-none focus:ring-2 focus:ring-[#0d9488]" />
+                  <p className="text-[11px] text-[#94a7b8] mt-1">Your AI will refer customers to you by name — e.g. &quot;I&apos;ll have {ownerName || 'Mike'} call you back.&quot;</p>
                 </div>
               </div>
             </div>
@@ -510,6 +508,7 @@ export default function SetupWizard() {
               <div className="space-y-3">
                 <div>
                   <label className="block text-sm font-semibold text-[#1a2e3b] mb-1">{labels.feeLabel}</label>
+                  <p className="text-[11px] text-[#94a7b8] mb-1.5">Your AI will quote this to customers who ask about pricing.</p>
                   <input type="text" value={diagnosticFee} onChange={e => setDiagnosticFee(e.target.value)}
                     placeholder={labels.feePlaceholder}
                     className="w-full px-4 py-2.5 border border-[#e5e0da] rounded-xl text-[14px] text-[#1a2e3b] focus:outline-none focus:ring-2 focus:ring-[#0d9488]" />
@@ -578,7 +577,7 @@ export default function SetupWizard() {
               </div>
             </div>
 
-            <button onClick={handleSaveDetails} disabled={saving || !ownerPhone.trim() || !ownerName.trim()}
+            <button onClick={handleSaveDetails} disabled={saving || !ownerName.trim()}
               className="w-full bg-[#0d9488] text-white py-3 rounded-xl text-[15px] font-bold hover:bg-[#0b7c72] transition-colors disabled:opacity-50">
               {saving ? (
                 <span className="flex items-center justify-center gap-2">
@@ -613,7 +612,7 @@ export default function SetupWizard() {
               </p>
             </div>
             <div className="flex gap-3">
-              <button onClick={async () => { await saveBusinessDetails({ testCallConfirmed: true }); await refreshStatus(); setStep('checklist'); }}
+              <button onClick={async () => { await saveBusinessDetails({ testCallConfirmed: true }); await refreshStatus(); setStep('checklist'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
                 className="flex-1 bg-[#0d9488] text-white py-3 rounded-xl text-[15px] font-bold hover:bg-[#0b7c72] transition-colors">
                 I&apos;ve tested {displayName} →
               </button>
@@ -662,41 +661,54 @@ export default function SetupWizard() {
               </div>
             </div>
 
-            {/* Call forwarding instructions — with context */}
+            {/* Call forwarding — based on their step 1 choice */}
             <div className="border-t border-[#f0eeeb] pt-4">
-              <h3 className="text-[13px] font-bold text-[#1a2e3b] mb-1">📱 Set up call forwarding</h3>
-              <p className="text-[13px] text-[#5a7184] mb-4">
-                This is how customers reach your AI receptionist. You forward your existing business number so callers dial the number they already know.
-              </p>
-
-              <div className="space-y-3 mb-4">
-                {/* Option 1: Forward unanswered */}
-                <div className="bg-[#f8fafc] rounded-xl p-4 border border-[#e5e0da]">
-                  <span className="inline-block bg-[#0d9488] text-white text-[10px] font-bold px-1.5 py-0.5 rounded mb-2">RECOMMENDED</span>
-                  <p className="text-[13px] font-semibold text-[#1a2e3b]">Forward unanswered calls</p>
-                  <p className="text-[12px] text-[#5a7184] mt-0.5">Your phone rings first. If you don&apos;t pick up after ~4 rings, the AI answers instead. You stay in control — the AI only picks up calls you miss.</p>
-                  <div className="mt-2.5">
-                    <p className="text-[12px] text-[#5a7184]">
-                      Dial <code className="bg-[#e5e0da] px-1.5 py-0.5 rounded text-[#1a2e3b] font-semibold">*71{status.phoneNumber?.replace('+1', '')}</code> from your business phone
+              {(() => {
+                const rules = (status as any).pickupRules || { afterHours: true, missedCalls: true, alwaysOn: false };
+                const isAlwaysOn = rules.alwaysOn;
+                const ruleLabels: string[] = [];
+                if (rules.afterHours) ruleLabels.push('after hours');
+                if (rules.missedCalls) ruleLabels.push('when you miss a call');
+                if (rules.alwaysOn) ruleLabels.push('every call');
+                const ruleText = ruleLabels.join(' and ');
+                const phoneNum = status.phoneNumber?.replace('+1', '') || '';
+                return (
+                  <>
+                    <h3 className="text-[13px] font-bold text-[#1a2e3b] mb-1">📱 Activate {displayName}</h3>
+                    <div className="bg-[#eff6ff] rounded-xl p-3 mb-4">
+                      <p className="text-[13px] text-[#1e40af] font-medium">Your setting: {displayName} will pick up <strong>{ruleText}</strong></p>
+                    </div>
+                    <p className="text-[13px] text-[#5a7184] mb-4">
+                      Dial this code from your business phone to start forwarding calls to {displayName}. One step — takes 5 seconds.
                     </p>
-                  </div>
-                </div>
 
-                {/* Option 2: Forward all */}
-                <div className="bg-[#f8fafc] rounded-xl p-4 border border-[#e5e0da]">
-                  <p className="text-[13px] font-semibold text-[#1a2e3b]">Forward all calls</p>
-                  <p className="text-[12px] text-[#5a7184] mt-0.5">Every call goes straight to your AI receptionist. Your phone won&apos;t ring at all. Best for after-hours or when you want the AI handling everything.</p>
-                  <div className="mt-2.5">
-                    <p className="text-[12px] text-[#5a7184]">
-                      Dial <code className="bg-[#e5e0da] px-1.5 py-0.5 rounded text-[#1a2e3b] font-semibold">*72{status.phoneNumber?.replace('+1', '')}</code> from your business phone
+                    {/* Active option */}
+                    <div className="bg-[#f0fdf4] rounded-xl p-4 border-2 border-[#0d9488] mb-3">
+                      <div className="flex items-center gap-2 mb-1">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2"><path d="M20 6L9 17l-5-5"/></svg>
+                        <p className="text-[13px] font-semibold text-[#059669]">{isAlwaysOn ? 'Forward all calls' : 'Forward unanswered calls'} — your selection</p>
+                      </div>
+                      <p className="text-[12px] text-[#5a7184] mt-0.5 ml-6">{isAlwaysOn ? `Every call goes straight to ${displayName}. Your phone won't ring.` : `Your phone rings first. If you don't pick up, ${displayName} answers. Works for both missed calls during the day and after-hours.`}</p>
+                      <div className="mt-2.5 ml-6">
+                        <p className="text-[14px] text-[#1a2e3b]">
+                          Dial <code className="bg-white px-2 py-1 rounded text-[#1a2e3b] font-bold text-[16px] border border-[#d1ccc6]">{isAlwaysOn ? '*72' : '*71'}{phoneNum}</code> from your phone
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Gray alternative */}
+                    <div className="bg-[#faf9f7] rounded-xl p-4 border border-[#e5e0da] opacity-60">
+                      <p className="text-[12px] font-semibold text-[#94a7b8]">{isAlwaysOn ? 'Or forward unanswered only' : 'Or forward all calls'}</p>
+                      <p className="text-[11px] text-[#94a7b8] mt-0.5">{isAlwaysOn ? 'If you change your mind and want your phone to ring first.' : 'If you want every call to go straight to the AI.'}</p>
+                      <p className="text-[11px] text-[#94a7b8] mt-1.5">Dial <code className="bg-[#e5e0da] px-1 py-0.5 rounded text-[#94a7b8] font-semibold">{isAlwaysOn ? '*71' : '*72'}{phoneNum}</code></p>
+                    </div>
+
+                    <p className="text-[11px] text-[#94a7b8] mt-3">
+                      To turn off forwarding, dial <code className="bg-[#e5e0da] px-1 py-0.5 rounded text-[#94a7b8] font-semibold">*73</code> from your phone. Works for most US carriers.
                     </p>
-                  </div>
-                </div>
-              </div>
-
-              <p className="text-[11px] text-[#94a7b8]">
-                These codes work for most carriers. <a href="/dashboard/setup" className="text-[#0d9488] no-underline hover:underline">See instructions for AT&amp;T, Verizon, T-Mobile, and others →</a>
-              </p>
+                  </>
+                );
+              })()}
             </div>
 
             {/* Go live button */}
