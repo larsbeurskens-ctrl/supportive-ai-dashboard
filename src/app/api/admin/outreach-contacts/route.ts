@@ -31,8 +31,9 @@ export async function GET(req: Request) {
   const now = new Date();
   const fourDaysAgo = new Date(now.getTime() - 4 * 24 * 60 * 60 * 1000);
   const threeDaysAgo = new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000);
+  const twoDaysAgo = new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000);
 
-  const [contacts, total, stats, emailFollowUps, callFollowUps] = await Promise.all([
+  const [contacts, total, stats, emailFollowUps, callFollowUps, textFollowUps] = await Promise.all([
     prisma.outreachContact.findMany({
       where, orderBy, take: limit, skip: offset,
       include: {
@@ -46,6 +47,7 @@ export async function GET(req: Request) {
         COUNT(*) as total,
         COUNT(CASE WHEN status = 'unsent' THEN 1 END) as unsent,
         COUNT(CASE WHEN status IN ('sent', 'clicked') THEN 1 END) as sent,
+        COUNT(CASE WHEN status = 'texted' THEN 1 END) as texted,
         COUNT(CASE WHEN status IN ('called', 'voicemail') THEN 1 END) as called,
         COUNT(CASE WHEN status IN ('spoke', 'demo_played') THEN 1 END) as spoke,
         COUNT(CASE WHEN status = 'interested' THEN 1 END) as interested,
@@ -73,6 +75,16 @@ export async function GET(req: Request) {
       take: 20,
       include: { _count: { select: { activities: true } } },
     }),
+    // Text follow-ups: texted 2+ days ago, no further activity
+    prisma.outreachContact.findMany({
+      where: {
+        status: "texted",
+        lastContactedAt: { lt: twoDaysAgo },
+      },
+      orderBy: { lastContactedAt: "asc" },
+      take: 20,
+      include: { _count: { select: { activities: true } } },
+    }),
   ]);
 
   const pipeline = stats[0];
@@ -83,6 +95,7 @@ export async function GET(req: Request) {
       total: Number(pipeline.total),
       unsent: Number(pipeline.unsent),
       sent: Number(pipeline.sent),
+      texted: Number(pipeline.texted),
       called: Number(pipeline.called),
       spoke: Number(pipeline.spoke),
       interested: Number(pipeline.interested),
@@ -92,6 +105,7 @@ export async function GET(req: Request) {
     followUps: {
       email: emailFollowUps,
       call: callFollowUps,
+      text: textFollowUps,
     },
   });
 }

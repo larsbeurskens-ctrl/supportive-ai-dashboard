@@ -50,6 +50,7 @@ export async function POST(req: Request) {
     interested: "interested",
     not_interested: "not_interested",
     callback_scheduled: "spoke",
+    note: "", // Don't change status for notes
   };
   const newStatus = outcome ? STATUS_MAP[outcome] : undefined;
 
