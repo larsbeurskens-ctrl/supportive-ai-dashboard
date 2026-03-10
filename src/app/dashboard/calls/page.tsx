@@ -93,6 +93,7 @@ export default function CallsPage() {
   const [calls, setCalls] = useState<Call[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isLive, setIsLive] = useState(false);
 
   // Demo calls for new accounts
   const now = Date.now();
@@ -111,6 +112,7 @@ export default function CallsPage() {
         setLoading(true);
         const data = await getCalls(50);
         setCalls(data);
+        try { const { getProvisionStatus } = await import('@/lib/api'); const s = await getProvisionStatus(); setIsLive(s.isLive || false); } catch {}
       } catch (err) {
         console.error('Failed to fetch calls:', err);
         setError('Failed to load calls');
@@ -121,7 +123,7 @@ export default function CallsPage() {
     fetchCalls();
   }, []);
 
-  const isDemo = calls.length === 0 && !loading;
+  const isDemo = !isLive && calls.length === 0 && !loading;
   const displayCalls = calls.length > 0 ? calls : (isDemo ? demoCalls : []);
 
   return (

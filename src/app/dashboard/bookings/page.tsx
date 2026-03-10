@@ -108,6 +108,7 @@ export default function BookingsPage() {
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [isLive, setIsLive] = useState(false);
 
   // Demo bookings for new accounts
   const now = new Date();
@@ -132,13 +133,14 @@ export default function BookingsPage() {
         setLoading(true);
         const data = await getBookings();
         setBookings(data);
+        try { const { getProvisionStatus } = await import('@/lib/api'); const s = await getProvisionStatus(); setIsLive(s.isLive || false); } catch {}
       } catch (err) { console.error(err); }
       finally { setLoading(false); }
     }
     load();
   }, []);
 
-  const isDemo = bookings.length === 0 && !loading;
+  const isDemo = !isLive && bookings.length === 0 && !loading;
   const allBookings = bookings.length > 0 ? bookings : (isDemo ? demoBookings : []);
 
   // Filter by selected date

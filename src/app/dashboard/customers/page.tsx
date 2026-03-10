@@ -8,6 +8,7 @@ export default function CustomersPage() {
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isLive, setIsLive] = useState(false);
 
   useEffect(() => {
     async function fetchCustomers() {
@@ -15,6 +16,7 @@ export default function CustomersPage() {
         setLoading(true);
         const data = await getCustomers(50);
         setCustomers(data);
+        try { const { getProvisionStatus } = await import('@/lib/api'); const s = await getProvisionStatus(); setIsLive(s.isLive || false); } catch {}
       } catch (err) {
         console.error('Failed to fetch customers:', err);
         setError('Failed to load customers');
@@ -31,7 +33,7 @@ export default function CustomersPage() {
     { id: 'dc5', firstName: 'Test Caller', phone: '(555) 567-8901', email: '', _count: { bookings: 1 }, totalBookings: 1, lifetimeValue: 180 } as any,
   ];
 
-  const isDemo = customers.length === 0 && !loading;
+  const isDemo = !isLive && customers.length === 0 && !loading;
   const displayCustomers = customers.length > 0 ? customers : (isDemo ? demoCustomers : []);
 
   return (
