@@ -27,6 +27,17 @@ const CARRIER_CODES: Record<string, { noAnswer: string; all: string; disable: st
   'Landline': { noAnswer: '*92{NUM}', all: '*72{NUM}', disable: '*73' },
 };
 
+function formatPhoneDisplay(phone: string): string {
+  const digits = phone.replace(/\D/g, '');
+  if (digits.length === 11 && digits.startsWith('1')) {
+    return `(${digits.slice(1,4)}) ${digits.slice(4,7)}-${digits.slice(7)}`;
+  }
+  if (digits.length === 10) {
+    return `(${digits.slice(0,3)}) ${digits.slice(3,6)}-${digits.slice(6)}`;
+  }
+  return phone;
+}
+
 // Vertical-specific labels
 const VERTICAL_LABELS: Record<string, {
   feeLabel: string; feePlaceholder: string; servicesPlaceholder: string;
@@ -252,7 +263,8 @@ export default function SetupWizard() {
   }
 
   const displayName = provisionResult?.agentName || status?.agentName || agentName || 'your AI';
-  const displayPhone = provisionResult?.phoneNumberPretty || status?.phoneNumber || '';
+  const rawPhone = provisionResult?.phoneNumberPretty || provisionResult?.phoneNumber || status?.phoneNumber || '';
+  const displayPhone = formatPhoneDisplay(rawPhone);
   const areaHint = AREA_CODE_HINTS[areaCode] || '';
 
   if (step === 'loading') {
@@ -448,16 +460,6 @@ export default function SetupWizard() {
         {step === 'business-details' && (
           <div className="space-y-5">
             {/* Success banner — only after fresh provision */}
-            {status?.provisioned && (
-              <div className="bg-[#f0fdf4] rounded-xl p-4 flex items-start gap-3">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2" className="flex-shrink-0 mt-0.5"><path d="M20 6L9 17l-5-5"/></svg>
-                <div>
-                  <p className="text-[13px] font-semibold text-[#059669]">{displayName} is ready to test!</p>
-                  <p className="text-[13px] text-[#5a7184]">Test number: <span className="font-bold text-[#1a2e3b]">{displayPhone}</span> — call it to hear your AI in action. Nothing is live until you say so.</p>
-                </div>
-              </div>
-            )}
-
             <p className="text-[14px] text-[#5a7184] leading-relaxed">
               {displayName} already knows your trade — now add your specifics so {displayName} sounds like part of your team.
             </p>
@@ -539,7 +541,7 @@ export default function SetupWizard() {
 
             {/* --- Section: Pricing & services --- */}
             <div className="border-t border-[#f0eeeb] pt-4">
-              <h3 className="text-[13px] font-bold text-[#94a7b8] uppercase tracking-wider mb-3">Pricing &amp; services</h3>
+              <h3 className="text-[13px] font-bold text-[#94a7b8] uppercase tracking-wider mb-3">What you offer</h3>
               <div className="space-y-3">
                 <div>
                   <label className="block text-sm font-semibold text-[#1a2e3b] mb-1">{labels.feeLabel}</label>
