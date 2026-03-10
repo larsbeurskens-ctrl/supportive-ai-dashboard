@@ -27,11 +27,14 @@ const DEFAULT_RANGES: Record<string, PriceRange[]> = {
     { service: 'Interior add-on', low: 0, high: 0, note: 'add roughly 40-50% to exterior' },
   ],
   hvac: [
-    { service: 'AC diagnostic', low: 75, high: 125 },
-    { service: 'AC repair', low: 150, high: 600 },
-    { service: 'Furnace repair', low: 150, high: 500 },
-    { service: 'Duct cleaning', low: 300, high: 500 },
-    { service: 'AC install', low: 3000, high: 7000 },
+    { service: 'AC diagnostic / tune-up', low: 75, high: 150 },
+    { service: 'Furnace diagnostic / tune-up', low: 75, high: 150 },
+    { service: 'Capacitor replacement', low: 150, high: 350 },
+    { service: 'Refrigerant recharge', low: 200, high: 500 },
+    { service: 'Blower motor replacement', low: 300, high: 800 },
+    { service: 'Compressor replacement', low: 800, high: 2500 },
+    { service: 'Full AC system replacement', low: 4000, high: 10000 },
+    { service: 'Full furnace replacement', low: 3000, high: 7000 },
   ],
 };
 

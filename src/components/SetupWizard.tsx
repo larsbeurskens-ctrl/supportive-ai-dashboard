@@ -516,7 +516,7 @@ export default function SetupWizard() {
                     <input type="text" value={ownerName} onChange={e => setOwnerName(e.target.value)}
                       placeholder="e.g. Mike Johnson"
                       className="w-full px-4 py-2.5 border border-[#e5e0da] rounded-xl text-[14px] text-[#1a2e3b] focus:outline-none focus:ring-2 focus:ring-[#0d9488]" />
-                    <p className="text-[11px] text-[#94a7b8] mt-1">Your AI will refer customers to you by name — e.g. &quot;I&apos;ll have {ownerName || 'Mike'} call you back.&quot;</p>
+                    <p className="text-[11px] text-[#94a7b8] mt-1">Used for emergency escalations and appointment text confirmations.</p>
                   </div>
                   {!status?.overrides?.ownerPhone && (
                     <div>
