@@ -19,6 +19,14 @@ const AREA_CODE_HINTS: Record<string, string> = {
 
 type WizardStep = 'loading' | 'create-agent' | 'business-details' | 'test-call' | 'checklist';
 
+const CARRIER_CODES: Record<string, { noAnswer: string; all: string; disable: string }> = {
+  'AT&T': { noAnswer: '*61*{NUM}#', all: '*21*{NUM}#', disable: '#21#' },
+  'Verizon': { noAnswer: '*71{NUM}', all: '*72{NUM}', disable: '*73' },
+  'T-Mobile': { noAnswer: '**61*{NUM}#', all: '**21*{NUM}#', disable: '##21#' },
+  'Spectrum': { noAnswer: '*92{NUM}', all: '*72{NUM}', disable: '*93' },
+  'Landline': { noAnswer: '*92{NUM}', all: '*72{NUM}', disable: '*73' },
+};
+
 // Vertical-specific labels
 const VERTICAL_LABELS: Record<string, {
   feeLabel: string; feePlaceholder: string; servicesPlaceholder: string;
@@ -110,6 +118,8 @@ export default function SetupWizard() {
 
   // Go live
   const [goingLive, setGoingLive] = useState(false);
+  const [selectedCarrier, setSelectedCarrier] = useState('');
+  const [dialedCode, setDialedCode] = useState(false);
 
   const vertical = status?.vertical || 'window_cleaning';
   const labels = VERTICAL_LABELS[vertical] || VERTICAL_LABELS.window_cleaning;
@@ -686,7 +696,7 @@ export default function SetupWizard() {
               </div>
             </div>
 
-            {/* What happens when you go live */}
+            {/* Connect your phone — only needed for "keep my number" flow */}
             <div className="border-t border-[#f0eeeb] pt-4">
               {(() => {
                 const rules = (status as any).pickupRules || { afterHours: true, missedCalls: true, alwaysOn: false };
@@ -695,12 +705,56 @@ export default function SetupWizard() {
                 if (rules.missedCalls) parts.push('when you miss a call');
                 if (rules.alwaysOn) parts.push('on every call');
                 const ruleText = parts.join(' and ');
+                const isKeepNumber = status.overrides?.phoneSetup === 'keep';
+                const phoneNum = status.phoneNumber?.replace('+1', '') || '';
+                const carrier = CARRIER_CODES[selectedCarrier];
+                const dialCode = carrier ? (rules.alwaysOn ? carrier.all : carrier.noAnswer).replace('{NUM}', phoneNum) : '';
+
+                if (!isKeepNumber) {
+                  // "New number" flow — no forwarding needed, just go live
+                  return (
+                    <div className="bg-[#eff6ff] rounded-xl p-4">
+                      <p className="text-[14px] text-[#1e40af]"><strong>Ready!</strong> {displayName} will answer calls at <strong>{displayPhone}</strong> — picking up <strong>{ruleText}</strong>.</p>
+                      <p className="text-[12px] text-[#3b82f6] mt-1">You can change pickup settings anytime from Call Settings.</p>
+                    </div>
+                  );
+                }
+
+                // "Keep my number" flow — need to connect their phone
                 return (
                   <>
-                    <div className="bg-[#eff6ff] rounded-xl p-4 mb-4">
-                      <p className="text-[14px] text-[#1e40af]"><strong>When you go live:</strong> {displayName} will pick up <strong>{ruleText}</strong>.</p>
-                      <p className="text-[12px] text-[#3b82f6] mt-1">You can change this anytime from <a href="/dashboard/setup" className="underline">Call Settings</a>.</p>
+                    <h3 className="text-[15px] font-bold text-[#1a2e3b] mb-2">Connect your phone to {displayName}</h3>
+                    <p className="text-[13px] text-[#5a7184] mb-1">{displayName} will pick up <strong>{ruleText}</strong>.</p>
+                    <p className="text-[13px] text-[#5a7184] mb-4">To make this work, you need to dial a short code from your business phone. This tells your carrier to send calls to {displayName} when you can&apos;t answer.</p>
+
+                    {/* Carrier selection */}
+                    <div className="mb-4">
+                      <p className="text-[13px] font-semibold text-[#1a2e3b] mb-2">Who is your phone carrier?</p>
+                      <div className="flex flex-wrap gap-2">
+                        {Object.keys(CARRIER_CODES).map(name => (
+                          <button key={name} onClick={() => { setSelectedCarrier(name); setDialedCode(false); }}
+                            className={`px-4 py-2.5 rounded-lg text-[13px] font-semibold border cursor-pointer transition-all ${
+                              selectedCarrier === name ? 'border-[#0d9488] bg-[#f0fdf4] text-[#1a2e3b]' : 'border-[#e5e0da] bg-white text-[#5a7184] hover:border-[#d1ccc6]'
+                            }`}>{name}</button>
+                        ))}
+                      </div>
                     </div>
+
+                    {/* Dial code + confirm */}
+                    {carrier && (
+                      <div className="space-y-3">
+                        <div className="bg-[#f0fdf4] rounded-xl p-5 border-2 border-[#0d9488]">
+                          <p className="text-[13px] text-[#059669] font-semibold mb-2">Dial this from your business phone now:</p>
+                          <p className="text-[24px] font-bold text-[#1a2e3b] font-mono tracking-wide mb-2">{dialCode}</p>
+                          <p className="text-[12px] text-[#5a7184]">Wait for the confirmation tone, then hang up. Takes 5 seconds.</p>
+                        </div>
+                        <label className="flex items-center gap-3 p-3 rounded-xl bg-white border border-[#e5e0da] cursor-pointer">
+                          <input type="checkbox" checked={dialedCode} onChange={e => setDialedCode(e.target.checked)}
+                            className="w-5 h-5 rounded border-[#d1ccc6] text-[#0d9488] focus:ring-[#0d9488]" />
+                          <span className="text-[14px] font-semibold text-[#1a2e3b]">I&apos;ve dialed the code — my phone is connected</span>
+                        </label>
+                      </div>
+                    )}
                   </>
                 );
               })()}
@@ -708,19 +762,33 @@ export default function SetupWizard() {
 
             {/* Go live button */}
             <div className="pt-2">
-              <button onClick={handleGoLive}
-                disabled={goingLive || !requiredDone}
-                className="w-full bg-[#22c55e] text-white py-4 rounded-xl text-[16px] font-bold hover:bg-[#16a34a] transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_2px_8px_rgba(34,197,94,0.3)]">
-                {goingLive ? (
-                  <span className="flex items-center justify-center gap-2">
-                    <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                    Going live...
-                  </span>
-                ) : `🚀 Go live — start receiving real calls`}
-              </button>
-              {!requiredDone && (
-                <p className="text-[12px] text-[#94a7b8] text-center mt-2">Complete the required items above to go live</p>
-              )}
+              {(() => {
+                const isKeepNumber = status.overrides?.phoneSetup === 'keep';
+                const canGoLive = requiredDone && (!isKeepNumber || dialedCode);
+                return (
+                  <>
+                    <button onClick={handleGoLive}
+                      disabled={goingLive || !canGoLive}
+                      className="w-full bg-[#22c55e] text-white py-4 rounded-xl text-[16px] font-bold hover:bg-[#16a34a] transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_2px_8px_rgba(34,197,94,0.3)]">
+                      {goingLive ? (
+                        <span className="flex items-center justify-center gap-2">
+                          <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                          Going live...
+                        </span>
+                      ) : `🚀 Go live — start receiving real calls`}
+                    </button>
+                    {!canGoLive && requiredDone && isKeepNumber && !selectedCarrier && (
+                      <p className="text-[12px] text-[#94a7b8] text-center mt-2">Select your carrier and dial the code above to go live</p>
+                    )}
+                    {!canGoLive && requiredDone && isKeepNumber && selectedCarrier && !dialedCode && (
+                      <p className="text-[12px] text-[#94a7b8] text-center mt-2">Confirm you&apos;ve dialed the code to go live</p>
+                    )}
+                    {!requiredDone && (
+                      <p className="text-[12px] text-[#94a7b8] text-center mt-2">Complete the required items above to go live</p>
+                    )}
+                  </>
+                );
+              })()}
             </div>
 
             {/* Optional add-ons — visually separate with explanations */}
