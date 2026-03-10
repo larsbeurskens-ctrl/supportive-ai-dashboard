@@ -66,6 +66,8 @@ export default function DashboardPage() {
   const [showLiveBanner, setShowLiveBanner] = useState(false);
   const [trialDaysLeft, setTrialDaysLeft] = useState<number | null>(null);
   const [selectedPlan, setSelectedPlan] = useState('');
+  const [hasCalendar, setHasCalendar] = useState(false);
+  const [calendarAuthUrl, setCalendarAuthUrl] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchData() {
@@ -95,6 +97,8 @@ export default function DashboardPage() {
             setPickupRulesText(parts.join(' and '));
             // Plan info
             setSelectedPlan((status as any).selectedPlan || 'starter');
+            setHasCalendar(!!status.checklist?.calendarConnected);
+            setCalendarAuthUrl(status.calendarAuthUrl || null);
             // Calculate trial days remaining (7-day trial from createdAt)
             const liveSince = localStorage.getItem('agent_live_since');
             if (liveSince) {
@@ -203,6 +207,24 @@ export default function DashboardPage() {
           </div>
         );
       })()}
+
+      {/* Calendar not connected warning — only when live */}
+      {isLive && !hasCalendar && !loading && (
+        <div className="bg-[#fef8f0] rounded-xl border border-[#f0dcc0] p-4 flex items-center justify-between">
+          <div className="flex items-start gap-3">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#d97706" strokeWidth="2" className="flex-shrink-0 mt-0.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <div>
+              <p className="text-[13px] font-bold text-[#92640a]">{agentName} can&apos;t book appointments yet</p>
+              <p className="text-[12px] text-[#a16207]">Without a calendar, {agentName} will collect customer details and text them to you instead of booking directly. Connect Google Calendar to enable live booking.</p>
+            </div>
+          </div>
+          {calendarAuthUrl && (
+            <a href={calendarAuthUrl} className="px-4 py-2 bg-[#e8930c] text-white text-[12px] font-bold rounded-lg no-underline hover:bg-[#d17f00] flex-shrink-0 whitespace-nowrap">
+              Connect Calendar
+            </a>
+          )}
+        </div>
+      )}
 
       {error && (
         <div className="bg-[#fef2f2] text-[#991b1b] p-4 rounded-xl text-sm font-medium">{error}</div>

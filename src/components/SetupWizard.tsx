@@ -275,9 +275,8 @@ export default function SetupWizard() {
     );
   }
 
-  // If live, show minimal status with pickup rules — persist for returning visits
+  // If live, show status with capabilities
   if (status?.isLive) {
-    // Track when they first saw the live state
     if (typeof window !== 'undefined' && !localStorage.getItem('agent_live_since')) {
       localStorage.setItem('agent_live_since', new Date().toISOString());
     }
@@ -287,14 +286,57 @@ export default function SetupWizard() {
     if (rules.missedCalls) ruleLabels.push('when you miss a call');
     if (rules.alwaysOn) ruleLabels.push('on every call');
     const ruleText = ruleLabels.length > 0 ? ruleLabels.join(' and ') : 'when you need it';
+    const hasCalendar = status.checklist?.calendarConnected;
     return (
-      <div className="bg-[#f0fdf4] rounded-2xl border border-[#bbf7d0] p-6">
-        <div className="flex items-center gap-3">
-          <div className="w-3 h-3 bg-[#22c55e] rounded-full animate-pulse" />
-          <div>
-            <p className="text-[15px] font-bold text-[#0f172a]">{displayName} is live — picks up {ruleText}</p>
-            <p className="text-[13px] text-[#64748b]">{displayPhone}</p>
+      <div className="space-y-4">
+        <div className="bg-[#f0fdf4] rounded-2xl border border-[#bbf7d0] p-6">
+          <div className="flex items-center gap-3">
+            <div className="w-3 h-3 bg-[#22c55e] rounded-full animate-pulse" />
+            <div>
+              <p className="text-[15px] font-bold text-[#0f172a]">{displayName} is live — picks up {ruleText}</p>
+              <p className="text-[13px] text-[#64748b]">{displayPhone}</p>
+            </div>
           </div>
+        </div>
+
+        {/* Capabilities summary */}
+        <div className="bg-white rounded-xl border border-[#e5e0da] p-5">
+          <p className="text-[13px] font-bold text-[#1a2e3b] mb-3">{displayName} can currently:</p>
+          <div className="space-y-2">
+            <div className="flex items-center gap-2.5">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              <span className="text-[13px] text-[#2a4a5e]">Answer calls, greet customers, and ask the right questions</span>
+            </div>
+            <div className="flex items-center gap-2.5">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              <span className="text-[13px] text-[#2a4a5e]">Quote your pricing and explain your services</span>
+            </div>
+            <div className="flex items-center gap-2.5">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              <span className="text-[13px] text-[#2a4a5e]">Escalate emergencies to you immediately</span>
+            </div>
+            <div className="flex items-center gap-2.5">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              <span className="text-[13px] text-[#2a4a5e]">Text you a summary after every call</span>
+            </div>
+            {hasCalendar ? (
+              <div className="flex items-center gap-2.5">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span className="text-[13px] text-[#2a4a5e]">Book appointments directly into your calendar</span>
+              </div>
+            ) : (
+              <div className="flex items-center gap-2.5">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#d97706" strokeWidth="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                <span className="text-[13px] text-[#92640a]">Collect booking details and text them to you — <strong>connect Google Calendar to enable direct booking</strong></span>
+              </div>
+            )}
+          </div>
+          {!hasCalendar && status.calendarAuthUrl && (
+            <button onClick={() => window.location.href = status.calendarAuthUrl!}
+              className="mt-4 px-4 py-2.5 bg-[#e8930c] text-white text-[13px] font-bold rounded-lg hover:bg-[#d17f00] cursor-pointer border-none">
+              Connect Google Calendar →
+            </button>
+          )}
         </div>
       </div>
     );
@@ -673,7 +715,7 @@ export default function SetupWizard() {
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2" className="flex-shrink-0 mt-0.5"><path d="M20 6L9 17l-5-5"/></svg>
                   <div>
                     <p className="text-[13px] font-bold text-[#059669]">All set! {displayName} is ready to go live.</p>
-                    <p className="text-[12px] text-[#16a34a]">Hit the button below to start receiving real calls.</p>
+                    <p className="text-[12px] text-[#16a34a]">Your 7-day free trial starts when you hit Go Live below.</p>
                   </div>
                 </div>
               ) : (
