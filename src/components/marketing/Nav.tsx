@@ -39,7 +39,8 @@ export function MarketingNav() {
             <button className={`text-sm font-medium cursor-pointer bg-transparent border-none transition-colors ${banner ? 'text-[#e8930c]' : 'text-[#2a4a5e]'}`}>
               Industries ▾
             </button>
-            <div className="hidden group-hover:block absolute top-full left-0 mt-1 bg-white border border-[#e5e0da] rounded-lg shadow-lg py-2 min-w-[200px] z-50">
+            <div className="hidden group-hover:block absolute top-full left-0 pt-1 z-50">
+              <div className="bg-white border border-[#e5e0da] rounded-lg shadow-lg py-2 min-w-[200px]">
               <Link href="/plumbing" className={`flex items-center gap-2.5 px-4 py-2.5 text-sm no-underline hover:bg-[#faf9f7] transition-colors ${pathname === '/plumbing' ? 'text-[#e8930c] font-semibold bg-[#fffbf5]' : 'text-[#2a4a5e]'}`}>
                 <span>🔧</span> Plumbing
               </Link>
@@ -49,6 +50,7 @@ export function MarketingNav() {
               <Link href="/hvac" className={`flex items-center gap-2.5 px-4 py-2.5 text-sm no-underline hover:bg-[#faf9f7] transition-colors ${pathname === '/hvac' ? 'text-[#e8930c] font-semibold bg-[#fffbf5]' : 'text-[#2a4a5e]'}`}>
                 <span>❄️</span> HVAC
               </Link>
+              </div>
             </div>
           </div>
           <Link href="/login" className="text-sm text-[#2a4a5e] font-medium no-underline hover:text-[#1a2e3b]">
