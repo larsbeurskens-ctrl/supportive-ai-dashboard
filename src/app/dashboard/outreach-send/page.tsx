@@ -34,6 +34,7 @@ interface Contact {
   textSequence: number;
   hasUnreadReply: boolean;
   lastReplyAt: string | null;
+  lastReplyText: string | null;
   _count: { activities: number };
   activities: Activity[];
 }
@@ -607,31 +608,23 @@ export default function OutreachSendPage() {
               View all →
             </button>
           </div>
-          <p className="text-[12px] text-[#991b1b]">Someone texted back. Click a contact below to see the conversation and reply.</p>
-        </div>
-      )}
-      {/* Unread Replies — URGENT */}
-      {contacts.some(c => c.hasUnreadReply) && (
-        <div className="mb-4 bg-[#fef2f2] border-2 border-[#dc2626] rounded-xl p-4 animate-pulse-subtle">
-          <h3 className="text-[14px] font-bold text-[#dc2626] mb-3">🔴 Unread replies — respond ASAP ({contacts.filter(c => c.hasUnreadReply).length})</h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+          <p className="text-[12px] text-[#991b1b] mb-3">Someone texted back. Click to see the conversation and reply.</p>
+          <div className="space-y-2">
             {contacts.filter(c => c.hasUnreadReply).map(c => (
-              <div key={`reply-${c.id}`} className="bg-white rounded-lg px-3 py-2 flex items-center justify-between gap-2 border border-[#fca5a5]">
-                <div className="min-w-0">
-                  <div className="text-[13px] font-semibold text-[#1a2e3b] truncate">{c.businessName}</div>
-                  <div className="text-[11px] text-[#dc2626] font-medium">
-                    Replied {c.lastReplyAt ? timeAgo(c.lastReplyAt) : 'recently'}
-                  </div>
-                  {c.phone && <div className="text-[11px] text-[#5a7184]">{c.mobilePhone || c.phone}</div>}
+              <div key={c.id} className="bg-white rounded-lg px-4 py-3 border border-[#fca5a5] flex items-start justify-between gap-3">
+                <div className="min-w-0 flex-1">
+                  <div className="text-[13px] font-bold text-[#1a2e3b]">{c.businessName}</div>
+                  {c.lastReplyText && (
+                    <p className="text-[13px] text-[#1a2e3b] mt-1 bg-[#fef2f2] px-3 py-2 rounded-lg border-l-3 border-[#dc2626]" style={{ borderLeft: '3px solid #dc2626' }}>
+                      &ldquo;{c.lastReplyText.length > 150 ? c.lastReplyText.substring(0, 150) + '...' : c.lastReplyText}&rdquo;
+                    </p>
+                  )}
+                  <div className="text-[11px] text-[#94a7b8] mt-1">{c.lastReplyAt ? timeAgo(c.lastReplyAt) : ''} · {c.phone}</div>
                 </div>
-                <div className="flex gap-1.5 flex-shrink-0">
-                  <button onClick={() => openSmsModal(c, true)}
-                    className="bg-[#dc2626] text-white px-2.5 py-1 rounded-lg text-[11px] font-semibold hover:bg-[#b91c1c] cursor-pointer border-none transition-colors">
-                    💬 Reply
-                  </button>
-                  <button onClick={() => handleMarkRead(c.id)}
-                    className="text-[11px] text-[#94a7b8] hover:text-[#1a2e3b] cursor-pointer bg-transparent border-none">✓</button>
-                </div>
+                <button onClick={() => openThread(c)}
+                  className="bg-[#dc2626] text-white px-3 py-1.5 rounded-lg text-[11px] font-bold hover:bg-[#b91c1c] cursor-pointer border-none transition-colors flex-shrink-0">
+                  💬 Reply
+                </button>
               </div>
             ))}
           </div>
@@ -790,6 +783,12 @@ export default function OutreachSendPage() {
                         </button>
                       )}
                     </div>
+                    {c.hasUnreadReply && c.lastReplyText && (
+                      <div className="text-[12px] text-[#1a2e3b] mt-1 bg-[#fef2f2] px-2 py-1.5 rounded border-l-2 cursor-pointer hover:bg-[#fee2e2]"
+                        style={{ borderLeft: '2px solid #dc2626' }} onClick={() => openThread(c)}>
+                        &ldquo;{c.lastReplyText.length > 80 ? c.lastReplyText.substring(0, 80) + '...' : c.lastReplyText}&rdquo;
+                      </div>
+                    )}
                     {c.painSignal && <div className="text-[11px] text-[#e8930c] mt-0.5">🔥 {c.painSignal}</div>}
                     {c.lastContactedAt && <div className="text-[10px] text-[#94a7b8] mt-0.5">Last contact: {timeAgo(c.lastContactedAt)}</div>}
                     {c.activities?.[0]?.notes && <div className="text-[10px] text-[#5a7184] mt-0.5 italic truncate max-w-[200px]">&ldquo;{c.activities[0].notes}&rdquo;</div>}
