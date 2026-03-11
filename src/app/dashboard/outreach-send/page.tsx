@@ -20,6 +20,7 @@ interface Contact {
   name: string | null;
   businessName: string | null;
   phone: string | null;
+  mobilePhone: string | null;
   website: string | null;
   vertical: string;
   score: number;
@@ -30,11 +31,14 @@ interface Contact {
   trackingSlug: string | null;
   emailTemplate: string | null;
   notes: string | null;
+  textSequence: number;
+  hasUnreadReply: boolean;
+  lastReplyAt: string | null;
   _count: { activities: number };
   activities: Activity[];
 }
 
-interface Pipeline { total: number; unsent: number; sent: number; texted: number; called: number; spoke: number; interested: number; not_interested: number; signed_up: number; }
+interface Pipeline { total: number; unsent: number; sent: number; texted: number; called: number; spoke: number; interested: number; not_interested: number; signed_up: number; unread_replies: number; }
 
 const VERTICAL_LABELS: Record<string, string> = {
   plumbing: '🔧 Plumbing', window_cleaning: '🪟 Window Cleaning', hvac: '❄️ HVAC',
@@ -77,7 +81,7 @@ export default function OutreachSendPage() {
   const { data: session, status: authStatus } = useSession();
   const router = useRouter();
   const [contacts, setContacts] = useState<Contact[]>([]);
-  const [pipeline, setPipeline] = useState<Pipeline>({ total: 0, unsent: 0, sent: 0, texted: 0, called: 0, spoke: 0, interested: 0, not_interested: 0, signed_up: 0 });
+  const [pipeline, setPipeline] = useState<Pipeline>({ total: 0, unsent: 0, sent: 0, texted: 0, called: 0, spoke: 0, interested: 0, not_interested: 0, signed_up: 0, unread_replies: 0 });
   const [loading, setLoading] = useState(true);
   const [filterVertical, setFilterVertical] = useState('');
   const [filterStatus, setFilterStatus] = useState('');
@@ -109,6 +113,28 @@ export default function OutreachSendPage() {
   const [smsBody, setSmsBody] = useState('');
   const [smsIsFollowUp, setSmsIsFollowUp] = useState(false);
   const [sendingSms, setSendingSms] = useState(false);
+
+  // Mobile phone editing
+  const [editMobileId, setEditMobileId] = useState<string | null>(null);
+  const [editMobileValue, setEditMobileValue] = useState('');
+
+  async function handleSaveMobile(contactId: string) {
+    await fetch('/api/admin/outreach-contacts', {
+      method: 'PATCH', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ contactId, mobilePhone: editMobileValue.trim() }),
+    });
+    setEditMobileId(null);
+    setEditMobileValue('');
+    await fetchContacts();
+  }
+
+  async function handleMarkRead(contactId: string) {
+    await fetch('/api/admin/outreach-contacts', {
+      method: 'PATCH', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ contactId, hasUnreadReply: false }),
+    });
+    await fetchContacts();
+  }
 
   useEffect(() => {
     if (authStatus === 'authenticated' && session?.user?.email !== ADMIN_EMAIL) {
@@ -251,10 +277,14 @@ export default function OutreachSendPage() {
     const verticalLabel = contact.vertical === 'window_cleaning' ? 'window cleaning' : contact.vertical;
     const demo = DEMO_NUMBERS[contact.vertical] || DEMO_NUMBERS.plumbing;
     const link = LANDING_PAGES[contact.vertical] || LANDING_PAGES.plumbing;
-    if (isFollowUp) {
-      setSmsBody(`Hey${contact.name ? ` ${contact.name.split(' ')[0]}` : ''}, just checking in — did you get a chance to listen to the AI receptionist demo I sent over? Happy to answer any questions. - Lars`);
-    } else {
+    const seq = (contact.textSequence || 0) + 1;
+    const firstName = contact.name ? contact.name.split(' ')[0] : '';
+    if (seq === 1 && !isFollowUp) {
       setSmsBody(`Thanks for the good chat just now, it's Lars from Supportive AI. Here's your link: ${link}\nOn there you can hear how the receptionist sounds for ${verticalLabel} companies. You can also try it yourself by calling the demo number: ${demo}\nIf it feels like a fit, you can create a free account and hear a version set up for your own business before switching anything live.`);
+    } else if (seq === 2 || (isFollowUp && (contact.textSequence || 0) <= 1)) {
+      setSmsBody(`Hey${firstName ? ` ${firstName}` : ''}, just checking in — did you get a chance to listen to the AI receptionist demo I sent over? Happy to answer any questions. - Lars`);
+    } else {
+      setSmsBody(`Hey${firstName ? ` ${firstName}` : ''}, last nudge from me — the demo line is still live if you want to hear it: ${demo}. No pressure, just thought it could help. - Lars`);
     }
   }
 
@@ -350,20 +380,60 @@ export default function OutreachSendPage() {
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" onClick={() => setSmsContact(null)}>
           <div className="bg-white rounded-2xl max-w-[540px] w-full" onClick={e => e.stopPropagation()}>
             <div className="px-6 py-4 border-b border-[#e5e0da]">
-              <h3 className="text-[16px] font-bold text-[#1a2e3b]">{smsIsFollowUp ? 'Follow-up text' : 'Send text'}</h3>
-              <p className="text-[12px] text-[#94a7b8]">{smsContact.businessName} · {smsContact.phone}</p>
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="text-[16px] font-bold text-[#1a2e3b]">
+                    Text {(smsContact.textSequence || 0) + 1}
+                    {smsIsFollowUp ? ' (follow-up)' : ''}
+                  </h3>
+                  <p className="text-[12px] text-[#94a7b8]">{smsContact.businessName}</p>
+                </div>
+                {(smsContact.textSequence || 0) > 0 && (
+                  <span className="text-[11px] font-semibold text-[#5a7184] bg-[#f5f4f2] px-2 py-1 rounded-full">
+                    {smsContact.textSequence} text{smsContact.textSequence !== 1 ? 's' : ''} sent
+                  </span>
+                )}
+              </div>
             </div>
-            <div className="px-6 py-4">
-              <label className="block text-[12px] font-semibold text-[#5a7184] mb-1.5">Message</label>
-              <textarea value={smsBody} onChange={e => setSmsBody(e.target.value)} rows={6}
-                className="w-full px-3 py-2.5 rounded-lg border border-[#d1ccc6] text-[14px] text-[#1a2e3b] resize-none focus:outline-none focus:ring-2 focus:ring-[#0d9488]" />
-              <p className="text-[11px] text-[#94a7b8] mt-1">{smsBody.length} characters · Sent from (845) 209-2401</p>
+            <div className="px-6 py-4 space-y-3">
+              <div>
+                <label className="block text-[12px] font-semibold text-[#5a7184] mb-1">Sending to</label>
+                <div className="flex items-center gap-2">
+                  <span className="text-[13px] text-[#1a2e3b] font-medium">
+                    {smsContact.mobilePhone || smsContact.phone}
+                    {smsContact.mobilePhone ? ' (mobile)' : ''}
+                  </span>
+                  {!smsContact.mobilePhone && (
+                    <button onClick={() => { setEditMobileId(smsContact.id); setEditMobileValue(''); }}
+                      className="text-[11px] text-[#3b82f6] hover:underline cursor-pointer bg-transparent border-none">
+                      + Add mobile
+                    </button>
+                  )}
+                </div>
+                {editMobileId === smsContact.id && (
+                  <div className="flex gap-2 mt-2">
+                    <input type="tel" placeholder="(555) 123-4567" value={editMobileValue}
+                      onChange={e => setEditMobileValue(e.target.value)}
+                      className="flex-1 px-3 py-1.5 rounded-lg border border-[#d1ccc6] text-[13px]" />
+                    <button onClick={() => handleSaveMobile(smsContact.id)}
+                      className="px-3 py-1.5 rounded-lg text-[12px] font-semibold bg-[#1a2e3b] text-white cursor-pointer border-none">Save</button>
+                    <button onClick={() => setEditMobileId(null)}
+                      className="px-2 py-1.5 text-[12px] text-[#94a7b8] cursor-pointer bg-transparent border-none">✕</button>
+                  </div>
+                )}
+              </div>
+              <div>
+                <label className="block text-[12px] font-semibold text-[#5a7184] mb-1.5">Message</label>
+                <textarea value={smsBody} onChange={e => setSmsBody(e.target.value)} rows={6}
+                  className="w-full px-3 py-2.5 rounded-lg border border-[#d1ccc6] text-[14px] text-[#1a2e3b] resize-none focus:outline-none focus:ring-2 focus:ring-[#0d9488]" />
+                <p className="text-[11px] text-[#94a7b8] mt-1">{smsBody.length} characters · Sent from (845) 209-2401</p>
+              </div>
             </div>
             <div className="px-6 py-4 border-t border-[#e5e0da] flex justify-end gap-3">
               <button onClick={() => setSmsContact(null)} className="px-4 py-2 rounded-lg text-[13px] font-semibold text-[#5a7184] border border-[#d1ccc6] bg-white hover:bg-[#f0eeeb] cursor-pointer transition-colors">Cancel</button>
               <button onClick={handleSendSms} disabled={sendingSms || !smsBody.trim()}
                 className="px-5 py-2 rounded-lg text-[13px] font-bold text-white bg-[#059669] hover:bg-[#047857] disabled:opacity-50 cursor-pointer border-none transition-colors">
-                {sendingSms ? 'Sending...' : smsIsFollowUp ? 'Send follow-up' : 'Send text'}
+                {sendingSms ? 'Sending...' : `Send text ${(smsContact.textSequence || 0) + 1}`}
               </button>
             </div>
           </div>
@@ -402,6 +472,33 @@ export default function OutreachSendPage() {
         ))}
       </div>
       {/* Follow-ups Due */}
+      {/* Unread Replies — URGENT */}
+      {contacts.some(c => c.hasUnreadReply) && (
+        <div className="mb-4 bg-[#fef2f2] border-2 border-[#dc2626] rounded-xl p-4 animate-pulse-subtle">
+          <h3 className="text-[14px] font-bold text-[#dc2626] mb-3">🔴 Unread replies — respond ASAP ({contacts.filter(c => c.hasUnreadReply).length})</h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+            {contacts.filter(c => c.hasUnreadReply).map(c => (
+              <div key={`reply-${c.id}`} className="bg-white rounded-lg px-3 py-2 flex items-center justify-between gap-2 border border-[#fca5a5]">
+                <div className="min-w-0">
+                  <div className="text-[13px] font-semibold text-[#1a2e3b] truncate">{c.businessName}</div>
+                  <div className="text-[11px] text-[#dc2626] font-medium">
+                    Replied {c.lastReplyAt ? timeAgo(c.lastReplyAt) : 'recently'}
+                  </div>
+                  {c.phone && <div className="text-[11px] text-[#5a7184]">{c.mobilePhone || c.phone}</div>}
+                </div>
+                <div className="flex gap-1.5 flex-shrink-0">
+                  <button onClick={() => openSmsModal(c, true)}
+                    className="bg-[#dc2626] text-white px-2.5 py-1 rounded-lg text-[11px] font-semibold hover:bg-[#b91c1c] cursor-pointer border-none transition-colors">
+                    💬 Reply
+                  </button>
+                  <button onClick={() => handleMarkRead(c.id)}
+                    className="text-[11px] text-[#94a7b8] hover:text-[#1a2e3b] cursor-pointer bg-transparent border-none">✓</button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
       {(followUps.email.length > 0 || followUps.call.length > 0 || followUps.text?.length > 0) && (
         <div className="mb-6 space-y-3">
           {followUps.text?.length > 0 && (
@@ -556,11 +653,35 @@ export default function OutreachSendPage() {
                       {hasEmail ? c.email : <span className="text-[#94a7b8] italic">needs email</span>}
                     </div>
                     {c.phone && <div className="text-[11px] text-[#94a7b8]">{c.phone}</div>}
+                    {c.mobilePhone && <div className="text-[11px] text-[#059669]">📱 {c.mobilePhone}</div>}
+                    {!c.mobilePhone && c.phone && (
+                      <button onClick={() => { setEditMobileId(c.id); setEditMobileValue(''); }}
+                        className="text-[10px] text-[#3b82f6] hover:underline cursor-pointer bg-transparent border-none p-0 mt-0.5">
+                        + add mobile
+                      </button>
+                    )}
+                    {editMobileId === c.id && (
+                      <div className="flex gap-1 mt-1">
+                        <input type="tel" placeholder="Mobile #" value={editMobileValue}
+                          onChange={e => setEditMobileValue(e.target.value)}
+                          className="w-28 px-2 py-1 rounded border border-[#d1ccc6] text-[11px]" />
+                        <button onClick={() => handleSaveMobile(c.id)}
+                          className="px-2 py-1 rounded text-[10px] font-semibold bg-[#1a2e3b] text-white cursor-pointer border-none">✓</button>
+                        <button onClick={() => setEditMobileId(null)}
+                          className="text-[10px] text-[#94a7b8] cursor-pointer bg-transparent border-none">✕</button>
+                      </div>
+                    )}
                   </td>
                   <td className="px-4 py-3 text-[12px] text-[#5a7184] align-top">{VERTICAL_LABELS[c.vertical] || c.vertical}</td>
                   <td className="px-4 py-3 text-[13px] font-bold text-[#1a2e3b] text-center align-top">{c.score}</td>
                   <td className="px-4 py-3 align-top">
                     <span className={`inline-block text-[11px] font-semibold px-2 py-0.5 rounded-full ${st.bg} ${st.text}`}>{st.label}</span>
+                    {c.hasUnreadReply && (
+                      <span className="inline-block ml-1 text-[11px] font-bold px-2 py-0.5 rounded-full bg-[#dc2626] text-white">💬 Reply!</span>
+                    )}
+                    {c.textSequence > 0 && !c.hasUnreadReply && (
+                      <div className="text-[10px] text-[#94a7b8] mt-0.5">{c.textSequence} text{c.textSequence !== 1 ? 's' : ''} sent</div>
+                    )}
                     {c.sentAt && <div className="text-[10px] text-[#94a7b8] mt-0.5">{timeAgo(c.sentAt)}</div>}
                   </td>
                   <td className="px-4 py-3 align-top">
@@ -576,14 +697,14 @@ export default function OutreachSendPage() {
                       {c.phone && c.status !== 'texted' && c.status !== 'interested' && c.status !== 'signed_up' && c.status !== 'not_interested' && (
                         <button onClick={() => openSmsModal(c, false)}
                           className="bg-[#059669] text-white px-2.5 py-1 rounded-lg text-[11px] font-semibold hover:bg-[#047857] cursor-pointer border-none transition-colors">
-                          💬 Text
+                          💬 Text {(c.textSequence || 0) + 1}
                         </button>
                       )}
                       {/* Text follow-up — if already texted */}
                       {c.phone && c.status === 'texted' && (
                         <button onClick={() => openSmsModal(c, true)}
-                          className="bg-white text-[#059669] px-2.5 py-1 rounded-lg text-[11px] font-semibold border border-[#059669] hover:bg-[#ecfdf5] cursor-pointer transition-colors">
-                          💬 Follow up
+                          className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold cursor-pointer border-none transition-colors ${c.hasUnreadReply ? 'bg-[#dc2626] text-white hover:bg-[#b91c1c]' : 'bg-white text-[#059669] border border-[#059669] hover:bg-[#ecfdf5]'}`}>
+                          💬 {c.hasUnreadReply ? 'Reply' : `Text ${(c.textSequence || 0) + 1}`}
                         </button>
                       )}
                       {/* Email actions */}

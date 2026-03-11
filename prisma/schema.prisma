@@ -398,6 +398,10 @@ model OutreachContact {
   trackingSlug   String?   // slug of auto-created TrackedLink
   emailTemplate  String?   // which template was used: first_touch | follow_up
   notes          String?
+  mobilePhone    String?
+  textSequence   Int       @default(0)
+  hasUnreadReply Boolean   @default(false)
+  lastReplyAt    DateTime?
   activities     OutreachActivity[]
 
   @@unique([email, vertical])

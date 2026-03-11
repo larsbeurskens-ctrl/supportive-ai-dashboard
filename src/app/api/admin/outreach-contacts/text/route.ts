@@ -40,21 +40,26 @@ export async function POST(req: Request) {
     }
 
     // Log activity
+    const textCount = await prisma.outreachActivity.count({
+      where: { contactId, type: { in: ["text", "text_follow_up"] } },
+    });
     await prisma.outreachActivity.create({
       data: {
         contactId,
         type: isFollowUp ? "text_follow_up" : "text",
         outcome: "sent",
-        notes: body.length > 200 ? body.substring(0, 200) + "..." : body,
+        notes: `Text ${textCount + 1}: ${body.length > 180 ? body.substring(0, 180) + "..." : body}`,
       },
     });
 
-    // Update contact status
-    const newStatus = isFollowUp ? contact.status : "texted"; // Keep status if follow-up
+    // Update contact status + sequence + clear unread
+    const newStatus = isFollowUp ? contact.status : "texted";
     await prisma.outreachContact.update({
       where: { id: contactId },
       data: {
         lastContactedAt: new Date(),
+        textSequence: textCount + 1,
+        hasUnreadReply: false,
         ...(newStatus !== contact.status ? { status: newStatus } : {}),
       },
     });

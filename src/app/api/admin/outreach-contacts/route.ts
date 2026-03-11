@@ -52,7 +52,8 @@ export async function GET(req: Request) {
         COUNT(CASE WHEN status IN ('spoke', 'demo_played') THEN 1 END) as spoke,
         COUNT(CASE WHEN status = 'interested' THEN 1 END) as interested,
         COUNT(CASE WHEN status = 'not_interested' THEN 1 END) as not_interested,
-        COUNT(CASE WHEN status = 'signed_up' THEN 1 END) as signed_up
+        COUNT(CASE WHEN status = 'signed_up' THEN 1 END) as signed_up,
+        COUNT(CASE WHEN "hasUnreadReply" = true THEN 1 END) as unread_replies
       FROM "OutreachContact"
     ` as Promise<Array<Record<string, bigint>>>,
     // Email follow-ups: sent 4+ days ago, no activity since
@@ -101,6 +102,7 @@ export async function GET(req: Request) {
       interested: Number(pipeline.interested),
       not_interested: Number(pipeline.not_interested),
       signed_up: Number(pipeline.signed_up),
+      unread_replies: Number(pipeline.unread_replies),
     },
     followUps: {
       email: emailFollowUps,
@@ -149,4 +151,17 @@ export async function POST(req: Request) {
   }
 
   return Response.json({ imported, skipped, total: contacts.length });
+}
+
+export async function PATCH(req: Request) {
+  if (!(await checkAdmin())) return Response.json({ error: "Unauthorized" }, { status: 401 });
+  const { contactId, mobilePhone, hasUnreadReply } = await req.json();
+  if (!contactId) return Response.json({ error: "contactId required" }, { status: 400 });
+
+  const data: Record<string, unknown> = {};
+  if (mobilePhone !== undefined) data.mobilePhone = mobilePhone || null;
+  if (hasUnreadReply !== undefined) data.hasUnreadReply = hasUnreadReply;
+
+  const updated = await prisma.outreachContact.update({ where: { id: contactId }, data });
+  return Response.json({ success: true, contact: updated });
 }
