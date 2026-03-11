@@ -374,16 +374,6 @@ export default function OutreachSendPage() {
     finally { setThreadSending(false); }
   }
 
-  async function saveMobilePhone(contactId: string, mobile: string) {
-    await fetch('/api/admin/outreach-contacts', {
-      method: 'PATCH', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ contactId, mobilePhone: mobile.trim() || null }),
-    });
-    setEditingMobile(null);
-    setMobileValue('');
-    await fetchContacts();
-  }
-
   if (loading) {
     return <div className="flex items-center justify-center py-20"><div className="w-6 h-6 border-2 border-[#1a2e3b] border-t-transparent rounded-full animate-spin" /></div>;
   }
