@@ -402,6 +402,7 @@ model OutreachContact {
   textSequence   Int       @default(0)
   hasUnreadReply Boolean   @default(false)
   lastReplyAt    DateTime?
+  lastReplyText  String?
   activities     OutreachActivity[]
 
   @@unique([email, vertical])
