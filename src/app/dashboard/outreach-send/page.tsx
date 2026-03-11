@@ -848,10 +848,17 @@ export default function OutreachSendPage() {
                       )}
                       {/* Text follow-up — if already texted */}
                       {c.phone && c.status === 'texted' && (
-                        <button onClick={() => openSmsModal(c, true)}
-                          className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold cursor-pointer border-none transition-colors ${c.hasUnreadReply ? 'bg-[#dc2626] text-white hover:bg-[#b91c1c]' : 'bg-white text-[#059669] border border-[#059669] hover:bg-[#ecfdf5]'}`}>
-                          💬 {c.hasUnreadReply ? 'Reply' : `Text ${(c.textSequence || 0) + 1}`}
-                        </button>
+                        c.hasUnreadReply ? (
+                          <button onClick={() => openThread(c)}
+                            className="bg-[#dc2626] text-white px-2.5 py-1 rounded-lg text-[11px] font-semibold cursor-pointer border-none transition-colors hover:bg-[#b91c1c]">
+                            💬 View reply
+                          </button>
+                        ) : (
+                          <button onClick={() => openSmsModal(c, true)}
+                            className="bg-white text-[#059669] px-2.5 py-1 rounded-lg text-[11px] font-semibold cursor-pointer border border-[#059669] hover:bg-[#ecfdf5] transition-colors">
+                            💬 Text {(c.textSequence || 0) + 1}
+                          </button>
+                        )
                       )}
                       {/* View conversation thread */}
                       {c.phone && (c.status === 'texted' || c.hasUnreadReply) && (
