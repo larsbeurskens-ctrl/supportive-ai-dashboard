@@ -22,7 +22,11 @@ export async function GET(req: Request) {
 
   const where: Record<string, unknown> = {};
   if (vertical) where.vertical = vertical;
-  if (status) where.status = status;
+  if (status === 'has_reply') {
+    where.hasUnreadReply = true;
+  } else if (status) {
+    where.status = status;
+  }
 
   const orderBy = sort === "last_contact"
     ? [{ lastContactedAt: { sort: "desc" as const, nulls: "last" as const } }, { score: "desc" as const }]

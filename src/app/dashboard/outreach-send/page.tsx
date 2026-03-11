@@ -40,6 +40,11 @@ interface Contact {
 
 interface Pipeline { total: number; unsent: number; sent: number; texted: number; called: number; spoke: number; interested: number; not_interested: number; signed_up: number; unread_replies: number; }
 
+interface SMSMessage { id: string; direction: string; body: string; createdAt: string; status: string; }
+interface SMSConversation { id: string; fromNumber: string; toNumber: string; toName: string | null; toCompany: string | null; unread: boolean; lastMessage: string; lastAt: string; messages: SMSMessage[]; }
+
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'https://supportive-ai-backend-production.up.railway.app';
+
 const VERTICAL_LABELS: Record<string, string> = {
   plumbing: '🔧 Plumbing', window_cleaning: '🪟 Window Cleaning', hvac: '❄️ HVAC',
 };
@@ -114,7 +119,14 @@ export default function OutreachSendPage() {
   const [smsIsFollowUp, setSmsIsFollowUp] = useState(false);
   const [sendingSms, setSendingSms] = useState(false);
 
-  // Mobile phone editing
+  // Conversation thread state
+  const [threadContact, setThreadContact] = useState<Contact | null>(null);
+  const [threadMessages, setThreadMessages] = useState<SMSMessage[]>([]);
+  const [threadLoading, setThreadLoading] = useState(false);
+  const [threadReply, setThreadReply] = useState('');
+  const [threadSending, setThreadSending] = useState(false);
+
+  // Mobile phone edit state
   const [editMobileId, setEditMobileId] = useState<string | null>(null);
   const [editMobileValue, setEditMobileValue] = useState('');
 
@@ -308,6 +320,69 @@ export default function OutreachSendPage() {
     finally { setSendingSms(false); }
   }
 
+  async function openThread(contact: Contact) {
+    setThreadContact(contact);
+    setThreadLoading(true);
+    setThreadMessages([]);
+    setThreadReply('');
+    try {
+      // Get conversations from backend, find one matching this contact's phone
+      const phone = (contact.phone || '').replace(/\D/g, '').slice(-10);
+      const res = await fetch(`${API_BASE}/api/sms/conversations`);
+      if (res.ok) {
+        const convos: SMSConversation[] = await res.json();
+        const match = convos.find((c: SMSConversation) => c.toNumber.replace(/\D/g, '').slice(-10) === phone);
+        if (match) {
+          const convoRes = await fetch(`${API_BASE}/api/sms/conversations/${match.id}`);
+          if (convoRes.ok) {
+            const full: SMSConversation = await convoRes.json();
+            setThreadMessages(full.messages || []);
+          }
+        }
+      }
+      // Mark as read in outreach contact
+      if (contact.hasUnreadReply) {
+        await fetch('/api/admin/outreach-contacts', {
+          method: 'PATCH', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ contactId: contact.id, hasUnreadReply: false }),
+        });
+        await fetchContacts();
+      }
+    } catch (e) { console.error('Thread load error:', e); }
+    finally { setThreadLoading(false); }
+  }
+
+  async function handleThreadReply() {
+    if (!threadContact || !threadReply.trim()) return;
+    setThreadSending(true);
+    try {
+      const res = await fetch('/api/admin/outreach-contacts/text', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ contactId: threadContact.id, body: threadReply.trim(), isFollowUp: true }),
+      });
+      if (res.ok) {
+        setThreadReply('');
+        // Reload thread
+        await openThread(threadContact);
+        await fetchContacts();
+      } else {
+        const d = await res.json();
+        alert(d.error || 'Failed to send');
+      }
+    } catch { alert('Failed to send reply'); }
+    finally { setThreadSending(false); }
+  }
+
+  async function saveMobilePhone(contactId: string, mobile: string) {
+    await fetch('/api/admin/outreach-contacts', {
+      method: 'PATCH', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ contactId, mobilePhone: mobile.trim() || null }),
+    });
+    setEditingMobile(null);
+    setMobileValue('');
+    await fetchContacts();
+  }
+
   if (loading) {
     return <div className="flex items-center justify-center py-20"><div className="w-6 h-6 border-2 border-[#1a2e3b] border-t-transparent rounded-full animate-spin" /></div>;
   }
@@ -439,6 +514,55 @@ export default function OutreachSendPage() {
           </div>
         </div>
       )}
+      {/* Thread Modal */}
+      {threadContact && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" onClick={() => setThreadContact(null)}>
+          <div className="bg-white rounded-2xl max-w-[540px] w-full max-h-[85vh] flex flex-col" onClick={e => e.stopPropagation()}>
+            <div className="px-6 py-4 border-b border-[#e5e0da] flex items-center justify-between">
+              <div>
+                <h3 className="text-[16px] font-bold text-[#1a2e3b]">💬 {threadContact.businessName}</h3>
+                <p className="text-[12px] text-[#94a7b8]">{threadContact.mobilePhone || threadContact.phone} · {threadContact.textSequence || 0} texts sent</p>
+              </div>
+              <button onClick={() => setThreadContact(null)} className="text-[#94a7b8] hover:text-[#1a2e3b] text-xl cursor-pointer bg-transparent border-none">✕</button>
+            </div>
+            <div className="flex-1 overflow-y-auto px-6 py-4 space-y-3 min-h-[200px] max-h-[50vh] bg-[#faf9f7]">
+              {threadLoading ? (
+                <div className="flex items-center justify-center py-8"><div className="w-5 h-5 border-2 border-[#1a2e3b] border-t-transparent rounded-full animate-spin" /></div>
+              ) : threadMessages.length === 0 ? (
+                <p className="text-[13px] text-[#94a7b8] text-center py-8">No messages yet. Send a text to start the conversation.</p>
+              ) : (
+                threadMessages.map(m => (
+                  <div key={m.id} className={`flex ${m.direction === 'outbound' ? 'justify-end' : 'justify-start'}`}>
+                    <div className={`max-w-[80%] rounded-xl px-3.5 py-2.5 ${
+                      m.direction === 'outbound'
+                        ? 'bg-[#1a2e3b] text-white'
+                        : 'bg-white border border-[#e5e0da] text-[#1a2e3b]'
+                    }`}>
+                      <p className="text-[13px] whitespace-pre-wrap">{m.body}</p>
+                      <p className={`text-[10px] mt-1 ${m.direction === 'outbound' ? 'text-white/60' : 'text-[#94a7b8]'}`}>
+                        {new Date(m.createdAt).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}
+                        {m.direction === 'inbound' && ' · 📨 Reply'}
+                      </p>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+            <div className="px-6 py-4 border-t border-[#e5e0da]">
+              <div className="flex gap-2">
+                <textarea value={threadReply} onChange={e => setThreadReply(e.target.value)} rows={2} placeholder="Type a reply..."
+                  className="flex-1 px-3 py-2 rounded-lg border border-[#d1ccc6] text-[13px] text-[#1a2e3b] resize-none focus:outline-none focus:ring-2 focus:ring-[#0d9488]"
+                  onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleThreadReply(); } }} />
+                <button onClick={handleThreadReply} disabled={threadSending || !threadReply.trim()}
+                  className="px-4 py-2 rounded-lg text-[13px] font-bold text-white bg-[#059669] hover:bg-[#047857] disabled:opacity-50 cursor-pointer border-none transition-colors self-end">
+                  {threadSending ? '...' : 'Send'}
+                </button>
+              </div>
+              <p className="text-[10px] text-[#94a7b8] mt-1">Enter to send · Shift+Enter for new line</p>
+            </div>
+          </div>
+        </div>
+      )}
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
@@ -453,7 +577,7 @@ export default function OutreachSendPage() {
       {importResult && <div className="bg-[#eef9f0] text-[#059669] text-[13px] font-medium px-4 py-2 rounded-lg mb-4">{importResult}</div>}
 
       {/* Pipeline Stats */}
-      <div className="grid grid-cols-3 lg:grid-cols-9 gap-3 mb-6">
+      <div className="grid grid-cols-3 lg:grid-cols-10 gap-3 mb-6">
         {[
           { label: 'Total', value: pipeline.total, color: '#1a2e3b' },
           { label: 'Unsent', value: pipeline.unsent, color: '#94a7b8' },
@@ -461,6 +585,7 @@ export default function OutreachSendPage() {
           { label: 'Called', value: pipeline.called, color: '#e8930c' },
           { label: 'Spoke', value: pipeline.spoke, color: '#059669' },
           { label: 'Texted', value: pipeline.texted, color: '#059669' },
+          { label: '💬 Replies', value: pipeline.unread_replies, color: pipeline.unread_replies > 0 ? '#dc2626' : '#94a7b8' },
           { label: 'Interested', value: pipeline.interested, color: '#16a34a' },
           { label: 'Not int.', value: pipeline.not_interested, color: '#dc2626' },
           { label: 'Signed up', value: pipeline.signed_up, color: '#059669' },
@@ -472,6 +597,19 @@ export default function OutreachSendPage() {
         ))}
       </div>
       {/* Follow-ups Due */}
+      {/* Unread Replies — URGENT */}
+      {pipeline.unread_replies > 0 && (
+        <div className="mb-4 bg-[#fef2f2] border-2 border-[#dc2626] rounded-xl p-4 animate-pulse-subtle">
+          <div className="flex items-center justify-between mb-2">
+            <h3 className="text-[14px] font-bold text-[#dc2626]">🔴 {pipeline.unread_replies} unread {pipeline.unread_replies === 1 ? 'reply' : 'replies'} — respond ASAP!</h3>
+            <button onClick={() => { setFilterStatus('has_reply'); setPage(0); }}
+              className="text-[12px] font-semibold text-[#dc2626] hover:underline cursor-pointer bg-transparent border-none">
+              View all →
+            </button>
+          </div>
+          <p className="text-[12px] text-[#991b1b]">Someone texted back. Click a contact below to see the conversation and reply.</p>
+        </div>
+      )}
       {/* Unread Replies — URGENT */}
       {contacts.some(c => c.hasUnreadReply) && (
         <div className="mb-4 bg-[#fef2f2] border-2 border-[#dc2626] rounded-xl p-4 animate-pulse-subtle">
@@ -596,6 +734,7 @@ export default function OutreachSendPage() {
         <select value={filterStatus} onChange={e => { setFilterStatus(e.target.value); setPage(0); }}
           className="px-3 py-2 rounded-lg border border-[#d1ccc6] text-[13px] text-[#1a2e3b] bg-white">
           <option value="">All statuses</option>
+          <option value="has_reply">💬 Has reply</option>
           <option value="unsent">Unsent</option>
           <option value="sent">Emailed</option>
           <option value="texted">Texted</option>
@@ -641,8 +780,16 @@ export default function OutreachSendPage() {
               return (
                 <tr key={c.id} className={`border-b border-[#f0eeeb] last:border-0 ${isExpanded ? 'bg-[#faf9f7]' : 'hover:bg-[#faf9f7]'}`}>
                   <td className="px-4 py-3 align-top">
-                    <div className="text-[13px] font-semibold text-[#1a2e3b] truncate max-w-[200px] cursor-pointer hover:text-[#3b82f6]"
-                      onClick={() => toggleExpand(c.id)}>{c.businessName || '—'}</div>
+                    <div className="flex items-center gap-1.5">
+                      <div className="text-[13px] font-semibold text-[#1a2e3b] truncate max-w-[200px] cursor-pointer hover:text-[#3b82f6]"
+                        onClick={() => toggleExpand(c.id)}>{c.businessName || '—'}</div>
+                      {c.hasUnreadReply && (
+                        <button onClick={() => openThread(c)}
+                          className="flex items-center gap-1 bg-[#dc2626] text-white px-1.5 py-0.5 rounded-full text-[10px] font-bold cursor-pointer border-none animate-pulse flex-shrink-0">
+                          💬 REPLY
+                        </button>
+                      )}
+                    </div>
                     {c.painSignal && <div className="text-[11px] text-[#e8930c] mt-0.5">🔥 {c.painSignal}</div>}
                     {c.lastContactedAt && <div className="text-[10px] text-[#94a7b8] mt-0.5">Last contact: {timeAgo(c.lastContactedAt)}</div>}
                     {c.activities?.[0]?.notes && <div className="text-[10px] text-[#5a7184] mt-0.5 italic truncate max-w-[200px]">&ldquo;{c.activities[0].notes}&rdquo;</div>}
@@ -705,6 +852,13 @@ export default function OutreachSendPage() {
                         <button onClick={() => openSmsModal(c, true)}
                           className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold cursor-pointer border-none transition-colors ${c.hasUnreadReply ? 'bg-[#dc2626] text-white hover:bg-[#b91c1c]' : 'bg-white text-[#059669] border border-[#059669] hover:bg-[#ecfdf5]'}`}>
                           💬 {c.hasUnreadReply ? 'Reply' : `Text ${(c.textSequence || 0) + 1}`}
+                        </button>
+                      )}
+                      {/* View conversation thread */}
+                      {c.phone && (c.status === 'texted' || c.hasUnreadReply) && (
+                        <button onClick={() => openThread(c)}
+                          className="bg-white text-[#5a7184] px-2 py-1 rounded-lg text-[10px] font-semibold border border-[#d1ccc6] hover:bg-[#f0eeeb] cursor-pointer transition-colors">
+                          Thread
                         </button>
                       )}
                       {/* Email actions */}
