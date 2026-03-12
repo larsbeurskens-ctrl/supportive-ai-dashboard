@@ -109,6 +109,8 @@ export default function BookingsPage() {
   const [loading, setLoading] = useState(true);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [isLive, setIsLive] = useState(false);
+  const [calendarConnected, setCalendarConnected] = useState(true); // assume true to avoid flash
+  const [calendarAuthUrl, setCalendarAuthUrl] = useState<string | null>(null);
 
   // Demo bookings for new accounts
   const now = new Date();
@@ -133,7 +135,13 @@ export default function BookingsPage() {
         setLoading(true);
         const data = await getBookings();
         setBookings(data);
-        try { const { getProvisionStatus } = await import('@/lib/api'); const s = await getProvisionStatus(); setIsLive(s.isLive || false); } catch {}
+        try { 
+          const { getProvisionStatus } = await import('@/lib/api'); 
+          const s = await getProvisionStatus(); 
+          setIsLive(s.isLive || false);
+          setCalendarConnected(s.checklist?.calendarConnected || false);
+          if (s.calendarAuthUrl) setCalendarAuthUrl(s.calendarAuthUrl);
+        } catch {}
       } catch (err) { console.error(err); }
       finally { setLoading(false); }
     }
@@ -190,6 +198,23 @@ export default function BookingsPage() {
           {selectedDate && ` · Showing ${selectedDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`}
         </p>
       </div>
+
+      {/* Calendar Connect Banner */}
+      {!calendarConnected && (
+        <div className="bg-[#eff6ff] border border-[#3b82f6] rounded-xl px-5 py-4 flex items-center justify-between gap-4">
+          <div>
+            <p className="text-[14px] font-semibold text-[#1e40af]">Connect Google Calendar to enable bookings</p>
+            <p className="text-[12px] text-[#3b82f6] mt-0.5">Your AI receptionist needs calendar access to check availability and book appointments. Takes 30 seconds.</p>
+          </div>
+          {calendarAuthUrl ? (
+            <a href={calendarAuthUrl} className="bg-[#3b82f6] text-white px-5 py-2.5 rounded-lg text-[13px] font-bold hover:bg-[#2563eb] transition-colors whitespace-nowrap no-underline">
+              Connect Calendar
+            </a>
+          ) : (
+            <span className="text-[12px] text-[#94a7b8]">Set up your AI agent first</span>
+          )}
+        </div>
+      )}
 
       {isDemo && (
         <div className="bg-[#fef8f0] border border-[#f0dcc0] rounded-xl px-4 py-3">
