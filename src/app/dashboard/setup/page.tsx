@@ -8,8 +8,21 @@ const CARRIER_CODES: Record<string, { noAnswer: string; all: string; disable: st
   'AT&T': { noAnswer: '*61*{NUM}#', all: '*21*{NUM}#', disable: '#21#' },
   'Verizon': { noAnswer: '*71{NUM}', all: '*72{NUM}', disable: '*73' },
   'T-Mobile': { noAnswer: '**61*{NUM}#', all: '**21*{NUM}#', disable: '##21#' },
+  'Cricket': { noAnswer: '*61*{NUM}#', all: '*21*{NUM}#', disable: '#21#' },
+  'Metro by T-Mobile': { noAnswer: '**61*{NUM}#', all: '**21*{NUM}#', disable: '##21#' },
+  'Mint Mobile': { noAnswer: '**61*{NUM}#', all: '**21*{NUM}#', disable: '##21#' },
+  'Boost Mobile': { noAnswer: '**61*{NUM}#', all: '**21*{NUM}#', disable: '##21#' },
+  'US Cellular': { noAnswer: '*71{NUM}', all: '*72{NUM}', disable: '*73' },
+  'Consumer Cellular': { noAnswer: '*61*{NUM}#', all: '*21*{NUM}#', disable: '#21#' },
+  'Visible': { noAnswer: '*71{NUM}', all: '*72{NUM}', disable: '*73' },
+  'Xfinity Mobile': { noAnswer: '*71{NUM}', all: '*72{NUM}', disable: '*73' },
+  'Google Fi': { noAnswer: '**61*{NUM}#', all: '**21*{NUM}#', disable: '##21#' },
   'Spectrum': { noAnswer: '*92{NUM}', all: '*72{NUM}', disable: '*93' },
-  'Landline': { noAnswer: '*92{NUM}', all: '*72{NUM}', disable: '*73' },
+  'Cox': { noAnswer: '*92{NUM}', all: '*72{NUM}', disable: '*93' },
+  'Optimum': { noAnswer: '*92{NUM}', all: '*72{NUM}', disable: '*93' },
+  'Vonage': { noAnswer: '*72{NUM}', all: '*72{NUM}', disable: '*73' },
+  'Ooma': { noAnswer: '*72{NUM}', all: '*72{NUM}', disable: '*73' },
+  'Landline / Other': { noAnswer: '*92{NUM}', all: '*72{NUM}', disable: '*73' },
 };
 
 function Toggle({ enabled, onChange, label, description }: { 
