@@ -87,6 +87,8 @@ export default function DashboardPage() {
           setIsLive(live);
           setAgentName(status.agentName || '');
           setAgentPhone(status.phoneNumber || '');
+          setHasCalendar(!!status.checklist?.calendarConnected);
+          setCalendarAuthUrl(status.calendarAuthUrl || null);
           if (live) {
             // Build pickup rules text
             const rules = (status as any).pickupRules || { afterHours: true, missedCalls: true };
@@ -97,8 +99,6 @@ export default function DashboardPage() {
             setPickupRulesText(parts.join(' and '));
             // Plan info
             setSelectedPlan((status as any).selectedPlan || 'starter');
-            setHasCalendar(!!status.checklist?.calendarConnected);
-            setCalendarAuthUrl(status.calendarAuthUrl || null);
             // Calculate trial days remaining (7-day trial from createdAt)
             const liveSince = localStorage.getItem('agent_live_since');
             if (liveSince) {
@@ -141,6 +141,7 @@ export default function DashboardPage() {
   ];
 
   const isDemo = !isLive && (!metrics || (metrics.callsLast7Days === 0 && metrics.bookingsLast7Days === 0));
+  const showSetupWizard = !isLive && !loading; // Show wizard until business goes live, even with test calls
   const displayJobs = todaysJobs.length > 0 ? todaysJobs : (isDemo ? demoJobs : []);
   const displayCalls = recentCalls.length > 0 ? recentCalls : (isDemo ? demoCalls : []);
 
@@ -231,7 +232,7 @@ export default function DashboardPage() {
       )}
 
       {/* Setup wizard — shows for new accounts */}
-      {isDemo && !loading && <SetupWizard />}
+      {showSetupWizard && <SetupWizard />}
 
       {isDemo && !loading && (
         <div className="bg-[#fef8f0] border border-[#f0dcc0] rounded-xl px-4 py-3 flex items-center justify-between">
