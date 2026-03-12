@@ -91,6 +91,8 @@ export default function OutreachSendPage() {
   const [loading, setLoading] = useState(true);
   const [filterVertical, setFilterVertical] = useState('');
   const [filterStatus, setFilterStatus] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchDebounce, setSearchDebounce] = useState('');
   const [sortBy, setSortBy] = useState('score');
   const [followUps, setFollowUps] = useState<{ email: Contact[]; call: Contact[]; text: Contact[] }>({ email: [], call: [], text: [] });  const [sending, setSending] = useState<string | null>(null);
   const [importing, setImporting] = useState(false);
@@ -160,6 +162,7 @@ export default function OutreachSendPage() {
     const params = new URLSearchParams();
     if (filterVertical) params.set('vertical', filterVertical);
     if (filterStatus) params.set('status', filterStatus);
+    if (searchDebounce) params.set('search', searchDebounce);
     params.set('sort', sortBy);
     params.set('limit', String(PAGE_SIZE));
     params.set('offset', String(page * PAGE_SIZE));
@@ -172,7 +175,13 @@ export default function OutreachSendPage() {
       if (data.followUps) setFollowUps(data.followUps);
     }
     setLoading(false);
-  }, [filterVertical, filterStatus, sortBy, page]);
+  }, [filterVertical, filterStatus, searchDebounce, sortBy, page]);
+
+  // Debounce search input
+  useEffect(() => {
+    const timer = setTimeout(() => { setSearchDebounce(searchQuery); setPage(0); }, 300);
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
 
   useEffect(() => { fetchContacts(); }, [fetchContacts]);
 
@@ -237,7 +246,7 @@ export default function OutreachSendPage() {
     if (!phone) { alert('No phone number for this contact'); return; }
     setCallingId(contact.id);
     try {
-      const resp = await fetch('/api/outreach/call', {
+      const resp = await fetch(`${API_BASE}/api/outreach/call`, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ to: phone, contactName: contact.name || contact.businessName, contactCompany: contact.businessName }),
       });
@@ -729,8 +738,13 @@ export default function OutreachSendPage() {
         </div>
       )}
 
-      {/* Filters + Sort */}
-      <div className="flex gap-3 mb-4">
+      {/* Filters + Sort + Search */}
+      <div className="flex gap-3 mb-4 flex-wrap">
+        <input
+          type="text" placeholder="Search by name, business, email, phone..."
+          value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
+          className="px-3 py-2 rounded-lg border border-[#d1ccc6] text-[13px] text-[#1a2e3b] bg-white min-w-[250px] flex-1 max-w-[400px] placeholder-[#94a7b8]"
+        />
         <select value={filterVertical} onChange={e => { setFilterVertical(e.target.value); setPage(0); }}
           className="px-3 py-2 rounded-lg border border-[#d1ccc6] text-[13px] text-[#1a2e3b] bg-white">
           <option value="">All verticals</option>

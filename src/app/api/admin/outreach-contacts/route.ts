@@ -16,6 +16,7 @@ export async function GET(req: Request) {
   const url = new URL(req.url);
   const vertical = url.searchParams.get("vertical");
   const status = url.searchParams.get("status");
+  const search = url.searchParams.get("search");
   const sort = url.searchParams.get("sort") || "score"; // score | last_contact
   const limit = parseInt(url.searchParams.get("limit") || "100");
   const offset = parseInt(url.searchParams.get("offset") || "0");
@@ -26,6 +27,14 @@ export async function GET(req: Request) {
     where.hasUnreadReply = true;
   } else if (status) {
     where.status = status;
+  }
+  if (search) {
+    where.OR = [
+      { businessName: { contains: search, mode: 'insensitive' } },
+      { name: { contains: search, mode: 'insensitive' } },
+      { email: { contains: search, mode: 'insensitive' } },
+      { phone: { contains: search, mode: 'insensitive' } },
+    ];
   }
 
   const orderBy = sort === "last_contact"
