@@ -113,6 +113,7 @@ export default function OutreachSendPage() {
   const [logOutcome, setLogOutcome] = useState('no_answer');
   const [logNotes, setLogNotes] = useState('');
   const [savingLog, setSavingLog] = useState(false);
+  const [callingId, setCallingId] = useState<string | null>(null);
 
   // SMS state
   const [smsContact, setSmsContact] = useState<Contact | null>(null);
@@ -229,6 +230,29 @@ export default function OutreachSendPage() {
       if (expandedId) fetchActivities(expandedId);
     } catch { alert('Failed to save'); }
     finally { setSavingLog(false); }
+  }
+
+  async function handleTwilioCall(contact: Contact) {
+    const phone = contact.mobilePhone || contact.phone;
+    if (!phone) { alert('No phone number for this contact'); return; }
+    setCallingId(contact.id);
+    try {
+      const resp = await fetch('/api/outreach/call', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ to: phone, contactName: contact.name || contact.businessName, contactCompany: contact.businessName }),
+      });
+      const data = await resp.json();
+      if (data.success) {
+        alert(`📞 Calling your phone now!\n\nWhen you pick up, you'll be connected to ${contact.name || contact.businessName}.`);
+        // Auto-open the log modal after the call is initiated
+        setLogCallId(contact.id);
+        setLogOutcome('spoke');
+        setLogNotes('');
+      } else {
+        alert('Call failed: ' + (data.error || 'Unknown error'));
+      }
+    } catch (err) { alert('Failed to initiate call'); }
+    finally { setCallingId(null); }
   }
 
   async function handleImportCSV(e: React.ChangeEvent<HTMLInputElement>) {
@@ -636,9 +660,9 @@ export default function OutreachSendPage() {
                     </div>
                     <div className="flex gap-1.5 flex-shrink-0">
                       {c.phone && (
-                        <button onClick={() => { setLogCallId(c.id); setLogOutcome('no_answer'); setLogNotes(''); }}
-                          className="bg-[#1a2e3b] text-white px-2.5 py-1 rounded-lg text-[11px] font-semibold hover:bg-[#243d4e] cursor-pointer border-none transition-colors">
-                          📞
+                        <button onClick={() => handleTwilioCall(c)} disabled={callingId === c.id}
+                          className="bg-[#1a2e3b] text-white px-2.5 py-1 rounded-lg text-[11px] font-semibold hover:bg-[#243d4e] cursor-pointer border-none transition-colors disabled:opacity-50">
+                          {callingId === c.id ? '⏳' : '📞'}
                         </button>
                       )}
                       <button onClick={() => openSmsModal(c, true)}
@@ -664,9 +688,9 @@ export default function OutreachSendPage() {
                       </div>
                       {c.phone && <div className="text-[11px] text-[#5a7184]">{c.phone}</div>}
                     </div>
-                    <button onClick={() => { setLogCallId(c.id); setLogOutcome('no_answer'); setLogNotes(''); }}
-                      className="bg-[#1a2e3b] text-white px-2.5 py-1 rounded-lg text-[11px] font-semibold hover:bg-[#243d4e] cursor-pointer border-none transition-colors flex-shrink-0">
-                      📞 Call
+                    <button onClick={() => handleTwilioCall(c)} disabled={callingId === c.id}
+                      className="bg-[#1a2e3b] text-white px-2.5 py-1 rounded-lg text-[11px] font-semibold hover:bg-[#243d4e] cursor-pointer border-none transition-colors flex-shrink-0 disabled:opacity-50">
+                      {callingId === c.id ? '⏳ Calling...' : '📞 Call'}
                     </button>
                   </div>
                 ))}
@@ -687,9 +711,9 @@ export default function OutreachSendPage() {
                     </div>
                     <div className="flex gap-1.5 flex-shrink-0">
                       {c.phone && (
-                        <button onClick={() => { setLogCallId(c.id); setLogOutcome('no_answer'); setLogNotes(''); }}
-                          className="bg-[#1a2e3b] text-white px-2.5 py-1 rounded-lg text-[11px] font-semibold hover:bg-[#243d4e] cursor-pointer border-none transition-colors">
-                          📞
+                        <button onClick={() => handleTwilioCall(c)} disabled={callingId === c.id}
+                          className="bg-[#1a2e3b] text-white px-2.5 py-1 rounded-lg text-[11px] font-semibold hover:bg-[#243d4e] cursor-pointer border-none transition-colors disabled:opacity-50">
+                          {callingId === c.id ? '⏳' : '📞'}
                         </button>
                       )}
                       <button onClick={() => handlePreview(c.id, 'follow_up')}
@@ -822,11 +846,17 @@ export default function OutreachSendPage() {
                   </td>
                   <td className="px-4 py-3 align-top">
                     <div className="flex flex-wrap items-center gap-1.5">
-                      {/* Log call button — always visible if has phone */}
+                      {/* Call via Twilio — rings your phone, bridges to lead */}
+                      {c.phone && (
+                        <button onClick={() => handleTwilioCall(c)} disabled={callingId === c.id}
+                          className="bg-[#1a2e3b] text-white px-2.5 py-1 rounded-lg text-[11px] font-semibold hover:bg-[#243d4e] cursor-pointer border-none transition-colors disabled:opacity-50">
+                          {callingId === c.id ? '⏳ Calling...' : '📞 Call'}
+                        </button>
+                      )}
                       {c.phone && (
                         <button onClick={() => { setLogCallId(c.id); setLogOutcome('no_answer'); setLogNotes(''); }}
-                          className="bg-[#1a2e3b] text-white px-2.5 py-1 rounded-lg text-[11px] font-semibold hover:bg-[#243d4e] cursor-pointer border-none transition-colors">
-                          📞 Log call
+                          className="bg-white text-[#5a7184] px-2 py-1 rounded-lg text-[11px] font-semibold border border-[#d1ccc6] hover:bg-[#f0eeeb] cursor-pointer transition-colors">
+                          ✏️ Log
                         </button>
                       )}
                       {/* Send text — if has phone */}
