@@ -106,6 +106,8 @@ export default function OutreachSendPage() {
     contact: { businessName: string | null; name: string | null; vertical: string; painSignal: string | null };
   } | null>(null);
   const [previewing, setPreviewing] = useState<string | null>(null);
+  const [editSubject, setEditSubject] = useState('');
+  const [editHtml, setEditHtml] = useState('');
 
   // Activity log state
   const [expandedId, setExpandedId] = useState<string | null>(null);
@@ -185,12 +187,12 @@ export default function OutreachSendPage() {
 
   useEffect(() => { fetchContacts(); }, [fetchContacts]);
 
-  async function handleSend(contactId: string, template: string) {
+  async function handleSend(contactId: string, template: string, customSubject?: string, customHtml?: string) {
     setSending(contactId);
     try {
       const res = await fetch('/api/admin/outreach-contacts/send', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ contactId, template }),
+        body: JSON.stringify({ contactId, template, customSubject, customHtml }),
       });
       if (res.ok) { await fetchContacts(); }
       else { const d = await res.json(); alert(d.error || 'Send failed'); }
@@ -205,7 +207,7 @@ export default function OutreachSendPage() {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ contactId, template }),
       });
-      if (res.ok) { setPreview({ ...(await res.json()), contactId, template }); }
+      if (res.ok) { const data = await res.json(); setPreview({ ...data, contactId, template }); setEditSubject(data.subject); setEditHtml(data.html); }
       else { alert('Preview failed'); }
     } catch { alert('Preview failed'); }
     finally { setPreviewing(null); }
@@ -459,14 +461,20 @@ export default function OutreachSendPage() {
             <div className="px-6 py-4 border-b border-[#e5e0da] space-y-2 bg-[#faf9f7]">
               <div className="flex gap-2 text-[13px]"><span className="text-[#94a7b8] w-16">From:</span><span className="text-[#1a2e3b] font-medium">{preview.from}</span></div>
               <div className="flex gap-2 text-[13px]"><span className="text-[#94a7b8] w-16">To:</span><span className="text-[#1a2e3b] font-medium">{preview.to}</span></div>
-              <div className="flex gap-2 text-[13px]"><span className="text-[#94a7b8] w-16">Subject:</span><span className="text-[#1a2e3b] font-semibold">{preview.subject}</span></div>
+              <div className="flex gap-2 text-[13px] items-center"><span className="text-[#94a7b8] w-16">Subject:</span>
+                <input value={editSubject} onChange={e => setEditSubject(e.target.value)}
+                  className="flex-1 px-2 py-1.5 rounded-lg border border-[#d1ccc6] text-[13px] font-semibold text-[#1a2e3b] bg-white" />
+              </div>
             </div>
             <div className="px-6 py-4 overflow-y-auto flex-1 min-h-0" style={{ maxHeight: '40vh' }}>
-              <div className="border border-[#e5e0da] rounded-xl p-5" dangerouslySetInnerHTML={{ __html: preview.html }} />
+              <div className="border border-[#e5e0da] rounded-xl p-5"
+                contentEditable suppressContentEditableWarning
+                onBlur={e => setEditHtml(e.currentTarget.innerHTML)}
+                dangerouslySetInnerHTML={{ __html: editHtml }} />
             </div>
             <div className="px-6 py-4 border-t-2 border-[#e5e0da] flex justify-end gap-3 flex-shrink-0 bg-[#faf9f7]">
               <button onClick={() => setPreview(null)} className="px-4 py-2 rounded-lg text-[13px] font-semibold text-[#5a7184] border border-[#d1ccc6] hover:bg-[#f0eeeb] cursor-pointer bg-white transition-colors">Cancel</button>
-              <button onClick={async () => { await handleSend(preview.contactId, preview.template); setPreview(null); }} disabled={sending === preview.contactId}
+              <button onClick={async () => { await handleSend(preview.contactId, preview.template, editSubject, editHtml); setPreview(null); }} disabled={sending === preview.contactId}
                 className="px-5 py-2 rounded-lg text-[13px] font-bold text-white bg-[#e8930c] hover:bg-[#d17f00] disabled:opacity-50 cursor-pointer border-none transition-colors">
                 {sending === preview.contactId ? 'Sending...' : 'Confirm & Send'}
               </button>

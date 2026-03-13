@@ -12,7 +12,7 @@ export async function POST(req: Request) {
     return Response.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const { contactId, template = "first_touch" } = await req.json();
+  const { contactId, template = "first_touch", customSubject, customHtml } = await req.json();
   if (!contactId) return Response.json({ error: "contactId required" }, { status: 400 });
 
   const contact = await prisma.outreachContact.findUnique({ where: { id: contactId } });
@@ -39,7 +39,9 @@ export async function POST(req: Request) {
   }
 
   const trackingUrl = `${SITE_URL}/for/${slug}`;
-  const { subject, html } = buildEmail(contact, trackingUrl, template);
+  const generated = buildEmail(contact, trackingUrl, template);
+  const subject = customSubject || generated.subject;
+  const html = customHtml || generated.html;
 
   // Send via Resend
   const { Resend } = await import("resend");
