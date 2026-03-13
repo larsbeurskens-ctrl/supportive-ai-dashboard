@@ -66,7 +66,7 @@ export function buildEmail(
   // === FOLLOW-UP ===
   if (template === "follow_up") {
     return {
-      subject: `Re: 24/7 answering + booking for ${vLabel}`,
+      subject: `Re: 24/7 phone answering + booking for ${vLabel}`,
       html: `<div style="${STYLE}">
 <p>${greet}</p>
 <p>Just following up - I know ${vLabel} work keeps you busy (which is exactly why I built this).</p>
@@ -74,18 +74,20 @@ export function buildEmail(
 
 <p>👉 2-min demo call: <a href="${trackingUrl}" style="${LINK}">${trackingUrl}</a></p>
 
-<p style="margin-top:16px;">Or call our demo agent yourself: <strong>${demoPhone}</strong> - takes 60 seconds.</p>
+<p style="margin-top:8px;">You can also try it yourself by calling the demo number: <strong>${demoPhone}</strong></p>
+
+<p style="margin-top:16px;">If it feels like a fit, you can create a free account and hear a version set up for your own business before switching anything live: <a href="${SITE_URL}/onboarding" style="${LINK}">supportive-ai.com/onboarding</a></p>
 
 <p style="margin-top:16px;">If the timing's not right, no worries at all.</p>
 
-<p style="margin-top:24px;">Lars<br/><span style="${SIG_STYLE}">(832) 346-6405</span></p>
+<p style="margin-top:24px;">Lars<br/><span style="${SIG_STYLE}">(832) 346-6405 · <a href="https://www.linkedin.com/in/lars-beurskens-19642a8/" style="text-decoration:none;"><img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" width="14" height="14" alt="LinkedIn" style="vertical-align:middle;" /></a></span></p>
 </div>`,
     };
   }
 
   // === FIRST TOUCH ===
   return {
-    subject: `24/7 answering + booking for ${vLabel}`,
+    subject: `24/7 phone answering + booking for ${vLabel}`,
     html: `<div style="${STYLE}">
 <p>${greet}</p>
 
@@ -102,11 +104,13 @@ export function buildEmail(
 </p>
 <p style="margin-top:16px;">Want to hear what it sounds like? 👉 2-min demo call: <a href="${trackingUrl}" style="${LINK}">${trackingUrl}</a></p>
 
+<p style="margin-top:8px;">You can also try it yourself by calling the demo number: <strong>${demoPhone}</strong></p>
+
 <p style="margin-top:16px;">I'll give you a quick call in the next few days.</p>
 
-<p style="margin-top:16px;">If you want to try it before I ring, set up a free trial - fully configured for ${biz}. Takes 2 minutes: <a href="${SITE_URL}/onboarding" style="${LINK}">supportive-ai.com/onboarding</a></p>
+<p style="margin-top:16px;">If it feels like a fit, you can create a free account and hear a version set up for your own business before switching anything live: <a href="${SITE_URL}/onboarding" style="${LINK}">supportive-ai.com/onboarding</a></p>
 
-<p style="margin-top:24px;">Best,<br/>Lars Beurskens<br/><span style="${SIG_STYLE}">Founder, Supportive AI<br/>(832) 346-6405<br/><a href="${SITE_URL}" style="${LINK}">supportive-ai.com</a></span></p>
+<p style="margin-top:24px;">Best,<br/>Lars Beurskens<br/><span style="${SIG_STYLE}">Founder, Supportive AI<br/>(832) 346-6405<br/><a href="${SITE_URL}" style="${LINK}">supportive-ai.com</a> · <a href="https://www.linkedin.com/in/lars-beurskens-19642a8/" style="text-decoration:none;"><img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" width="14" height="14" alt="LinkedIn" style="vertical-align:middle;margin-left:4px;" /></a></span></p>
 
 <p style="color:#94a7b8;font-size:13px;margin-top:16px;">P.S. Free 7-day trial, no card needed.</p>
 </div>`,
