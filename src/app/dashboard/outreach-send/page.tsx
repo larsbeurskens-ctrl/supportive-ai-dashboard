@@ -226,6 +226,17 @@ export default function OutreachSendPage() {
     fetchActivities(contactId);
   }
 
+  async function handleDeleteContact(contactId: string, name: string) {
+    if (!confirm(`Delete ${name}? This can't be undone.`)) return;
+    try {
+      await fetch('/api/admin/outreach-contacts', {
+        method: 'DELETE', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ contactId }),
+      });
+      await fetchContacts();
+    } catch { alert('Delete failed'); }
+  }
+
   async function handleLogCall() {
     if (!logCallId) return;
     setSavingLog(true);
@@ -883,6 +894,10 @@ export default function OutreachSendPage() {
                           ✏️ Log
                         </button>
                       )}
+                      <button onClick={() => handleDeleteContact(c.id, c.businessName || c.email)}
+                        className="bg-white text-[#dc2626] px-2 py-1 rounded-lg text-[11px] font-semibold border border-[#fecaca] hover:bg-[#fef2f2] cursor-pointer transition-colors">
+                        🗑️
+                      </button>
                       {/* Send text — if has phone */}
                       {c.phone && c.status !== 'texted' && c.status !== 'interested' && c.status !== 'signed_up' && c.status !== 'not_interested' && (
                         <button onClick={() => openSmsModal(c, false)}

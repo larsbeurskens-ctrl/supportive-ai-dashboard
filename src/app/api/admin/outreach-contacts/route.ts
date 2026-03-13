@@ -183,3 +183,14 @@ export async function PATCH(req: Request) {
   const updated = await prisma.outreachContact.update({ where: { id: contactId }, data });
   return Response.json({ success: true, contact: updated });
 }
+
+export async function DELETE(req: Request) {
+  if (!(await checkAdmin())) return Response.json({ error: "Unauthorized" }, { status: 401 });
+  const { contactId } = await req.json();
+  if (!contactId) return Response.json({ error: "contactId required" }, { status: 400 });
+
+  // Delete activities first, then the contact
+  await prisma.outreachActivity.deleteMany({ where: { contactId } });
+  await prisma.outreachContact.delete({ where: { id: contactId } });
+  return Response.json({ success: true });
+}
