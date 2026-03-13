@@ -975,12 +975,40 @@ export default function OutreachSendPage() {
       {total > PAGE_SIZE && (
         <div className="flex items-center justify-between mt-4">
           <span className="text-[13px] text-[#94a7b8]">Showing {page * PAGE_SIZE + 1}-{Math.min((page + 1) * PAGE_SIZE, total)} of {total}</span>
-          <div className="flex gap-2">
-            <button onClick={() => setPage(p => Math.max(0, p - 1))} disabled={page === 0}
-              className="px-3 py-1.5 rounded-lg text-[13px] font-semibold border border-[#d1ccc6] bg-white text-[#1a2e3b] hover:bg-[#f0eeeb] disabled:opacity-40 cursor-pointer transition-colors">← Prev</button>
-            <span className="px-3 py-1.5 text-[13px] text-[#5a7184]">Page {page + 1} of {Math.ceil(total / PAGE_SIZE)}</span>
-            <button onClick={() => setPage(p => p + 1)} disabled={(page + 1) * PAGE_SIZE >= total}
-              className="px-3 py-1.5 rounded-lg text-[13px] font-semibold border border-[#d1ccc6] bg-white text-[#1a2e3b] hover:bg-[#f0eeeb] disabled:opacity-40 cursor-pointer transition-colors">Next →</button>
+          <div className="flex gap-1 items-center">
+            {(() => {
+              const totalPages = Math.ceil(total / PAGE_SIZE);
+              const pages: (number | '...')[] = [];
+              if (totalPages <= 9) {
+                for (let i = 0; i < totalPages; i++) pages.push(i);
+              } else {
+                pages.push(0);
+                if (page > 3) pages.push('...');
+                for (let i = Math.max(1, page - 2); i <= Math.min(totalPages - 2, page + 2); i++) pages.push(i);
+                if (page < totalPages - 4) pages.push('...');
+                pages.push(totalPages - 1);
+              }
+              return (
+                <>
+                  <button onClick={() => setPage(0)} disabled={page === 0}
+                    className="px-2 py-1.5 rounded-lg text-[12px] font-semibold border border-[#d1ccc6] bg-white text-[#1a2e3b] hover:bg-[#f0eeeb] disabled:opacity-30 cursor-pointer transition-colors">«</button>
+                  <button onClick={() => setPage(p => Math.max(0, p - 1))} disabled={page === 0}
+                    className="px-2 py-1.5 rounded-lg text-[12px] font-semibold border border-[#d1ccc6] bg-white text-[#1a2e3b] hover:bg-[#f0eeeb] disabled:opacity-30 cursor-pointer transition-colors">‹</button>
+                  {pages.map((p, i) => p === '...' ? (
+                    <span key={`dots-${i}`} className="px-1 text-[12px] text-[#94a7b8]">…</span>
+                  ) : (
+                    <button key={p} onClick={() => setPage(p as number)}
+                      className={`px-2.5 py-1.5 rounded-lg text-[12px] font-semibold border cursor-pointer transition-colors ${
+                        p === page ? 'bg-[#1a2e3b] text-white border-[#1a2e3b]' : 'border-[#d1ccc6] bg-white text-[#5a7184] hover:bg-[#f0eeeb]'
+                      }`}>{(p as number) + 1}</button>
+                  ))}
+                  <button onClick={() => setPage(p => Math.min(totalPages - 1, p + 1))} disabled={(page + 1) * PAGE_SIZE >= total}
+                    className="px-2 py-1.5 rounded-lg text-[12px] font-semibold border border-[#d1ccc6] bg-white text-[#1a2e3b] hover:bg-[#f0eeeb] disabled:opacity-30 cursor-pointer transition-colors">›</button>
+                  <button onClick={() => setPage(totalPages - 1)} disabled={page === totalPages - 1}
+                    className="px-2 py-1.5 rounded-lg text-[12px] font-semibold border border-[#d1ccc6] bg-white text-[#1a2e3b] hover:bg-[#f0eeeb] disabled:opacity-30 cursor-pointer transition-colors">»</button>
+                </>
+              );
+            })()}
           </div>
         </div>
       )}
