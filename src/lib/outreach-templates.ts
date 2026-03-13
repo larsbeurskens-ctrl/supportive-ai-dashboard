@@ -80,7 +80,7 @@ export function buildEmail(
 
 <p style="margin-top:16px;">If the timing's not right, no worries at all.</p>
 
-<p style="margin-top:24px;">Lars<br/><span style="${SIG_STYLE}">(832) 346-6405 · <a href="https://www.linkedin.com/in/lars-beurskens-19642a8/" style="text-decoration:none;"><img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" width="14" height="14" alt="LinkedIn" style="vertical-align:middle;" /></a></span></p>
+<p style="margin-top:24px;">Lars<br/><span style="${SIG_STYLE}">Founder, Supportive AI <a href="https://www.linkedin.com/in/lars-beurskens-19642a8/" style="text-decoration:none;"><img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" width="14" height="14" alt="LinkedIn" style="vertical-align:middle;margin-left:4px;" /></a><br/>(832) 346-6405</span></p>
 </div>`,
     };
   }
@@ -110,7 +110,7 @@ export function buildEmail(
 
 <p style="margin-top:16px;">If it feels like a fit, you can create a free account and hear a version set up for your own business before switching anything live: <a href="${SITE_URL}/onboarding" style="${LINK}">supportive-ai.com/onboarding</a></p>
 
-<p style="margin-top:24px;">Best,<br/>Lars Beurskens<br/><span style="${SIG_STYLE}">Founder, Supportive AI<br/>(832) 346-6405<br/><a href="${SITE_URL}" style="${LINK}">supportive-ai.com</a> · <a href="https://www.linkedin.com/in/lars-beurskens-19642a8/" style="text-decoration:none;"><img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" width="14" height="14" alt="LinkedIn" style="vertical-align:middle;margin-left:4px;" /></a></span></p>
+<p style="margin-top:24px;">Best,<br/>Lars Beurskens<br/><span style="${SIG_STYLE}">Founder, Supportive AI <a href="https://www.linkedin.com/in/lars-beurskens-19642a8/" style="text-decoration:none;"><img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" width="14" height="14" alt="LinkedIn" style="vertical-align:middle;margin-left:4px;" /></a><br/>(832) 346-6405<br/><a href="${SITE_URL}" style="${LINK}">supportive-ai.com</a></span></p>
 
 <p style="color:#94a7b8;font-size:13px;margin-top:16px;">P.S. Free 7-day trial, no card needed.</p>
 </div>`,
