@@ -25,6 +25,11 @@ export async function GET(req: Request) {
   if (vertical) where.vertical = vertical;
   if (status === 'has_reply') {
     where.hasUnreadReply = true;
+  } else if (status === 'has_email') {
+    where.email = { not: null, notIn: [''] };
+    where.NOT = [{ email: { contains: '@placeholder' } }];
+  } else if (status === 'has_phone') {
+    where.phone = { not: null };
   } else if (status) {
     where.status = status;
   }

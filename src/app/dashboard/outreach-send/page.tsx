@@ -755,6 +755,8 @@ export default function OutreachSendPage() {
         <select value={filterStatus} onChange={e => { setFilterStatus(e.target.value); setPage(0); }}
           className="px-3 py-2 rounded-lg border border-[#d1ccc6] text-[13px] text-[#1a2e3b] bg-white">
           <option value="">All statuses</option>
+          <option value="has_email">📧 Has email</option>
+          <option value="has_phone">📞 Has phone</option>
           <option value="has_reply">💬 Has reply</option>
           <option value="unsent">Unsent</option>
           <option value="sent">Emailed</option>
