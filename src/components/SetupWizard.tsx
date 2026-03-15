@@ -92,6 +92,9 @@ export default function SetupWizard() {
   const [step, setStep] = useState<WizardStep>('loading');
   const [status, setStatus] = useState<ProvisionStatus | null>(null);
   const [error, setError] = useState('');
+  
+  // Detect UK based on browser timezone
+  const isUK = typeof window !== 'undefined' && Intl.DateTimeFormat().resolvedOptions().timeZone?.startsWith('Europe/London');
 
   // Step 1: Phone setup
   const [phoneChoice, setPhoneChoice] = useState<'keep' | 'new' | ''>('');
@@ -134,6 +137,7 @@ export default function SetupWizard() {
 
   const vertical = status?.vertical || 'window_cleaning';
   const labels = VERTICAL_LABELS[vertical] || VERTICAL_LABELS.window_cleaning;
+  const ukSwap = (s: string) => isUK ? s.replace(/\$/g, '£') : s;
 
   const refreshStatus = useCallback(async () => {
     try {
@@ -537,13 +541,13 @@ export default function SetupWizard() {
               <div className="space-y-3">
                 <div className="grid grid-cols-3 gap-3">
                   <div>
-                    <label className="block text-sm font-semibold text-[#1a2e3b] mb-1">City</label>
-                    <input type="text" value={city} onChange={e => setCity(e.target.value)} placeholder="Houston"
+                    <label className="block text-sm font-semibold text-[#1a2e3b] mb-1">{isUK ? 'Town / City' : 'City'}</label>
+                    <input type="text" value={city} onChange={e => setCity(e.target.value)} placeholder={isUK ? 'Islington' : 'Houston'}
                       className="w-full px-4 py-2.5 border border-[#e5e0da] rounded-xl text-[14px] text-[#1a2e3b] focus:outline-none focus:ring-2 focus:ring-[#0d9488]" />
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold text-[#1a2e3b] mb-1">State</label>
-                    <input type="text" value={state} onChange={e => setState(e.target.value)} placeholder="TX"
+                    <label className="block text-sm font-semibold text-[#1a2e3b] mb-1">{isUK ? 'County' : 'State'}</label>
+                    <input type="text" value={state} onChange={e => setState(e.target.value)} placeholder={isUK ? 'London' : 'TX'}
                       className="w-full px-4 py-2.5 border border-[#e5e0da] rounded-xl text-[14px] text-[#1a2e3b] focus:outline-none focus:ring-2 focus:ring-[#0d9488]" />
                   </div>
                   <div>
@@ -565,7 +569,7 @@ export default function SetupWizard() {
                   <label className="flex items-center gap-2 cursor-pointer">
                     <input type="checkbox" checked={isLicensed} onChange={e => setIsLicensed(e.target.checked)}
                       className="w-4 h-4 rounded border-[#e5e0da] text-[#0d9488] focus:ring-[#0d9488]" />
-                    <span className="text-[13px] text-[#1a2e3b]">Licensed</span>
+                    <span className="text-[13px] text-[#1a2e3b]">{isUK ? 'Gas Safe registered' : 'Licensed'}</span>
                   </label>
                   <label className="flex items-center gap-2 cursor-pointer">
                     <input type="checkbox" checked={isInsured} onChange={e => setIsInsured(e.target.checked)}
@@ -589,7 +593,7 @@ export default function SetupWizard() {
                   <label className="block text-sm font-semibold text-[#1a2e3b] mb-1">{labels.feeLabel}</label>
                   <p className="text-[11px] text-[#94a7b8] mb-1.5">Your AI will quote this to customers who ask about pricing.</p>
                   <input type="text" value={diagnosticFee} onChange={e => setDiagnosticFee(e.target.value)}
-                    placeholder={labels.feePlaceholder}
+                    placeholder={ukSwap(labels.feePlaceholder)}
                     className="w-full px-4 py-2.5 border border-[#e5e0da] rounded-xl text-[14px] text-[#1a2e3b] focus:outline-none focus:ring-2 focus:ring-[#0d9488]" />
                   <label className="flex items-center gap-2 mt-2 cursor-pointer">
                     <input type="checkbox" checked={feeDeductible} onChange={e => setFeeDeductible(e.target.checked)}

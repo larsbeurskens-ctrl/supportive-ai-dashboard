@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { getProvisionStatus, saveBusinessDetails, goLive } from '@/lib/api';
 import type { ProvisionStatus } from '@/lib/api';
 
-const CARRIER_CODES: Record<string, { noAnswer: string; all: string; disable: string }> = {
+const US_CARRIER_CODES: Record<string, { noAnswer: string; all: string; disable: string }> = {
   'AT&T': { noAnswer: '*61*{NUM}#', all: '*21*{NUM}#', disable: '#21#' },
   'Verizon': { noAnswer: '*71{NUM}', all: '*72{NUM}', disable: '*73' },
   'T-Mobile': { noAnswer: '**61*{NUM}#', all: '**21*{NUM}#', disable: '##21#' },
@@ -23,6 +23,21 @@ const CARRIER_CODES: Record<string, { noAnswer: string; all: string; disable: st
   'Vonage': { noAnswer: '*72{NUM}', all: '*72{NUM}', disable: '*73' },
   'Ooma': { noAnswer: '*72{NUM}', all: '*72{NUM}', disable: '*73' },
   'Landline / Other': { noAnswer: '*92{NUM}', all: '*72{NUM}', disable: '*73' },
+};
+
+const UK_CARRIER_CODES: Record<string, { noAnswer: string; all: string; disable: string }> = {
+  'BT': { noAnswer: '*61*{NUM}#', all: '*21*{NUM}#', disable: '#21#' },
+  'EE': { noAnswer: '**61*{NUM}#', all: '**21*{NUM}#', disable: '##21#' },
+  'O2': { noAnswer: '**61*{NUM}#', all: '**21*{NUM}#', disable: '##21#' },
+  'Three': { noAnswer: '**61*{NUM}#', all: '**21*{NUM}#', disable: '##21#' },
+  'Vodafone': { noAnswer: '**61*{NUM}#', all: '**21*{NUM}#', disable: '##21#' },
+  'Sky Mobile': { noAnswer: '**61*{NUM}#', all: '**21*{NUM}#', disable: '##21#' },
+  'Virgin Media': { noAnswer: '*61*{NUM}#', all: '*21*{NUM}#', disable: '#21#' },
+  'Tesco Mobile': { noAnswer: '**61*{NUM}#', all: '**21*{NUM}#', disable: '##21#' },
+  'giffgaff': { noAnswer: '**61*{NUM}#', all: '**21*{NUM}#', disable: '##21#' },
+  'BT Landline': { noAnswer: '*61*{NUM}#', all: '*21*{NUM}#', disable: '#21#' },
+  'Sky Landline': { noAnswer: '*21*{NUM}#', all: '*21*{NUM}#', disable: '#21#' },
+  'Other UK': { noAnswer: '**61*{NUM}#', all: '**21*{NUM}#', disable: '##21#' },
 };
 
 function Toggle({ enabled, onChange, label, description }: { 
@@ -69,8 +84,10 @@ export default function CallSettingsPage() {
   useEffect(() => { refresh(); }, [refresh]);
 
   const agentName = status?.agentName || 'your AI';
-  const phoneNum = status?.phoneNumber?.replace('+1', '') || '';
+  const isUK = status?.phoneNumber?.startsWith('+44') || (status as any)?.overrides?.state?.length > 2;
+  const phoneNum = isUK ? (status?.phoneNumber?.replace('+44', '0') || '') : (status?.phoneNumber?.replace('+1', '') || '');
   const isLive = status?.isLive || false;
+  const CARRIER_CODES = isUK ? UK_CARRIER_CODES : US_CARRIER_CODES;
 
   // Build human-readable status
   const activeRules: string[] = [];

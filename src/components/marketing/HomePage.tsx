@@ -31,11 +31,14 @@ const HOME_DEMO_CONFIGS = [
       '20 Margaret St, Poughkeepsie, NY 12601',
       '35 Market St, Poughkeepsie, NY 12601',
     ],
-    whatToTry: 'Report an active leak, ask about a dripping faucet, or request a water heater quote. Try saying it\'s urgent.',
+    whatToTry: 'Report an active leak, ask about a dripping tap, or request a heating repair quote. Try saying it\'s urgent.',
   },
 ];
 
 export function HomePage() {
+  const isUK = typeof window !== 'undefined' && Intl.DateTimeFormat().resolvedOptions().timeZone === 'Europe/London';
+  const currency = isUK ? '£' : '$';
+  const startingPrice = isUK ? '£69/mo' : '$89/mo';
   const [showDemo, setShowDemo] = useState(false);
   const [playing, setPlaying] = useState<string | null>(null);
   const [progress, setProgress] = useState<Record<string, number>>({});
@@ -241,7 +244,7 @@ export function HomePage() {
                 scenario: 'Active leak — emergency escalation',
                 bubbles: [
                   { role: 'ai', text: "Thank you for calling Hudson Valley Plumbing! This is Sarah. How can I help you today?" },
-                  { role: 'customer', text: "I'm up to my ankle in water. I have a leaky faucet in the upstairs bathroom." },
+                  { role: 'customer', text: "I'm up to my ankle in water. I have a leaky tap in the upstairs bathroom." },
                   { role: 'ai', text: "That sounds like it could be an emergency. Do you have water actively leaking or flooding right now?" },
                   { role: 'customer', text: "Yes, actively leaking and it's rising quickly." },
                   { role: 'ai', text: "Okay, I'm going to get someone out to you right away. First, I need your name please." },
@@ -644,7 +647,7 @@ export function HomePage() {
               {[
                 { value: '7 days', label: 'Free trial' },
                 { value: '50 calls', label: 'Included free' },
-                { value: '$89/mo', label: 'Starting price' },
+                { value: startingPrice, label: 'Starting price' },
               ].map((s, i) => (
                 <div key={i} className="text-center p-4 rounded-xl bg-[#faf9f7] border border-[#e5e0da]">
                   <div className="text-[24px] font-extrabold text-[#1a2e3b]">{s.value}</div>

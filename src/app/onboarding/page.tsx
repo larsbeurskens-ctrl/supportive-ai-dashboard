@@ -42,10 +42,13 @@ const TRADES = [
 ];
 
 const PLAN_LABELS: Record<string, string> = {
-  starter: 'Starter — $89/mo',
-  standard: 'Standard — $149/mo',
-  business: 'Business — $299/mo',
+  starter: 'Starter',
+  standard: 'Standard',
+  business: 'Business',
 };
+
+const PLAN_PRICES_US: Record<string, string> = { starter: '$89/mo', standard: '$149/mo', business: '$299/mo' };
+const PLAN_PRICES_UK: Record<string, string> = { starter: '£69/mo', standard: '£119/mo', business: '£229/mo' };
 
 export default function OnboardingPage() {
   return (
@@ -60,6 +63,8 @@ export default function OnboardingPage() {
 function OnboardingForm() {
   const searchParams = useSearchParams();
   const planFromUrl = searchParams.get('plan') || 'starter';
+  const isUK = typeof window !== 'undefined' && Intl.DateTimeFormat().resolvedOptions().timeZone === 'Europe/London';
+  const prices = isUK ? PLAN_PRICES_UK : PLAN_PRICES_US;
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [company, setCompany] = useState('');
@@ -132,7 +137,7 @@ function OnboardingForm() {
             </p>
             {PLAN_LABELS[planFromUrl] && (
               <div className="inline-block mt-3 px-4 py-1.5 bg-[#eff6ff] text-[#1e40af] text-[13px] font-semibold rounded-full">
-                Selected plan: {PLAN_LABELS[planFromUrl]}
+                Selected plan: {PLAN_LABELS[planFromUrl]} — {prices[planFromUrl]}
               </div>
             )}
           </div>
