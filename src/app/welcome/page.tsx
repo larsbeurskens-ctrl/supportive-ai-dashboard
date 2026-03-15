@@ -25,6 +25,9 @@ export default function WelcomePage() {
         const data = JSON.parse(raw);
 
         if (session?.user?.email) {
+          const tz = data.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone || 'America/New_York';
+          const isUK = data.country === 'UK' || tz === 'Europe/London';
+
           const res = await fetch(`${API_BASE}/api/businesses/onboard`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -34,9 +37,10 @@ export default function WelcomePage() {
               industry: data.trade,
               verticalType: data.trade,
               ownerName: data.name,
-              timezone: 'America/New_York',
-              serviceRadius: '30',
+              timezone: tz,
+              serviceRadius: isUK ? '20' : '30',
               selectedPlan: data.plan || 'starter',
+              country: isUK ? 'UK' : 'US',
             }),
           });
 

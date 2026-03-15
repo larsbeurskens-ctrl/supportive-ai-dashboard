@@ -63,7 +63,8 @@ export default function OnboardingPage() {
 function OnboardingForm() {
   const searchParams = useSearchParams();
   const planFromUrl = searchParams.get('plan') || 'starter';
-  const isUK = typeof window !== 'undefined' && Intl.DateTimeFormat().resolvedOptions().timeZone === 'Europe/London';
+  const countryParam = searchParams.get('country');
+  const isUK = countryParam === 'UK' || (typeof window !== 'undefined' && Intl.DateTimeFormat().resolvedOptions().timeZone === 'Europe/London');
   const prices = isUK ? PLAN_PRICES_UK : PLAN_PRICES_US;
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -90,6 +91,8 @@ function OnboardingForm() {
       localStorage.setItem('supportive_signup', JSON.stringify({
         name, email, company, trade,
         plan: planFromUrl,
+        timezone: isUK ? 'Europe/London' : Intl.DateTimeFormat().resolvedOptions().timeZone,
+        country: isUK ? 'UK' : 'US',
         createdAt: new Date().toISOString(),
       }));
 

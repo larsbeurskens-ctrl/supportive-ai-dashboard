@@ -93,8 +93,9 @@ export default function SetupWizard() {
   const [status, setStatus] = useState<ProvisionStatus | null>(null);
   const [error, setError] = useState('');
   
-  // Detect UK based on browser timezone
-  const isUK = typeof window !== 'undefined' && Intl.DateTimeFormat().resolvedOptions().timeZone?.startsWith('Europe/London');
+  // Detect UK from business data or browser timezone
+  const isUK = status?.overrides?.country === 'UK' || 
+    (typeof window !== 'undefined' && Intl.DateTimeFormat().resolvedOptions().timeZone === 'Europe/London');
 
   // Step 1: Phone setup
   const [phoneChoice, setPhoneChoice] = useState<'keep' | 'new' | ''>('');
