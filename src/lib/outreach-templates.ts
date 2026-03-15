@@ -7,7 +7,7 @@ export const VERTICAL_DESTINATIONS: Record<string, string> = {
   plumbing: "/plumbing#hear-it",
   window_cleaning: "/window-cleaning#hear-it",
   hvac: "/hvac#hear-it",
-  plumbing_uk: "/plumbing#hear-it",
+  plumbing_uk: "/#hear-it",
 };
 
 const VERTICAL_LABELS: Record<string, string> = {
