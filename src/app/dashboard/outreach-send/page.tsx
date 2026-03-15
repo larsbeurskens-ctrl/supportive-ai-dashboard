@@ -767,7 +767,8 @@ export default function OutreachSendPage() {
         <select value={filterVertical} onChange={e => { setFilterVertical(e.target.value); setPage(0); }}
           className="px-3 py-2 rounded-lg border border-[#d1ccc6] text-[13px] text-[#1a2e3b] bg-white">
           <option value="">All verticals</option>
-          <option value="plumbing">Plumbing</option>
+          <option value="plumbing">Plumbing (US)</option>
+          <option value="plumbing_uk">Plumbing (UK)</option>
           <option value="window_cleaning">Window Cleaning</option>
           <option value="hvac">HVAC</option>
         </select>

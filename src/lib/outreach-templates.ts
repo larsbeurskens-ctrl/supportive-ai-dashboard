@@ -7,30 +7,35 @@ export const VERTICAL_DESTINATIONS: Record<string, string> = {
   plumbing: "/plumbing#hear-it",
   window_cleaning: "/window-cleaning#hear-it",
   hvac: "/hvac#hear-it",
+  plumbing_uk: "/plumbing#hear-it",
 };
 
 const VERTICAL_LABELS: Record<string, string> = {
   plumbing: "plumbing",
   window_cleaning: "window cleaning",
   hvac: "HVAC",
+  plumbing_uk: "plumbing",
 };
 
 const DEMO_PHONES: Record<string, string> = {
   plumbing: "(240) 301-1473",
   window_cleaning: "(845) 209-2401",
   hvac: "(845) 209-2401",
+  plumbing_uk: "+44 7427 846243",
 };
 
 const PAIN_OPENERS: Record<string, string> = {
   plumbing: "When a customer calls and you're under a sink, driving, or on another job - you can't always pick up. And the calls you miss usually go to the next plumber.",
   window_cleaning: "When a customer calls and you're up on a ladder, driving between jobs, or quoting another property - you can't always pick up. And the calls you miss usually go to the next company.",
   hvac: "When a customer calls and you're in an attic, on a rooftop, or running between service calls - you can't always pick up. And the calls you miss usually go to the next HVAC company.",
+  plumbing_uk: "When a customer rings and you're under a sink, driving between jobs, or on a call-out — you can't always pick up. And the calls you miss usually go to the next plumber on the list.",
 };
 
 const VERTICAL_TRADE: Record<string, string> = {
   plumbing: "plumbers",
   window_cleaning: "window cleaning businesses",
   hvac: "HVAC companies",
+  plumbing_uk: "plumbers",
 };
 
 const STYLE = `font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;max-width:560px;color:#1a2e3b;font-size:15px;line-height:1.7;`;
