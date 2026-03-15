@@ -24,6 +24,13 @@ const DEMO_PHONES: Record<string, string> = {
   plumbing_uk: "+44 7427 846243",
 };
 
+const SALES_PHONES: Record<string, string> = {
+  plumbing: "(832) 346-6405",
+  window_cleaning: "(832) 346-6405",
+  hvac: "(832) 346-6405",
+  plumbing_uk: "+44 7414 153843",
+};
+
 const PAIN_OPENERS: Record<string, string> = {
   plumbing: "When a customer calls and you're under a sink, driving, or on another job - you can't always pick up. And the calls you miss usually go to the next plumber.",
   window_cleaning: "When a customer calls and you're up on a ladder, driving between jobs, or quoting another property - you can't always pick up. And the calls you miss usually go to the next company.",
@@ -64,6 +71,7 @@ export function buildEmail(
   const biz = contact.businessName || "your business";
   const vLabel = VERTICAL_LABELS[contact.vertical] || contact.vertical;
   const demoPhone = DEMO_PHONES[contact.vertical] || "(845) 209-2401";
+  const salesPhone = SALES_PHONES[contact.vertical] || "(832) 346-6405";
   const trade = VERTICAL_TRADE[contact.vertical] || "home service businesses";
   const pain = PAIN_OPENERS[contact.vertical] || PAIN_OPENERS.plumbing;
   const greet = greeting();
@@ -85,7 +93,7 @@ export function buildEmail(
 
 <p style="margin-top:16px;">If the timing's not right, no worries at all.</p>
 
-<p style="margin-top:24px;">Lars<br/><span style="${SIG_STYLE}">Founder, Supportive AI <a href="https://www.linkedin.com/in/lars-beurskens-19642a8/" style="text-decoration:none;"><img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" width="14" height="14" alt="LinkedIn" style="vertical-align:middle;margin-left:4px;" /></a><br/>(832) 346-6405</span></p>
+<p style="margin-top:24px;">Lars<br/><span style="${SIG_STYLE}">Founder, Supportive AI <a href="https://www.linkedin.com/in/lars-beurskens-19642a8/" style="text-decoration:none;"><img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" width="14" height="14" alt="LinkedIn" style="vertical-align:middle;margin-left:4px;" /></a><br/>${salesPhone}</span></p>
 </div>`,
     };
   }
@@ -115,7 +123,7 @@ export function buildEmail(
 
 <p style="margin-top:16px;">If it feels like a fit, you can create a free account and hear a version set up for your own business before switching anything live: <a href="${SITE_URL}/onboarding" style="${LINK}">supportive-ai.com/onboarding</a></p>
 
-<p style="margin-top:24px;">Best,<br/>Lars Beurskens<br/><span style="${SIG_STYLE}">Founder, Supportive AI <a href="https://www.linkedin.com/in/lars-beurskens-19642a8/" style="text-decoration:none;"><img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" width="14" height="14" alt="LinkedIn" style="vertical-align:middle;margin-left:4px;" /></a><br/>(832) 346-6405<br/><a href="${SITE_URL}" style="${LINK}">supportive-ai.com</a></span></p>
+<p style="margin-top:24px;">Best,<br/>Lars Beurskens<br/><span style="${SIG_STYLE}">Founder, Supportive AI <a href="https://www.linkedin.com/in/lars-beurskens-19642a8/" style="text-decoration:none;"><img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" width="14" height="14" alt="LinkedIn" style="vertical-align:middle;margin-left:4px;" /></a><br/>${salesPhone}<br/><a href="${SITE_URL}" style="${LINK}">supportive-ai.com</a></span></p>
 
 <p style="color:#94a7b8;font-size:13px;margin-top:16px;">P.S. Free 7-day trial, no card needed.</p>
 </div>`,
