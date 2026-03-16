@@ -12,47 +12,7 @@ export const metadata: Metadata = {
 //   /audio/plumbing-pricing.m4a
 const plumbingRecordings = [
   {
-    id: 'plumb-lance',
-    src: '/audio/demo-call-plumbing-lance-booking.m4a',
-    scenario: '🇺🇸 Leaky faucet — booking a Monday slot',
-    bubbles: [
-      { role: 'ai' as const, text: "Thank you for calling Hudson Valley Plumbing! This is Sarah. How can I help you today?" },
-      { role: 'customer' as const, text: "Hi, Sarah. This is Lance. I'd like to book an appointment at 150 Market Street. My faucet is leaking." },
-      { role: 'ai' as const, text: "Got it, Lance! A leaky faucet at 150 Market Street. Is that in the kitchen, bathroom, or somewhere else?" },
-      { role: 'customer' as const, text: "It's in the bathroom." },
-      { role: 'ai' as const, text: "Great news! We have openings at 8 AM, 9 AM, and 10 AM on Monday. Which one works best for you?" },
-      { role: 'customer' as const, text: "9 AM will be best. Thank you." },
-      { role: 'ai' as const, text: "You're all set for Monday, March 9 at 9 AM! There's an $89 diagnostic visit fee — the plumber will assess and quote before starting any work. No surprises. You'll get a confirmation text shortly." },
-    ],
-  },
-  {
-    id: 'plumb-rob',
-    src: '/audio/demo-call-plumbing-rob-pricing.m4a',
-    scenario: '🇺🇸 Pricing + insurance — clogged drain',
-    bubbles: [
-      { role: 'ai' as const, text: "Thank you for calling Hudson Valley Plumbing! This is Sarah. How can I help you today?" },
-      { role: 'customer' as const, text: "Hi, Sarah. Can you give me some ballpark figures to fix a clogged drain, please?" },
-      { role: 'ai' as const, text: "Sure! For drain clearing it typically runs $150–$300. Our plumber will give you an exact quote on-site before starting — no surprises. There's also an $89 diagnostic fee for the visit." },
-      { role: 'customer' as const, text: "Yes, that would be great. I just wanted to make sure that you're also insured." },
-      { role: 'ai' as const, text: "Absolutely — we're fully licensed and insured. You're in good hands. Let me grab a few details to get you on the schedule." },
-    ],
-  },
-  {
-    id: 'plumb-john',
-    src: '/audio/demo-call-plumbing-emergency-john.m4a',
-    scenario: '🇺🇸 Active leak — emergency escalation',
-    bubbles: [
-      { role: 'ai' as const, text: "Thank you for calling Hudson Valley Plumbing! This is Sarah. How can I help you today?" },
-      { role: 'customer' as const, text: "I'm up to my ankle in water. I have a leaky faucet in the upstairs bathroom." },
-      { role: 'ai' as const, text: "That sounds like it could be an emergency. Do you have water actively leaking or flooding right now?" },
-      { role: 'customer' as const, text: "Yes, actively leaking and it's rising quickly." },
-      { role: 'ai' as const, text: "First — can you locate your main water shut-off and turn it off? I'm flagging this as an emergency right now." },
-      { role: 'customer' as const, text: "I'm at 60 Market Street in Poughkeepsie. Name is John." },
-      { role: 'ai' as const, text: "Our team is being notified now and will call you right back. Stay safe, John." },
-    ],
-  },
-  {
-    id: 'uk-plumb-michael',
+    id: 'uk-robert-pricing',
     src: '/audio/demo-call-uk-robert-pricing.m4a',
     scenario: '🇬🇧 UK — Price enquiry, leaky tap',
     bubbles: [
@@ -76,6 +36,44 @@ const plumbingRecordings = [
       { role: 'ai' as const, text: "We've got openings at 8 AM and 3 PM on Wednesday. Which works better?" },
       { role: 'customer' as const, text: "Three would be perfect." },
       { role: 'ai' as const, text: "You're all set for Wednesday at 3 PM! £65 call-out fee gets applied to the repair. No surprises." },
+    ],
+  },
+  {
+    id: 'plumb-lance',
+    src: '/audio/demo-call-plumbing-lance-booking.m4a',
+    scenario: '🇺🇸 Leaky faucet — booking a Monday slot',
+    bubbles: [
+      { role: 'ai' as const, text: "Thank you for calling Hudson Valley Plumbing! This is Sarah. How can I help you today?" },
+      { role: 'customer' as const, text: "Hi, Sarah. Can you give me some ballpark figures to fix a clogged drain, please?" },
+      { role: 'ai' as const, text: "Sure! For drain clearing it typically runs $150–$300. Our plumber will give you an exact quote on-site before starting — no surprises. There's also an $89 diagnostic fee for the visit." },
+      { role: 'customer' as const, text: "Yes, that would be great. I just wanted to make sure that you're also insured." },
+      { role: 'ai' as const, text: "Absolutely — we're fully licensed and insured. You're in good hands. Let me grab a few details to get you on the schedule." },
+    ],
+  },
+  {
+    id: 'plumb-rob',
+    src: '/audio/demo-call-plumbing-rob-pricing.m4a',
+    scenario: '🇺🇸 Pricing + insurance — clogged drain',
+    bubbles: [
+      { role: 'ai' as const, text: "Thank you for calling Hudson Valley Plumbing! This is Sarah. How can I help you today?" },
+      { role: 'customer' as const, text: "Can you give me some ballpark figures to fix a clogged drain, please?" },
+      { role: 'ai' as const, text: "For drain clearing it typically runs $150–$300. There's also an $89 diagnostic fee. No surprises." },
+      { role: 'customer' as const, text: "I just wanted to make sure that you're also insured." },
+      { role: 'ai' as const, text: "Absolutely — we're fully licensed and insured. You're in good hands." },
+    ],
+  },
+  {
+    id: 'plumb-john',
+    src: '/audio/demo-call-plumbing-emergency-john.m4a',
+    scenario: '🇺🇸 Active leak — emergency escalation',
+    bubbles: [
+      { role: 'ai' as const, text: "Thank you for calling Hudson Valley Plumbing! This is Sarah. How can I help you today?" },
+      { role: 'customer' as const, text: "I'm up to my ankle in water. I have a leaky faucet in the upstairs bathroom." },
+      { role: 'ai' as const, text: "That sounds like it could be an emergency. Do you have water actively leaking or flooding right now?" },
+      { role: 'customer' as const, text: "Yes, actively leaking and it's rising quickly." },
+      { role: 'ai' as const, text: "First — can you locate your main water shut-off and turn it off? I'm flagging this as an emergency right now." },
+      { role: 'customer' as const, text: "I'm at 60 Market Street in Poughkeepsie. Name is John." },
+      { role: 'ai' as const, text: "Our team is being notified now and will call you right back. Stay safe, John." },
     ],
   },
 ];

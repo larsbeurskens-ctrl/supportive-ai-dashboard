@@ -293,18 +293,27 @@ export function HomePage() {
                 </div>
 
                 {/* Chat bubbles */}
-                <div className="p-4 space-y-3 max-h-[320px] overflow-y-auto">
-                  {conv.bubbles.map((b, j) => (
-                    <div key={j} className={`flex ${b.role === 'customer' ? 'justify-end' : 'justify-start'}`}>
-                      <div className={`max-w-[85%] px-3.5 py-2.5 rounded-2xl text-[13px] leading-relaxed ${
-                        b.role === 'customer'
-                          ? 'bg-[#1a2e3b] text-white rounded-br-md'
-                          : 'bg-[#f0eeeb] text-[#1a2e3b] rounded-bl-md'
-                      }`}>
-                        {b.text}
+                <div className="relative cursor-pointer" onClick={() => { if (playing !== conv.id) togglePlay(conv.id, conv.src); }}>
+                  <div className="p-4 space-y-3 max-h-[320px] overflow-y-auto">
+                    {conv.bubbles.map((b, j) => (
+                      <div key={j} className={`flex ${b.role === 'customer' ? 'justify-end' : 'justify-start'}`}>
+                        <div className={`max-w-[85%] px-3.5 py-2.5 rounded-2xl text-[13px] leading-relaxed ${
+                          b.role === 'customer'
+                            ? 'bg-[#1a2e3b] text-white rounded-br-md'
+                            : 'bg-[#f0eeeb] text-[#1a2e3b] rounded-bl-md'
+                        }`}>
+                          {b.text}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  {playing !== conv.id && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/20 rounded-lg transition-opacity hover:bg-black/30">
+                      <div className="w-16 h-16 rounded-full bg-[#e8930c] flex items-center justify-center shadow-lg" style={{ animation: 'pulse-play 2s ease-in-out infinite' }}>
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="white"><polygon points="6 3 20 12 6 21 6 3"/></svg>
                       </div>
                     </div>
-                  ))}
+                  )}
                 </div>
 
                 {/* Audio player */}
