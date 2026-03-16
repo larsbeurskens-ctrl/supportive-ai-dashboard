@@ -225,7 +225,7 @@ export function HomePage() {
               {
                 id: 'wc-mike',
                 src: '/audio/demo-call-wc-booking-mike.m4a',
-                label: 'Window Cleaning',
+                label: '🇺🇸 Window Cleaning',
                 scenario: 'New booking — 2-story colonial',
                 bubbles: [
                   { role: 'ai', text: "Hey there! Thanks for calling Clean Pro Window Washing, this is Sarah. How can I help you today?" },
@@ -240,7 +240,7 @@ export function HomePage() {
               {
                 id: 'plumb-john',
                 src: '/audio/demo-call-plumbing-emergency-john.m4a',
-                label: 'Plumbing Emergency',
+                label: '🇺🇸 Plumbing Emergency',
                 scenario: 'Active leak — emergency escalation',
                 bubbles: [
                   { role: 'ai', text: "Thank you for calling Hudson Valley Plumbing! This is Sarah. How can I help you today?" },
@@ -253,18 +253,32 @@ export function HomePage() {
                 ],
               },
               {
-                id: 'uk-plumb-michael',
-                src: '/audio/demo-call-uk-plumbing-michael-trimmed.m4a',
-                label: 'UK Plumbing',
-                scenario: 'Leaky tap — booking next day',
+                id: 'uk-robert-pricing',
+                src: '/audio/demo-call-uk-robert-pricing.m4a',
+                label: '🇬🇧 UK Price Enquiry',
+                scenario: 'Pricing questions — leaky tap',
                 bubbles: [
                   { role: 'ai', text: "Hello, thank you for calling London Plumbing Services! This is Sarah. How can I help you today?" },
-                  { role: 'customer', text: "Hi, this is Michael. I have a leaky tap in the upstairs bathroom." },
-                  { role: 'ai', text: "Hi Michael! Yeah, absolutely we can help with that. What's your full address?" },
-                  { role: 'customer', text: "28 Annaly Park Mansions, London, SE28 0NE." },
-                  { role: 'ai', text: "For tomorrow we've got an opening at 12 PM. Would that work?" },
-                  { role: 'customer', text: "12 PM works really well. Let's lock it in." },
-                  { role: 'ai', text: "You're all set for Tuesday at 12 PM! There's a £65 call-out fee — gets applied to the repair. No surprises." },
+                  { role: 'customer', text: "Hi, this is Robert. I have a question about your pricing and services." },
+                  { role: 'ai', text: "Our call-out fee is £65. A leaky tap runs about £80 to £150, blocked drains £80 to £200, boiler repairs £150 to £400." },
+                  { role: 'customer', text: "Is the call-out fee deducted from the repair cost?" },
+                  { role: 'ai', text: "The £65 call-out fee gets applied to the repair cost if you go ahead — so it's essentially free." },
+                  { role: 'customer', text: "That would be great. Thank you so much." },
+                ],
+              },
+              {
+                id: 'uk-maria-booking',
+                src: '/audio/demo-call-uk-maria-booking.m4a',
+                label: '🇬🇧 UK Booking',
+                scenario: 'Clogged drain — full booking flow',
+                bubbles: [
+                  { role: 'ai', text: "Hello, thank you for calling London Plumbing Services! This is Sarah. How can I help you today?" },
+                  { role: 'customer', text: "I'm calling regarding a clogged drain in my kitchen." },
+                  { role: 'ai', text: "We can definitely help with that. Can I start by getting your name?" },
+                  { role: 'customer', text: "My name is Maria. 9 Japan Crescent, N4 4BB, London." },
+                  { role: 'ai', text: "We've got openings at 8 AM and 3 PM on Wednesday. Which works better?" },
+                  { role: 'customer', text: "Three would be perfect." },
+                  { role: 'ai', text: "You're all set for Wednesday at 3 PM! £65 call-out fee gets applied to the repair. No surprises." },
                 ],
               },
             ].map((conv) => (

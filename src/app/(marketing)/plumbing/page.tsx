@@ -14,7 +14,7 @@ const plumbingRecordings = [
   {
     id: 'plumb-lance',
     src: '/audio/demo-call-plumbing-lance-booking.m4a',
-    scenario: 'Leaky faucet — booking a Monday slot',
+    scenario: '🇺🇸 Leaky faucet — booking a Monday slot',
     bubbles: [
       { role: 'ai' as const, text: "Thank you for calling Hudson Valley Plumbing! This is Sarah. How can I help you today?" },
       { role: 'customer' as const, text: "Hi, Sarah. This is Lance. I'd like to book an appointment at 150 Market Street. My faucet is leaking." },
@@ -28,7 +28,7 @@ const plumbingRecordings = [
   {
     id: 'plumb-rob',
     src: '/audio/demo-call-plumbing-rob-pricing.m4a',
-    scenario: 'Pricing + insurance — clogged drain',
+    scenario: '🇺🇸 Pricing + insurance — clogged drain',
     bubbles: [
       { role: 'ai' as const, text: "Thank you for calling Hudson Valley Plumbing! This is Sarah. How can I help you today?" },
       { role: 'customer' as const, text: "Hi, Sarah. Can you give me some ballpark figures to fix a clogged drain, please?" },
@@ -40,7 +40,7 @@ const plumbingRecordings = [
   {
     id: 'plumb-john',
     src: '/audio/demo-call-plumbing-emergency-john.m4a',
-    scenario: 'Active leak — emergency escalation',
+    scenario: '🇺🇸 Active leak — emergency escalation',
     bubbles: [
       { role: 'ai' as const, text: "Thank you for calling Hudson Valley Plumbing! This is Sarah. How can I help you today?" },
       { role: 'customer' as const, text: "I'm up to my ankle in water. I have a leaky faucet in the upstairs bathroom." },
@@ -53,16 +53,29 @@ const plumbingRecordings = [
   },
   {
     id: 'uk-plumb-michael',
-    src: '/audio/demo-call-uk-plumbing-michael-trimmed.m4a',
-    scenario: 'UK — Leaky tap, booking next day',
+    src: '/audio/demo-call-uk-robert-pricing.m4a',
+    scenario: '🇬🇧 UK — Price enquiry, leaky tap',
     bubbles: [
       { role: 'ai' as const, text: "Hello, thank you for calling London Plumbing Services! This is Sarah. How can I help you today?" },
-      { role: 'customer' as const, text: "Hi, this is Michael. I have a leaky tap in the upstairs bathroom." },
-      { role: 'ai' as const, text: "Hi Michael! Yeah, absolutely we can help with that. What's your full address?" },
-      { role: 'customer' as const, text: "28 Annaly Park Mansions, London, SE28 0NE." },
-      { role: 'ai' as const, text: "For tomorrow we've got an opening at 12 PM. Would that work?" },
-      { role: 'customer' as const, text: "12 PM works really well. Let's lock it in." },
-      { role: 'ai' as const, text: "You're all set for Tuesday at 12 PM! There's a £65 call-out fee — gets applied to the repair. No surprises." },
+      { role: 'customer' as const, text: "Hi, this is Robert. I have a question about your pricing and services." },
+      { role: 'ai' as const, text: "Our call-out fee is £65. A leaky tap runs £80–£150, blocked drains £80–£200, boiler repairs £150–£400." },
+      { role: 'customer' as const, text: "Is the call-out fee deducted from the repair cost?" },
+      { role: 'ai' as const, text: "The £65 call-out fee gets applied to the repair cost if you go ahead — so it's essentially free." },
+      { role: 'customer' as const, text: "That would be great. Thank you so much." },
+    ],
+  },
+  {
+    id: 'uk-maria-booking',
+    src: '/audio/demo-call-uk-maria-booking.m4a',
+    scenario: '🇬🇧 UK — Clogged drain, full booking',
+    bubbles: [
+      { role: 'ai' as const, text: "Hello, thank you for calling London Plumbing Services! This is Sarah. How can I help you today?" },
+      { role: 'customer' as const, text: "I'm calling regarding a clogged drain in my kitchen." },
+      { role: 'ai' as const, text: "We can definitely help with that. Can I start by getting your name?" },
+      { role: 'customer' as const, text: "My name is Maria. 9 Japan Crescent, N4 4BB, London." },
+      { role: 'ai' as const, text: "We've got openings at 8 AM and 3 PM on Wednesday. Which works better?" },
+      { role: 'customer' as const, text: "Three would be perfect." },
+      { role: 'ai' as const, text: "You're all set for Wednesday at 3 PM! £65 call-out fee gets applied to the repair. No surprises." },
     ],
   },
 ];
