@@ -252,6 +252,21 @@ export function HomePage() {
                   { role: 'ai', text: "I've escalated this as an emergency and our team will call you right back to get someone out there immediately. Stay safe, John." },
                 ],
               },
+              {
+                id: 'uk-plumb-michael',
+                src: '/audio/demo-call-uk-plumbing-michael-trimmed.m4a',
+                label: 'UK Plumbing',
+                scenario: 'Leaky tap — booking next day',
+                bubbles: [
+                  { role: 'ai', text: "Hello, thank you for calling London Plumbing Services! This is Sarah. How can I help you today?" },
+                  { role: 'customer', text: "Hi, this is Michael. I have a leaky tap in the upstairs bathroom." },
+                  { role: 'ai', text: "Hi Michael! Yeah, absolutely we can help with that. What's your full address?" },
+                  { role: 'customer', text: "28 Annaly Park Mansions, London, SE28 0NE." },
+                  { role: 'ai', text: "For tomorrow we've got an opening at 12 PM. Would that work?" },
+                  { role: 'customer', text: "12 PM works really well. Let's lock it in." },
+                  { role: 'ai', text: "You're all set for Tuesday at 12 PM! There's a £65 call-out fee — gets applied to the repair. No surprises." },
+                ],
+              },
             ].map((conv) => (
               <div key={conv.id} className="bg-white rounded-2xl border border-[#e5e0da] overflow-hidden">
                 {/* Header */}
