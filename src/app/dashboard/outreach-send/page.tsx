@@ -39,7 +39,7 @@ interface Contact {
   activities: Activity[];
 }
 
-interface Pipeline { total: number; unsent: number; sent: number; texted: number; called: number; spoke: number; interested: number; not_interested: number; signed_up: number; unread_replies: number; }
+interface Pipeline { total: number; unsent: number; sent: number; clicked: number; texted: number; called: number; spoke: number; interested: number; not_interested: number; signed_up: number; unread_replies: number; }
 
 interface SMSMessage { id: string; direction: string; body: string; createdAt: string; status: string; }
 interface SMSConversation { id: string; fromNumber: string; toNumber: string; toName: string | null; toCompany: string | null; unread: boolean; lastMessage: string; lastAt: string; messages: SMSMessage[]; }
@@ -87,7 +87,7 @@ export default function OutreachSendPage() {
   const { data: session, status: authStatus } = useSession();
   const router = useRouter();
   const [contacts, setContacts] = useState<Contact[]>([]);
-  const [pipeline, setPipeline] = useState<Pipeline>({ total: 0, unsent: 0, sent: 0, texted: 0, called: 0, spoke: 0, interested: 0, not_interested: 0, signed_up: 0, unread_replies: 0 });
+  const [pipeline, setPipeline] = useState<Pipeline>({ total: 0, unsent: 0, sent: 0, clicked: 0, texted: 0, called: 0, spoke: 0, interested: 0, not_interested: 0, signed_up: 0, unread_replies: 0 });
   const [loading, setLoading] = useState(true);
   const [filterVertical, setFilterVertical] = useState('');
   const [filterStatus, setFilterStatus] = useState('');
@@ -637,15 +637,16 @@ export default function OutreachSendPage() {
           { label: 'Total', value: pipeline.total, color: '#1a2e3b' },
           { label: 'Unsent', value: pipeline.unsent, color: '#94a7b8' },
           { label: 'Emailed', value: pipeline.sent, color: '#3b82f6' },
+          { label: '🔗 Clicked', value: pipeline.clicked, color: '#e8930c', filter: 'clicked' },
           { label: 'Called', value: pipeline.called, color: '#e8930c' },
-          { label: 'Spoke', value: pipeline.spoke, color: '#059669' },
           { label: 'Texted', value: pipeline.texted, color: '#059669' },
           { label: '💬 Replies', value: pipeline.unread_replies, color: pipeline.unread_replies > 0 ? '#dc2626' : '#94a7b8' },
           { label: 'Interested', value: pipeline.interested, color: '#16a34a' },
           { label: 'Not int.', value: pipeline.not_interested, color: '#dc2626' },
           { label: 'Signed up', value: pipeline.signed_up, color: '#059669' },
         ].map(s => (
-          <div key={s.label} className="bg-white rounded-xl border border-[#e5e0da] p-3 text-center">
+          <div key={s.label} className={`bg-white rounded-xl border border-[#e5e0da] p-3 text-center ${'filter' in s ? 'cursor-pointer hover:border-[#e8930c] transition-colors' : ''}`}
+            onClick={() => { if ('filter' in s && s.filter) { setFilterStatus(s.filter as string); setPage(0); } }}>
             <div className="text-[20px] font-extrabold" style={{ color: s.color }}>{s.value}</div>
             <div className="text-[10px] font-semibold text-[#94a7b8] uppercase tracking-wide">{s.label}</div>
           </div>
@@ -812,6 +813,7 @@ export default function OutreachSendPage() {
           <option value="has_reply">💬 Has reply</option>
           <option value="unsent">Unsent</option>
           <option value="sent">Emailed</option>
+          <option value="clicked">🔗 Clicked link</option>
           <option value="texted">Texted</option>
           <option value="called">Called</option>
           <option value="voicemail">Voicemail</option>

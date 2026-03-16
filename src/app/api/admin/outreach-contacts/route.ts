@@ -64,7 +64,8 @@ export async function GET(req: Request) {
       SELECT 
         COUNT(*) as total,
         COUNT(CASE WHEN status = 'unsent' THEN 1 END) as unsent,
-        COUNT(CASE WHEN status IN ('sent', 'clicked') THEN 1 END) as sent,
+        COUNT(CASE WHEN status = 'sent' THEN 1 END) as sent,
+        COUNT(CASE WHEN status = 'clicked' THEN 1 END) as clicked,
         COUNT(CASE WHEN status = 'texted' THEN 1 END) as texted,
         COUNT(CASE WHEN status IN ('called', 'voicemail') THEN 1 END) as called,
         COUNT(CASE WHEN status IN ('spoke', 'demo_played') THEN 1 END) as spoke,
@@ -114,6 +115,7 @@ export async function GET(req: Request) {
       total: Number(pipeline.total),
       unsent: Number(pipeline.unsent),
       sent: Number(pipeline.sent),
+      clicked: Number(pipeline.clicked),
       texted: Number(pipeline.texted),
       called: Number(pipeline.called),
       spoke: Number(pipeline.spoke),
