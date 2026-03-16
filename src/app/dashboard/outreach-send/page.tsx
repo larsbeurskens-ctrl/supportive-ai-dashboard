@@ -135,6 +135,8 @@ export default function OutreachSendPage() {
   // Mobile phone edit state
   const [editMobileId, setEditMobileId] = useState<string | null>(null);
   const [editMobileValue, setEditMobileValue] = useState('');
+  const [editEmailId, setEditEmailId] = useState<string | null>(null);
+  const [editEmailValue, setEditEmailValue] = useState('');
 
   async function handleSaveMobile(contactId: string) {
     await fetch('/api/admin/outreach-contacts', {
@@ -143,6 +145,16 @@ export default function OutreachSendPage() {
     });
     setEditMobileId(null);
     setEditMobileValue('');
+    await fetchContacts();
+  }
+
+  async function handleSaveEmail(contactId: string) {
+    await fetch('/api/admin/outreach-contacts', {
+      method: 'PATCH', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ contactId, email: editEmailValue.trim() }),
+    });
+    setEditEmailId(null);
+    setEditEmailValue('');
     await fetchContacts();
   }
 
@@ -865,9 +877,20 @@ export default function OutreachSendPage() {
                     {c._count.activities > 0 && <div className="text-[10px] text-[#94a7b8]">{c._count.activities} interaction{c._count.activities !== 1 ? 's' : ''}</div>}
                   </td>
                   <td className="px-4 py-3 align-top">
-                    <div className="text-[13px] text-[#1a2e3b] truncate max-w-[200px]">
-                      {hasEmail ? c.email : <span className="text-[#94a7b8] italic">needs email</span>}
-                    </div>
+                    {editEmailId === c.id ? (
+                      <div className="flex gap-1 items-center">
+                        <input type="email" value={editEmailValue} onChange={e => setEditEmailValue(e.target.value)}
+                          placeholder="email@example.com" autoFocus onKeyDown={e => e.key === 'Enter' && handleSaveEmail(c.id)}
+                          className="w-full px-2 py-1 border border-[#d1ccc6] rounded text-[12px] text-[#1a2e3b] focus:outline-none focus:ring-1 focus:ring-[#0d9488]" />
+                        <button onClick={() => handleSaveEmail(c.id)} className="text-[#059669] text-[12px] font-bold cursor-pointer bg-transparent border-none">✓</button>
+                        <button onClick={() => setEditEmailId(null)} className="text-[#94a7b8] text-[12px] cursor-pointer bg-transparent border-none">✕</button>
+                      </div>
+                    ) : (
+                      <div className="text-[13px] text-[#1a2e3b] truncate max-w-[200px] cursor-pointer hover:text-[#0d9488]"
+                        onClick={() => { setEditEmailId(c.id); setEditEmailValue(hasEmail ? c.email : ''); }}>
+                        {hasEmail ? c.email : <span className="text-[#3b82f6] italic">+ add email</span>}
+                      </div>
+                    )}
                     {c.phone && <div className="text-[11px] text-[#94a7b8]">{c.phone}</div>}
                     {c.mobilePhone && <div className="text-[11px] text-[#059669]">📱 {c.mobilePhone}</div>}
                     {!c.mobilePhone && c.phone && (

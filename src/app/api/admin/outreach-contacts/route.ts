@@ -173,13 +173,14 @@ export async function POST(req: Request) {
 
 export async function PATCH(req: Request) {
   if (!(await checkAdmin())) return Response.json({ error: "Unauthorized" }, { status: 401 });
-  const { contactId, mobilePhone, hasUnreadReply, dismissFollowUp } = await req.json();
+  const { contactId, mobilePhone, hasUnreadReply, dismissFollowUp, email } = await req.json();
   if (!contactId) return Response.json({ error: "contactId required" }, { status: 400 });
 
   const data: Record<string, unknown> = {};
   if (mobilePhone !== undefined) data.mobilePhone = mobilePhone || null;
   if (hasUnreadReply !== undefined) data.hasUnreadReply = hasUnreadReply;
   if (dismissFollowUp) data.lastContactedAt = new Date();
+  if (email !== undefined) data.email = email;
 
   const updated = await prisma.outreachContact.update({ where: { id: contactId }, data });
   return Response.json({ success: true, contact: updated });

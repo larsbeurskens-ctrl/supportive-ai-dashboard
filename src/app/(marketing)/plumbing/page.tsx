@@ -51,6 +51,20 @@ const plumbingRecordings = [
       { role: 'ai' as const, text: "Our team is being notified now and will call you right back. Stay safe, John." },
     ],
   },
+  {
+    id: 'uk-plumb-michael',
+    src: '/audio/demo-call-uk-plumbing-michael-trimmed.m4a',
+    scenario: 'UK — Leaky tap, booking next day',
+    bubbles: [
+      { role: 'ai' as const, text: "Hello, thank you for calling London Plumbing Services! This is Sarah. How can I help you today?" },
+      { role: 'customer' as const, text: "Hi, this is Michael. I have a leaky tap in the upstairs bathroom." },
+      { role: 'ai' as const, text: "Hi Michael! Yeah, absolutely we can help with that. What's your full address?" },
+      { role: 'customer' as const, text: "28 Annaly Park Mansions, London, SE28 0NE." },
+      { role: 'ai' as const, text: "For tomorrow we've got an opening at 12 PM. Would that work?" },
+      { role: 'customer' as const, text: "12 PM works really well. Let's lock it in." },
+      { role: 'ai' as const, text: "You're all set for Tuesday at 12 PM! There's a £65 call-out fee — gets applied to the repair. No surprises." },
+    ],
+  },
 ];
 
 export default function PlumbingPage() {
