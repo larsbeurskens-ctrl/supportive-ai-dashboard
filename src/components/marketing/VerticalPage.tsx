@@ -62,6 +62,8 @@ export function VerticalPage({
   const [progress, setProgress] = useState<Record<string, number>>({});
   const [durations, setDurations] = useState<Record<string, number>>({});
   const audioRefs = useRef<Record<string, HTMLAudioElement>>({});
+  const isUK = typeof window !== 'undefined' && Intl.DateTimeFormat().resolvedOptions().timeZone === 'Europe/London';
+  const currency = isUK ? '£' : '$';
 
   function togglePlay(id: string, src: string) {
     const existing = audioRefs.current[id];
@@ -393,19 +395,19 @@ export function VerticalPage({
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {[
               {
-                name: 'Starter', price: 89, calls: '40 calls/mo', target: 'One-man crews',
+                name: 'Starter', price: isUK ? 69 : 89, calls: '40 calls/mo', target: 'One-man crews',
                 features: ['AI answering — ideal for after-hours & missed calls', 'Google Calendar booking', 'SMS confirmations', 'Keep your existing number', 'Emergency escalation', 'Dashboard & call history', 'Call recordings & transcripts'],
-                note: '$2.50/call overage', popular: false,
+                note: isUK ? '£1.75/call overage' : '$2.50/call overage', popular: false,
               },
               {
-                name: 'Standard', price: 149, calls: '125 calls/mo', target: 'Busy trades businesses',
+                name: 'Standard', price: isUK ? 119 : 149, calls: isUK ? '150 calls/mo' : '125 calls/mo', target: 'Busy trades businesses',
                 features: ['Everything in Starter', 'WhatsApp AI agent', 'Payment links (Stripe)', 'Detailed call analytics'],
-                note: '$1.50/call overage', popular: true,
+                note: isUK ? '£1.25/call overage' : '$1.50/call overage', popular: true,
               },
               {
-                name: 'Business', price: 299, calls: '250 calls/mo', target: 'Multi-van operations',
+                name: 'Business', price: isUK ? 229 : 299, calls: '250 calls/mo', target: 'Multi-van operations',
                 features: ['Everything in Standard', 'Priority support', 'Multi-crew scheduling', 'Review requests'],
-                note: '$1.25/call overage', popular: false,
+                note: isUK ? '£1.00/call overage' : '$1.25/call overage', popular: false,
               },
             ].map((plan) => (
               <div key={plan.name} className={`p-7 rounded-xl relative ${plan.popular ? 'border-2 border-[#e8930c] bg-[#fffdf9]' : 'border border-[#e5e0da] bg-white'}`}>
@@ -415,7 +417,7 @@ export function VerticalPage({
                 <h3 className="text-xl font-bold text-[#1a2e3b] mb-1">{plan.name}</h3>
                 <p className="text-[13px] text-[#5a7184] mb-4">{plan.target}</p>
                 <div className="mb-1">
-                  <span className="text-[40px] font-extrabold text-[#1a2e3b]">${plan.price}</span>
+                  <span className="text-[40px] font-extrabold text-[#1a2e3b]">{currency}{plan.price}</span>
                   <span className="text-[15px] text-[#5a7184]">/mo</span>
                 </div>
                 <p className="text-[13px] text-[#e8930c] font-bold mb-1">{plan.calls}</p>
@@ -488,7 +490,7 @@ export function VerticalPage({
               {[
                 { value: '7 days', label: 'Free trial' },
                 { value: '50 calls', label: 'Included free' },
-                { value: '$89/mo', label: 'Starting price' },
+                { value: isUK ? '£69/mo' : '$89/mo', label: 'Starting price' },
               ].map((s, i) => (
                 <div key={i} className="text-center p-3 rounded-xl bg-[#faf9f7] border border-[#e5e0da]">
                   <div className="text-[20px] font-extrabold text-[#1a2e3b]">{s.value}</div>

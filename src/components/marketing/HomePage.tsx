@@ -566,29 +566,29 @@ export function HomePage() {
             {[
               {
                 name: 'Starter',
-                price: 89,
+                price: isUK ? 69 : 89,
                 calls: '40 calls/mo',
                 target: 'One-man crews',
                 features: ['AI answering — ideal for after-hours & missed calls', 'Google Calendar booking', 'SMS confirmations', 'Keep your existing number', 'Emergency escalation', 'Dashboard & call history', 'Call recordings & transcripts'],
-                note: '$2.50/call overage',
+                note: isUK ? '£1.75/call overage' : '$2.50/call overage',
                 popular: false,
               },
               {
                 name: 'Standard',
-                price: 149,
-                calls: '125 calls/mo',
+                price: isUK ? 119 : 149,
+                calls: isUK ? '150 calls/mo' : '125 calls/mo',
                 target: 'Busy trades businesses',
                 features: ['Everything in Starter', 'WhatsApp AI agent', 'Payment links (Stripe)', 'Detailed call analytics'],
-                note: '$1.50/call overage',
+                note: isUK ? '£1.25/call overage' : '$1.50/call overage',
                 popular: true,
               },
               {
                 name: 'Business',
-                price: 299,
+                price: isUK ? 229 : 299,
                 calls: '250 calls/mo',
                 target: 'Multi-van operations',
                 features: ['Everything in Standard', 'Priority support', 'Multi-crew scheduling', 'Review requests'],
-                note: '$1.25/call overage',
+                note: isUK ? '£1.00/call overage' : '$1.25/call overage',
                 popular: false,
               },
             ].map((plan) => (
@@ -608,7 +608,7 @@ export function HomePage() {
                 <h3 className="text-xl font-bold text-[#1a2e3b] mb-1">{plan.name}</h3>
                 <p className="text-[13px] text-[#5a7184] mb-4">{plan.target}</p>
                 <div className="mb-1">
-                  <span className="text-[40px] font-extrabold text-[#1a2e3b]">${plan.price}</span>
+                  <span className="text-[40px] font-extrabold text-[#1a2e3b]">{currency}{plan.price}</span>
                   <span className="text-[15px] text-[#5a7184]">/mo</span>
                 </div>
                 <p className="text-[13px] text-[#e8930c] font-bold mb-1">{plan.calls}</p>
