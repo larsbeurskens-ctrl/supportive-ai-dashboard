@@ -80,6 +80,7 @@ export async function GET(req: Request) {
       where: {
         status: "sent",
         sentAt: { lt: fourDaysAgo },
+        OR: [{ lastContactedAt: null }, { lastContactedAt: { lt: fourDaysAgo } }],
       },
       orderBy: { sentAt: "asc" },
       take: 20,
