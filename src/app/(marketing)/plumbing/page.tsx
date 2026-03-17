@@ -101,6 +101,7 @@ export default function PlumbingPage() {
         "You can't tell urgent from routine when you're already on a job.",
         "Customers expect instant response. If you don't pick up, they move on.",
         "You lose $300-800 emergency jobs to a single missed call.",
+        "Half your calls are SEO companies and supplier reps. You waste time on calls that aren't customers.",
       ]}
       capabilities={[
         { title: 'Emergency triage', desc: 'Detects burst pipes, flooding, sewage backup, no hot water. Flags emergencies and notifies you immediately via SMS and phone.' },
@@ -109,6 +110,7 @@ export default function PlumbingPage() {
         { title: 'Safety guidance', desc: 'Tells callers to shut off the water main if there\'s active flooding. Basic safety advice before you arrive.' },
         { title: 'Service call fee disclosed', desc: 'Communicates your standard service call fee upfront. Full quote on-site — no phone quoting for plumbing.' },
         { title: 'Priority scheduling', desc: 'Emergency calls get the next available slot. Routine maintenance books normally. You set the rules.' },
+        { title: 'Screens out junk calls', desc: 'SEO companies, insurance brokers, supplier reps — they talk to your AI instead of you. Only real customers and emergencies get through to your phone.' },
       ]}
       stats={[
         { value: '0', label: 'Calls sent to voicemail' },

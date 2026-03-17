@@ -19,6 +19,7 @@ export default function HVACPage() {
         "Hiring temp receptionists for peak season is expensive and unreliable.",
         "Customers with no heat in January won't leave a voicemail. They call the next company.",
         "You lose thousands in peak season revenue to missed calls.",
+        "Constant interruptions from marketing calls — SEO, insurance, parts suppliers — when you're trying to focus on jobs.",
       ]}
       capabilities={[
         { title: 'Heating vs cooling triage', desc: 'Identifies whether it\'s heating or cooling, system type, and urgency level. Routes the call accordingly.' },
@@ -27,6 +28,7 @@ export default function HVACPage() {
         { title: 'Maintenance plan upsell', desc: 'Mentions your seasonal maintenance packages to callers. Builds recurring revenue on autopilot.' },
         { title: 'Emergency escalation', desc: 'No heat in winter with vulnerable occupants? Immediate owner alert + priority scheduling.' },
         { title: 'Warranty & equipment tracking', desc: 'Asks about warranty status and equipment age to help you prepare the right parts for the visit.' },
+        { title: 'Screens out junk calls', desc: 'Marketing calls, cold sellers, and parts suppliers talk to your AI instead of you. Only real customers and emergencies get through.' },
       ]}
       stats={[
         { value: '3x', label: 'Peak season call surge' },

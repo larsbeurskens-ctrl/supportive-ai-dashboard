@@ -76,6 +76,7 @@ export default function WindowCleaningPage() {
         "By the time you call back from voicemail, they've booked someone else.",
         "You're doing admin at 9pm — returning calls, sending quotes, chasing payments.",
         "Answering services don't know a 2-story colonial from a ranch house.",
+        "Half your incoming calls are marketing spam — SEO companies, lead gen services, insurance brokers.",
       ]}
       capabilities={[
         { title: 'Knows your trade', desc: 'Asks about property type, number of stories, interior/exterior, screens, hard water stains. Gives accurate ballpark pricing.' },
@@ -84,6 +85,7 @@ export default function WindowCleaningPage() {
         { title: 'Handles 20+ common questions', desc: 'Pricing, insurance, what\'s included, how long it takes, rain policy. Trained on real customer conversations.' },
         { title: 'Reschedule & cancel', desc: 'Customers can call to reschedule or cancel. The AI finds their booking by name, updates the calendar, and texts confirmation.' },
         { title: 'Booking confirmations by SMS', desc: 'Every booking triggers an automatic confirmation text to the customer and a notification to you.' },
+        { title: 'Screens out junk calls', desc: 'Marketing calls, cold sellers, and robocalls talk to your AI instead of you. Only genuine customer enquiries and emergencies get through.' },
       ]}
       stats={[
         { value: '100%', label: 'Calls answered' },

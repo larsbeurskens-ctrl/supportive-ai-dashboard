@@ -468,6 +468,11 @@ export function HomePage() {
               title: 'Direct-to-you payments',
               desc: 'Money goes straight to your bank via Stripe Connect. No middleman holding your funds. No delays.',
             },
+            {
+              icon: <PhoneIcon className="text-[#e8930c]" />,
+              title: 'Screens out junk calls automatically',
+              desc: 'SEO companies, insurance brokers, supplier reps — they talk to your AI instead of you. Only real customer calls and emergencies ever reach your phone.',
+            },
           ].map((b, i) => (
             <div key={i} className="flex gap-4 p-6 rounded-xl border border-[#e5e0da] bg-white">
               <div className="flex-shrink-0 mt-0.5">{b.icon}</div>
@@ -572,7 +577,7 @@ export function HomePage() {
                 price: isUK ? 69 : 89,
                 calls: '40 calls/mo',
                 target: 'One-man crews',
-                features: ['AI answering — ideal for after-hours & missed calls', 'Google Calendar booking', 'SMS confirmations', 'Keep your existing number', 'Emergency escalation', 'Dashboard & call history', 'Call recordings & transcripts'],
+                features: ['AI answering — ideal for after-hours & missed calls', 'Google Calendar booking', 'SMS confirmations', 'Keep your existing number', 'Emergency escalation', 'Junk call screening', 'Dashboard & call history', 'Call recordings & transcripts'],
                 note: isUK ? '£1.75/call overage' : '$2.50/call overage',
                 popular: false,
               },

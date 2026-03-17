@@ -399,7 +399,7 @@ export function VerticalPage({
             {[
               {
                 name: 'Starter', price: isUK ? 69 : 89, calls: '40 calls/mo', target: 'One-man crews',
-                features: ['AI answering — ideal for after-hours & missed calls', 'Google Calendar booking', 'SMS confirmations', 'Keep your existing number', 'Emergency escalation', 'Dashboard & call history', 'Call recordings & transcripts'],
+                features: ['AI answering — ideal for after-hours & missed calls', 'Google Calendar booking', 'SMS confirmations', 'Keep your existing number', 'Emergency escalation', 'Junk call screening', 'Dashboard & call history', 'Call recordings & transcripts'],
                 note: isUK ? '£1.75/call overage' : '$2.50/call overage', popular: false,
               },
               {
