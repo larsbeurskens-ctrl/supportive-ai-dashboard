@@ -781,6 +781,16 @@ export default function OutreachSendPage() {
                         className="bg-white text-[#1a2e3b] px-2.5 py-1 rounded-lg text-[11px] font-semibold border border-[#d1ccc6] hover:bg-[#f0eeeb] cursor-pointer transition-colors">
                         Follow up
                       </button>
+                      <button onClick={async () => {
+                        await fetch('/api/admin/outreach-contacts', {
+                          method: 'PATCH', headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({ contactId: c.id, dismissFollowUp: true }),
+                        });
+                        await fetchContacts();
+                      }}
+                        className="text-[#94a7b8] hover:text-[#dc2626] px-1 py-1 rounded-lg text-[14px] cursor-pointer bg-transparent border-none transition-colors" title="Dismiss">
+                        ✕
+                      </button>
                     </div>
                   </div>
                 ))}
