@@ -36,7 +36,10 @@ const HOME_DEMO_CONFIGS = [
 ];
 
 export function HomePage() {
-  const isUK = typeof window !== 'undefined' && Intl.DateTimeFormat().resolvedOptions().timeZone === 'Europe/London';
+  const isUK = typeof window !== 'undefined' && (
+    Intl.DateTimeFormat().resolvedOptions().timeZone === 'Europe/London' ||
+    new URLSearchParams(window.location.search).get('country') === 'UK'
+  );
   const currency = isUK ? '£' : '$';
   const startingPrice = isUK ? '£69/mo' : '$89/mo';
   const [showDemo, setShowDemo] = useState(false);

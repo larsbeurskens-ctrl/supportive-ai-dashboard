@@ -62,7 +62,10 @@ export function VerticalPage({
   const [progress, setProgress] = useState<Record<string, number>>({});
   const [durations, setDurations] = useState<Record<string, number>>({});
   const audioRefs = useRef<Record<string, HTMLAudioElement>>({});
-  const isUK = typeof window !== 'undefined' && Intl.DateTimeFormat().resolvedOptions().timeZone === 'Europe/London';
+  const isUK = typeof window !== 'undefined' && (
+    Intl.DateTimeFormat().resolvedOptions().timeZone === 'Europe/London' ||
+    new URLSearchParams(window.location.search).get('country') === 'UK'
+  );
   const currency = isUK ? '£' : '$';
 
   function togglePlay(id: string, src: string) {

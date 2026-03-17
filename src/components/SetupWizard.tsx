@@ -94,8 +94,12 @@ export default function SetupWizard() {
   const [error, setError] = useState('');
   
   // Detect UK from business data or browser timezone
-  const isUK = status?.overrides?.country === 'UK' || 
-    (typeof window !== 'undefined' && Intl.DateTimeFormat().resolvedOptions().timeZone === 'Europe/London');
+  const [country, setCountry] = useState<'US' | 'UK'>(
+    status?.overrides?.country === 'UK' || 
+    (typeof window !== 'undefined' && Intl.DateTimeFormat().resolvedOptions().timeZone === 'Europe/London')
+      ? 'UK' : 'US'
+  );
+  const isUK = country === 'UK';
 
   // Step 1: Phone setup
   const [phoneChoice, setPhoneChoice] = useState<'keep' | 'new' | ''>('');
@@ -237,6 +241,7 @@ export default function SetupWizard() {
         serviceRadius: parseInt(serviceRadius) || 30,
         diagnosticFee: diagnosticFee.trim(),
         feeDeductible,        services: services.trim(), customFAQ: customFAQ.trim(),
+        country,
         isLicensed, isInsured,
         yearsExperience: yearsExperience.trim(),
         emergencyAvailability: emergencyService,
@@ -515,6 +520,21 @@ export default function SetupWizard() {
             <div className="border-t border-[#f0eeeb] pt-4">
               <h3 className="text-[13px] font-bold text-[#94a7b8] uppercase tracking-wider mb-3">About you</h3>
               <div className="space-y-3">
+                {/* Country selector */}
+                <div>
+                  <label className="block text-sm font-semibold text-[#1a2e3b] mb-1">Country</label>
+                  <div className="flex gap-2">
+                    <button type="button" onClick={() => setCountry('US')}
+                      className={`flex-1 px-4 py-2.5 rounded-xl text-[14px] font-semibold border transition-colors cursor-pointer ${
+                        country === 'US' ? 'bg-[#0d9488] text-white border-[#0d9488]' : 'bg-white text-[#1a2e3b] border-[#e5e0da] hover:border-[#0d9488]'
+                      }`}>🇺🇸 United States</button>
+                    <button type="button" onClick={() => setCountry('UK')}
+                      className={`flex-1 px-4 py-2.5 rounded-xl text-[14px] font-semibold border transition-colors cursor-pointer ${
+                        country === 'UK' ? 'bg-[#0d9488] text-white border-[#0d9488]' : 'bg-white text-[#1a2e3b] border-[#e5e0da] hover:border-[#0d9488]'
+                      }`}>🇬🇧 United Kingdom</button>
+                  </div>
+                  <p className="text-[11px] text-[#94a7b8] mt-1">Determines your AI&apos;s accent, currency, and terminology.</p>
+                </div>
                 <div className={`grid ${!status?.overrides?.ownerPhone ? 'grid-cols-2' : ''} gap-3`}>
                   <div>
                     <label className="block text-sm font-semibold text-[#1a2e3b] mb-1">Your name <span className="text-red-500">*</span></label>
@@ -526,8 +546,13 @@ export default function SetupWizard() {
                   {!status?.overrides?.ownerPhone && (
                     <div>
                       <label className="block text-sm font-semibold text-[#1a2e3b] mb-1">Your mobile <span className="text-red-500">*</span></label>
-                      <input type="tel" value={ownerPhone} onChange={e => setOwnerPhone(e.target.value)}
-                        placeholder="(555) 123-4567"
+                      <input type="tel" value={ownerPhone} onChange={e => {
+                        setOwnerPhone(e.target.value);
+                        const ph = e.target.value.replace(/\s/g, '');
+                        if (ph.startsWith('+44') || ph.startsWith('07')) setCountry('UK');
+                        else if (ph.startsWith('+1') || (ph.length >= 10 && /^\d{10}$/.test(ph.replace(/\D/g, '')))) setCountry('US');
+                      }}
+                        placeholder={isUK ? '07XXX XXX XXX' : '(555) 123-4567'}
                         className="w-full px-4 py-2.5 border border-[#e5e0da] rounded-xl text-[14px] text-[#1a2e3b] focus:outline-none focus:ring-2 focus:ring-[#0d9488]" />
                       <p className="text-[11px] text-[#94a7b8] mt-1">For emergency escalations and appointment text confirmations.</p>
                     </div>
