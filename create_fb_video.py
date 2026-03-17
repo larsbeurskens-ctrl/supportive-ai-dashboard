@@ -228,11 +228,34 @@ MARIA_CONV = [
     {"t": 138, "role": "user",  "text": "You too. Bye!"},
 ]
 
+LANCE_CONV = [
+    {"t": 0,   "role": "agent", "text": "Thank you for calling Hudson Valley Plumbing. This is Sarah. How can I help you today?"},
+    {"t": 6,   "role": "user",  "text": "Hi Sarah, this is Lance. I'd like to book an appointment at 150 Market Street in Poughkeepsie. My faucet is leaking."},
+    {"t": 18,  "role": "agent", "text": "Got it, Lance — a leaky faucet at 150 Market Street in Poughkeepsie. Is that in the kitchen, bathroom, or somewhere else?"},
+    {"t": 26,  "role": "user",  "text": "It's in the bathroom."},
+    {"t": 29,  "role": "agent", "text": "Perfect — bathroom faucet. And what's the zip code there, Lance?"},
+    {"t": 34,  "role": "user",  "text": "12601."},
+    {"t": 38,  "role": "agent", "text": "Awesome, thanks Lance. So when were you thinking — any particular day that works for you?"},
+    {"t": 44,  "role": "user",  "text": "Do you have next week on Monday?"},
+    {"t": 48,  "role": "agent", "text": "Let me check what we have open on that day, just a moment..."},
+    {"t": 54,  "role": "user",  "text": "Thank you."},
+    {"t": 57,  "role": "agent", "text": "Great news! We have openings at 8 AM, 9 AM, and 10 AM on Monday. Which one works best for you?"},
+    {"t": 64,  "role": "user",  "text": "9 AM will be best. Thank you."},
+    {"t": 68,  "role": "agent", "text": "Perfect. Let me get that booked for you — just pulling up my system, this will take me a sec..."},
+    {"t": 75,  "role": "agent", "text": "You're all set for Monday, March 9th at 9 AM! Just so you know, there's an $89 diagnostic visit fee. The plumber will assess the issue and give you a clear quote before starting — no surprises."},
+    {"t": 91,  "role": "agent", "text": "And what's the best number to reach you so we can send you a confirmation text?"},
+    {"t": 93,  "role": "user",  "text": "It's 479-888-4761."},
+    {"t": 102, "role": "agent", "text": "Okay, so that's 479-888-4761 — did I get that right?"},
+    {"t": 108, "role": "user",  "text": "Yes."},
+    {"t": 112, "role": "agent", "text": "Perfect — you'll get a confirmation text at that number. We'll see you Monday, March 9th at 9 AM. Is there anything else I can help you with today?"},
+    {"t": 120, "role": "user",  "text": "No, that's it. Thank you so much. See you Monday. Bye!"},
+]
+
 if __name__ == "__main__":
     import sys
-    which = sys.argv[1] if len(sys.argv) > 1 else "both"
+    which = sys.argv[1] if len(sys.argv) > 1 else "lance"
     
-    if which in ("robert", "both"):
+    if which in ("robert", "all"):
         print("\n=== ROBERT (UK Price Enquiry) ===")
         make_video(
             "London Plumbing Services",
@@ -242,7 +265,7 @@ if __name__ == "__main__":
             94
         )
     
-    if which in ("maria", "both"):
+    if which in ("maria", "all"):
         print("\n=== MARIA (UK Booking) ===")
         make_video(
             "London Plumbing Services",
@@ -250,6 +273,16 @@ if __name__ == "__main__":
             f"{DIR}/public/audio/demo-call-uk-maria-booking.m4a",
             f"{DIR}/uk_maria_booking_facebook.mp4",
             155
+        )
+    
+    if which in ("lance", "all"):
+        print("\n=== LANCE (US Plumbing Booking) ===")
+        make_video(
+            "Hudson Valley Plumbing",
+            LANCE_CONV,
+            f"{DIR}/public/audio/demo-call-plumbing-lance-booking.m4a",
+            f"{DIR}/lance_booking_facebook.mp4",
+            124
         )
     
     print("\n✅ All done!")

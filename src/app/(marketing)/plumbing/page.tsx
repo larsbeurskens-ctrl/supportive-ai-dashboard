@@ -89,13 +89,18 @@ export default function PlumbingPage() {
         label: 'Plumbing Demo',
         phone: '(240) 301-1473',
         tel: '+12403011473',
-        addresses: [
-          '60 Market Street, Poughkeepsie, NY 12601',
-          '20 Margaret St, Poughkeepsie, NY 12601',
-          '35 Oak Street, Kingston, NY 12401',
-        ],
+        addresses: ['60 Market Street, Poughkeepsie, NY 12601', '20 Margaret St, Poughkeepsie, NY 12601'],
         whatToTry: 'Report an active leak and say water is rising — hear how it triages. Or ask about a dripping faucet, water heater replacement cost, or try booking a routine job.',
       }}
+      demoConfigUK={{
+        label: 'Plumbing Demo (UK)',
+        phone: '+44 7427 846243',
+        tel: '+447427846243',
+        addresses: ['9 Japan Crescent, London, N4 4BB', '28 Annaly Park Mansions, London, SE28 0NE'],
+        whatToTry: 'Report a leaky tap, ask about pricing and the call-out fee, or try booking a routine job. Mention a London address and postcode.',
+      }}
+      phoneNumber="(240) 301-1473"
+      phoneNumberUK="+44 7427 846243"
       painPoints={[
         "Missed calls go straight to voicemail. The customer Googles the next plumber.",
         "You can't tell urgent from routine when you're already on a job.",
@@ -118,7 +123,6 @@ export default function PlumbingPage() {
         { value: '< 1s', label: 'Pickup time' },
       ]}
       recordings={plumbingRecordings}
-      phoneNumber="(240) 301-1473"
       accentColor="#e8930c"
       available={true}
     />

@@ -47,7 +47,7 @@ interface SMSConversation { id: string; fromNumber: string; toNumber: string; to
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'https://supportive-ai-backend-production.up.railway.app';
 
 const VERTICAL_LABELS: Record<string, string> = {
-  plumbing: '🔧 Plumbing', window_cleaning: '🪟 Window Cleaning', hvac: '❄️ HVAC',
+  plumbing: '🔧 Plumbing', window_cleaning: '🪟 Window Cleaning', hvac: '❄️ HVAC', plumbing_uk: '🔧 Plumbing (UK)',
 };
 const STATUS_STYLES: Record<string, { bg: string; text: string; label: string }> = {
   unsent: { bg: 'bg-[#f5f4f2]', text: 'text-[#5a7184]', label: 'Unsent' },
@@ -335,19 +335,22 @@ export default function OutreachSendPage() {
 
   const DEMO_NUMBERS: Record<string, string> = {
     plumbing: '(240) 301-1473', window_cleaning: '(845) 209-2401', hvac: '(737) 327-8220',
+    plumbing_uk: '+44 7427 846243',
   };
   const LANDING_PAGES: Record<string, string> = {
     plumbing: 'https://supportive-ai.com/plumbing#hear-it',
     window_cleaning: 'https://supportive-ai.com/window-cleaning#hear-it',
     hvac: 'https://supportive-ai.com/hvac#hear-it',
+    plumbing_uk: 'https://supportive-ai.com/#hear-it',
   };
 
   function openSmsModal(contact: Contact, isFollowUp: boolean) {
     setSmsContact(contact);
     setSmsIsFollowUp(isFollowUp);
-    const verticalLabel = contact.vertical === 'window_cleaning' ? 'window cleaning' : contact.vertical;
+    const verticalLabel = contact.vertical === 'window_cleaning' ? 'window cleaning' : contact.vertical === 'plumbing_uk' ? 'plumbing' : contact.vertical;
     const demo = DEMO_NUMBERS[contact.vertical] || DEMO_NUMBERS.plumbing;
     const link = LANDING_PAGES[contact.vertical] || LANDING_PAGES.plumbing;
+    const isUKContact = contact.vertical.endsWith('_uk');
     const seq = (contact.textSequence || 0) + 1;
     const firstName = contact.name ? contact.name.split(' ')[0] : '';
     if (seq === 1 && !isFollowUp) {

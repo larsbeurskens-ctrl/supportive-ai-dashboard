@@ -39,11 +39,13 @@ interface VerticalPageProps {
   stats: Stat[];
   testimonial?: Testimonial;
   phoneNumber: string | null;
+  phoneNumberUK?: string | null;
   accentColor: string;
   available: boolean;
   recordings: Recording[];
   verticalSlug: string;
-  demoConfig: DemoConfig; // vertical-specific overlay content
+  demoConfig: DemoConfig;
+  demoConfigUK?: DemoConfig;
 }
 
 /* ===== Audio Player hook helpers ===== */
@@ -55,7 +57,7 @@ function fmtTime(s: number) {
 
 export function VerticalPage({
   trade, headline, subheadline, painPoints, capabilities,
-  stats, testimonial, phoneNumber, available, recordings, verticalSlug, demoConfig,
+  stats, testimonial, phoneNumber, phoneNumberUK, available, recordings, verticalSlug, demoConfig, demoConfigUK,
 }: VerticalPageProps) {
   const [showDemo, setShowDemo] = useState(false);
   const [playing, setPlaying] = useState<string | null>(null);
@@ -67,6 +69,8 @@ export function VerticalPage({
     new URLSearchParams(window.location.search).get('country') === 'UK'
   );
   const currency = isUK ? '£' : '$';
+  const activePhone = (isUK && phoneNumberUK) ? phoneNumberUK : phoneNumber;
+  const activeDemo = (isUK && demoConfigUK) ? demoConfigUK : demoConfig;
 
   function togglePlay(id: string, src: string) {
     const existing = audioRefs.current[id];
@@ -98,7 +102,7 @@ export function VerticalPage({
 
   return (
     <>
-      {showDemo && <DemoOverlay onClose={() => setShowDemo(false)} configs={[demoConfig]} />}
+      {showDemo && <DemoOverlay onClose={() => setShowDemo(false)} configs={[activeDemo]} />}
 
       {/* ===== HERO ===== */}
       <section className="pt-16 pb-10 md:pt-20 px-6 md:px-10 max-w-[820px] mx-auto text-center">
@@ -109,7 +113,7 @@ export function VerticalPage({
           {subheadline}
         </p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center mb-4">
-          {available && phoneNumber ? (
+          {available && activePhone ? (
             <>
               <Link
                 href="/onboarding"
@@ -133,9 +137,9 @@ export function VerticalPage({
             </Link>
           )}
         </div>
-        {available && phoneNumber && (
+        {available && activePhone && (
           <p className="text-[13px] text-[#94a7b8]">
-            Call <strong className="text-[#5a7184]">{phoneNumber}</strong> right now — hear it answer, qualify the lead, and book a job.
+            Call <strong className="text-[#5a7184]">{activePhone}</strong> right now — hear it answer, qualify the lead, and book a job.
           </p>
         )}
       </section>
@@ -525,7 +529,7 @@ export function VerticalPage({
       </section>
 
       {/* ===== FINAL CTA ===== */}
-      {available && phoneNumber && (
+      {available && activePhone && (
         <section className="py-16 px-6 md:px-10">
           <div className="max-w-[700px] mx-auto bg-[#1a2e3b] rounded-2xl p-10 text-center">
             <h2 className="text-2xl font-bold text-white mb-2">
@@ -539,7 +543,7 @@ export function VerticalPage({
               className="inline-flex items-center gap-3 bg-[#243d4e] rounded-xl px-8 py-4 border border-[#35596e] hover:bg-[#2c4a5d] transition-colors cursor-pointer border-none"
             >
               <PhoneIcon size={22} className="text-[#e8930c]" />
-              <span className="text-[22px] font-bold text-white tracking-wide">{phoneNumber}</span>
+              <span className="text-[22px] font-bold text-white tracking-wide">{activePhone}</span>
             </button>
             <p className="text-[12px] text-white/40 mt-4">Standard call rates apply</p>
           </div>

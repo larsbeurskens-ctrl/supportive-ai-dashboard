@@ -68,6 +68,15 @@ export default function DashboardPage() {
   const [selectedPlan, setSelectedPlan] = useState('');
   const [hasCalendar, setHasCalendar] = useState(false);
   const [calendarAuthUrl, setCalendarAuthUrl] = useState<string | null>(null);
+  const [country, setCountry] = useState<'US' | 'UK'>(() => {
+    if (typeof window !== 'undefined') {
+      try { const s = JSON.parse(localStorage.getItem('supportive_signup') || '{}'); if (s.country === 'UK') return 'UK'; } catch {}
+      if (Intl.DateTimeFormat().resolvedOptions().timeZone === 'Europe/London') return 'UK';
+    }
+    return 'US';
+  });
+  const isUK = country === 'UK';
+  const curr = (amount: string | number) => `${isUK ? '£' : '$'}${typeof amount === 'number' ? amount.toLocaleString() : amount}`;
 
   useEffect(() => {
     async function fetchData() {
@@ -89,6 +98,7 @@ export default function DashboardPage() {
           setAgentPhone(status.phoneNumber || '');
           setHasCalendar(!!status.checklist?.calendarConnected);
           setCalendarAuthUrl(status.calendarAuthUrl || null);
+          if ((status as any).overrides?.country === 'UK') setCountry('UK');
           if (live) {
             // Build pickup rules text
             const rules = (status as any).pickupRules || { afterHours: true, missedCalls: true };
@@ -129,9 +139,9 @@ export default function DashboardPage() {
   const nextWeek = new Date(); nextWeek.setDate(nextWeek.getDate() + 4);
 
   const demoJobs: Booking[] = [
-    { id: 'demo-1', customer: { firstName: 'Test Caller' } as any, scheduledTime: '09:00', scheduledDate: tomorrow.toISOString(), serviceAddress: '12 Market St, Poughkeepsie', status: 'confirmed', stories: 2, propertyType: 'Residential' } as any,
-    { id: 'demo-2', customer: { firstName: 'Test Caller' } as any, scheduledTime: '11:30', scheduledDate: tomorrow.toISOString(), serviceAddress: '45 Oak St, Newburgh', status: 'confirmed', stories: 1, propertyType: 'Residential' } as any,
-    { id: 'demo-3', customer: { firstName: 'Test Caller' } as any, scheduledTime: '14:00', scheduledDate: dayAfter.toISOString(), serviceAddress: '8 River Rd, Kingston', status: 'confirmed', stories: 3, propertyType: 'Residential' } as any,
+    { id: 'demo-1', customer: { firstName: 'Test Caller' } as any, scheduledTime: '09:00', scheduledDate: tomorrow.toISOString(), serviceAddress: isUK ? '14 Camden Rd, London' : '12 Market St, Poughkeepsie', status: 'confirmed', stories: 2, propertyType: 'Residential' } as any,
+    { id: 'demo-2', customer: { firstName: 'Test Caller' } as any, scheduledTime: '11:30', scheduledDate: tomorrow.toISOString(), serviceAddress: isUK ? '8 Queen St, Islington' : '45 Oak St, Newburgh', status: 'confirmed', stories: 1, propertyType: 'Residential' } as any,
+    { id: 'demo-3', customer: { firstName: 'Test Caller' } as any, scheduledTime: '14:00', scheduledDate: dayAfter.toISOString(), serviceAddress: isUK ? '22 Park Lane, Hackney' : '8 River Rd, Kingston', status: 'confirmed', stories: 3, propertyType: 'Residential' } as any,
   ];
   const demoCalls: Call[] = [
     { id: 'demo-c1', customer: { firstName: 'Test Caller' } as any, startTime: new Date(Date.now() - 3600000).toISOString(), createdAt: new Date().toISOString(), status: 'completed', duration: 142, phoneNumber: '(555) 123-4567' } as any,
@@ -148,7 +158,7 @@ export default function DashboardPage() {
   const metricCards = [
     { label: 'Calls Answered', value: isDemo ? 23 : (metrics?.callsLast7Days ?? '-'), change: isDemo ? '78% booked a job' : (metrics ? `${metrics.bookingSuccessRate}% booked a job` : ''), icon: PhoneIcon },
     { label: 'Jobs Booked', value: isDemo ? 18 : (metrics?.bookingsLast7Days ?? '-'), change: '', icon: CalendarIcon },
-    { label: 'Revenue Scheduled', value: isDemo ? '$4,250' : (metrics ? `$${metrics.revenueScheduled.toLocaleString()}` : '-'), change: '', icon: DollarIcon },
+    { label: 'Revenue Scheduled', value: isDemo ? curr('4,250') : (metrics ? curr(metrics.revenueScheduled.toLocaleString()) : '-'), change: '', icon: DollarIcon },
     { label: 'Happy Callers', value: isDemo ? '94%' : (metrics ? `${metrics.happyCallerPercent}%` : '-'), change: '', icon: TrendUpIcon },
   ];
 

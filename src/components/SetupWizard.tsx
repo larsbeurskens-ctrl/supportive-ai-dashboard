@@ -19,16 +19,31 @@ const AREA_CODE_HINTS: Record<string, string> = {
 
 type WizardStep = 'loading' | 'create-agent' | 'business-details' | 'test-call' | 'checklist';
 
-const CARRIER_CODES: Record<string, { noAnswer: string; all: string; disable: string }> = {
+const CARRIER_CODES_US: Record<string, { noAnswer: string; all: string; disable: string }> = {
   'AT&T': { noAnswer: '*61*{NUM}#', all: '*21*{NUM}#', disable: '#21#' },
   'Verizon': { noAnswer: '*71{NUM}', all: '*72{NUM}', disable: '*73' },
   'T-Mobile': { noAnswer: '**61*{NUM}#', all: '**21*{NUM}#', disable: '##21#' },
   'Spectrum': { noAnswer: '*92{NUM}', all: '*72{NUM}', disable: '*93' },
   'Landline': { noAnswer: '*92{NUM}', all: '*72{NUM}', disable: '*73' },
 };
+const CARRIER_CODES_UK: Record<string, { noAnswer: string; all: string; disable: string }> = {
+  'EE': { noAnswer: '**61*{NUM}#', all: '**21*{NUM}#', disable: '##21#' },
+  'Vodafone': { noAnswer: '**61*{NUM}#', all: '**21*{NUM}#', disable: '##21#' },
+  'Three': { noAnswer: '**61*{NUM}#', all: '**21*{NUM}#', disable: '##21#' },
+  'O2': { noAnswer: '**61*{NUM}#', all: '**21*{NUM}#', disable: '##21#' },
+  'BT': { noAnswer: '*61*{NUM}#', all: '*21*{NUM}#', disable: '#21#' },
+  'Sky': { noAnswer: '*61*{NUM}#', all: '*21*{NUM}#', disable: '#21#' },
+};
+
 
 function formatPhoneDisplay(phone: string): string {
   const digits = phone.replace(/\D/g, '');
+  // UK numbers: +44...
+  if (digits.startsWith('44') && digits.length >= 12) {
+    const local = digits.slice(2); // e.g. 7427846243
+    return `+44 ${local.slice(0,4)} ${local.slice(4,7)} ${local.slice(7)}`;
+  }
+  // US numbers
   if (digits.length === 11 && digits.startsWith('1')) {
     return `(${digits.slice(1,4)}) ${digits.slice(4,7)}-${digits.slice(7)}`;
   }
@@ -93,12 +108,22 @@ export default function SetupWizard() {
   const [status, setStatus] = useState<ProvisionStatus | null>(null);
   const [error, setError] = useState('');
   
-  // Detect UK from business data or browser timezone
-  const [country, setCountry] = useState<'US' | 'UK'>(
-    status?.overrides?.country === 'UK' || 
-    (typeof window !== 'undefined' && Intl.DateTimeFormat().resolvedOptions().timeZone === 'Europe/London')
-      ? 'UK' : 'US'
-  );
+  // Detect UK from business data, signup data, or browser timezone
+  const [country, setCountry] = useState<'US' | 'UK'>(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const signup = JSON.parse(localStorage.getItem('supportive_signup') || '{}');
+        if (signup.country === 'UK') return 'UK';
+      } catch {}
+      if (Intl.DateTimeFormat().resolvedOptions().timeZone === 'Europe/London') return 'UK';
+    }
+    return 'US';
+  });
+  // Sync country from status when it loads
+  useEffect(() => {
+    if (status?.overrides?.country === 'UK') setCountry('UK');
+    else if (status?.overrides?.country === 'US') setCountry('US');
+  }, [status?.overrides?.country]);
   const isUK = country === 'UK';
 
   // Step 1: Phone setup
@@ -156,6 +181,13 @@ export default function SetupWizard() {
   function prefillFromStatus(s: ProvisionStatus) {
     const o = s.overrides || {};
     if (o.ownerName) setOwnerName(o.ownerName);
+    else {
+      // Fallback: read name from signup data
+      try {
+        const signup = JSON.parse(localStorage.getItem('supportive_signup') || '{}');
+        if (signup.name && !ownerName) setOwnerName(signup.name);
+      } catch {}
+    }
     if (o.ownerPhone) setOwnerPhone(o.ownerPhone);
     if (o.city) setCity(o.city);
     if (o.state) setState(o.state);
@@ -201,12 +233,12 @@ export default function SetupWizard() {
   // === Handlers ===
   async function handleProvision() {
     if (!agentName.trim()) { setError('Give your AI a name'); return; }
-    if (phoneChoice === 'new' && areaCode.length !== 3) { setError('Enter a 3-digit area code'); return; }
+    if (phoneChoice === 'new' && !isUK && areaCode.length !== 3) { setError('Enter a 3-digit area code'); return; }
     if (phoneChoice === 'keep' && !existingPhone.trim()) { setError('Enter your business phone number'); return; }
     setProvisioning(true); setError('');
     try {
       // For "keep" flow, extract area code from their number, or use 845 as fallback
-      const effectiveAreaCode = phoneChoice === 'new' ? areaCode : (existingPhone.replace(/\D/g, '').slice(0, 3) || '845');
+      const effectiveAreaCode = isUK ? 'UK' : (phoneChoice === 'new' ? areaCode : (existingPhone.replace(/\D/g, '').slice(0, 3) || '845'));
       const res = await provisionBusiness(effectiveAreaCode, agentName.trim());
       setProvisionResult(res);
       // Store phone preferences
@@ -436,14 +468,14 @@ export default function SetupWizard() {
               <div>
                 <label className="block text-sm font-semibold text-[#1a2e3b] mb-1.5">Your business phone number</label>
                 <input type="tel" value={existingPhone} onChange={e => setExistingPhone(e.target.value)}
-                  placeholder="(555) 123-4567"
+                  placeholder={isUK ? '+44 7XXX XXX XXX' : '(555) 123-4567'}
                   className="w-full px-4 py-3 border border-[#e5e0da] rounded-xl text-[15px] text-[#1a2e3b] placeholder:text-[#d1ccc6] focus:outline-none focus:ring-2 focus:ring-[#0d9488]" />
                 <p className="text-[11px] text-[#94a7b8] mt-1">We&apos;ll use this number for emergency escalations and appointment text confirmations.</p>
               </div>
             )}
 
             {/* New number: area code */}
-            {phoneChoice === 'new' && (
+            {phoneChoice === 'new' && !isUK && (
               <div>
                 <label className="block text-sm font-semibold text-[#1a2e3b] mb-1.5">Pick your local area code</label>
                 <div className="relative">
@@ -453,6 +485,11 @@ export default function SetupWizard() {
                     className="w-[160px] px-4 py-3 border border-[#e5e0da] rounded-xl text-[18px] font-bold text-center text-[#1a2e3b] placeholder:text-[#d1ccc6] focus:outline-none focus:ring-2 focus:ring-[#0d9488]" />
                   {areaHint && <span className="ml-3 text-[13px] text-[#059669] font-medium">{areaHint}</span>}
                 </div>
+              </div>
+            )}
+            {phoneChoice === 'new' && isUK && (
+              <div className="bg-[#eff6ff] rounded-xl p-3">
+                <p className="text-[13px] text-[#1e40af]">We&apos;ll create a UK local number (+44) for your AI. No area code needed.</p>
               </div>
             )}
 
@@ -493,7 +530,7 @@ export default function SetupWizard() {
             {/* Submit */}
             {phoneChoice && (pickupAfterHours || pickupMissedCalls || pickupAlwaysOn) && (
               <button onClick={handleProvision}
-                disabled={provisioning || !agentName.trim() || (phoneChoice === 'new' && areaCode.length !== 3)}
+                disabled={provisioning || !agentName.trim() || (phoneChoice === 'new' && !isUK && areaCode.length !== 3)}
                 className="w-full bg-[#0d9488] text-white py-3 rounded-xl text-[15px] font-bold hover:bg-[#0b7c72] transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
                 {provisioning ? (
                   <span className="flex items-center justify-center gap-2">
@@ -587,7 +624,7 @@ export default function SetupWizard() {
                   <label className="block text-sm font-semibold text-[#1a2e3b] mb-1">Service radius</label>
                   <div className="flex items-center gap-3">
                     <input type="range" min="5" max="75" value={serviceRadius} onChange={e => setServiceRadius(e.target.value)} className="flex-1 accent-[#0d9488]" />
-                    <span className="text-[14px] font-bold text-[#1a2e3b] w-20 text-right">{serviceRadius} miles</span>
+                    <span className="text-[14px] font-bold text-[#1a2e3b] w-20 text-right">{serviceRadius} {isUK ? 'km' : 'miles'}</span>
                   </div>
                 </div>
                 {/* Licensed & Insured */}
@@ -661,7 +698,7 @@ export default function SetupWizard() {
                 <div>
                   <label className="block text-sm font-semibold text-[#1a2e3b] mb-1">Do you offer financing?</label>
                   <input type="text" value={financing} onChange={e => setFinancing(e.target.value)}
-                    placeholder="e.g. Yes, through GreenSky — 12 months same as cash on jobs over $500. Or leave blank."
+                    placeholder={ukSwap("e.g. Yes, through GreenSky — 12 months same as cash on jobs over $500. Or leave blank.")}
                     className="w-full px-4 py-2.5 border border-[#e5e0da] rounded-xl text-[14px] text-[#1a2e3b] focus:outline-none focus:ring-2 focus:ring-[#0d9488]" />
                   <p className="text-[11px] text-[#94a7b8] mt-1">Your AI will mention this when customers ask about payment options or large jobs.</p>
                 </div>
@@ -694,6 +731,10 @@ export default function SetupWizard() {
                   Saving &amp; updating {displayName}...
                 </span>
               ) : `Save & test ${displayName} →`}
+            </button>
+            <button onClick={() => setStep('create-agent')}
+              className="w-full text-[13px] font-semibold text-[#5a7184] bg-transparent border border-[#e5e0da] py-2.5 rounded-xl hover:bg-[#faf9f7] mt-2">
+              ← Back to phone setup
             </button>
             {error && <div className="bg-red-50 text-red-700 p-3 rounded-xl text-[13px]">{error}</div>}
           </div>
@@ -780,8 +821,9 @@ export default function SetupWizard() {
                 if (rules.alwaysOn) parts.push('on every call');
                 const ruleText = parts.join(' and ');
                 const isKeepNumber = status.overrides?.phoneSetup === 'keep';
-                const phoneNum = status.phoneNumber?.replace('+1', '') || '';
-                const carrier = CARRIER_CODES[selectedCarrier];
+                const phoneNum = status.phoneNumber?.replace('+1', '').replace('+44', '') || '';
+                const carrierList = isUK ? CARRIER_CODES_UK : CARRIER_CODES_US;
+                const carrier = carrierList[selectedCarrier];
                 const dialCode = carrier ? (rules.alwaysOn ? carrier.all : carrier.noAnswer).replace('{NUM}', phoneNum) : '';
 
                 if (!isKeepNumber) {
@@ -805,7 +847,7 @@ export default function SetupWizard() {
                     <div className="mb-4">
                       <p className="text-[13px] font-semibold text-[#1a2e3b] mb-2">Who is your phone carrier?</p>
                       <div className="flex flex-wrap gap-2">
-                        {Object.keys(CARRIER_CODES).map(name => (
+                        {Object.keys(carrierList).map(name => (
                           <button key={name} onClick={() => { setSelectedCarrier(name); setDialedCode(false); }}
                             className={`px-4 py-2.5 rounded-lg text-[13px] font-semibold border cursor-pointer transition-all ${
                               selectedCarrier === name ? 'border-[#0d9488] bg-[#f0fdf4] text-[#1a2e3b]' : 'border-[#e5e0da] bg-white text-[#5a7184] hover:border-[#d1ccc6]'
