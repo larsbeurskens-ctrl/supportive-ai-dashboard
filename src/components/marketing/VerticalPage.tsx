@@ -286,7 +286,7 @@ export function VerticalPage({
                 <span className="flex-shrink-0 w-6 h-6 rounded-full bg-[#fef2e0] flex items-center justify-center mt-0.5">
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#e8930c" strokeWidth="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                 </span>
-                <p className="text-[14px] text-[#2a4a5e] leading-relaxed font-medium">{p}</p>
+                <p className="text-[14px] text-[#2a4a5e] leading-relaxed font-medium">{isUK ? p.replace(/\$/g, '£') : p}</p>
               </div>
             ))}
           </div>
