@@ -189,6 +189,16 @@ export default function SetupWizard() {
       } catch {}
     }
     if (o.ownerPhone) setOwnerPhone(o.ownerPhone);
+    // Pre-fill phone setup (step 1) fields
+    if (o.phoneSetup) setPhoneChoice(o.phoneSetup as 'keep' | 'new');
+    if (o.existingBusinessPhone) setExistingPhone(o.existingBusinessPhone);
+    if (s.agentName) setAgentName(s.agentName);
+    const rules = (s as any).pickupRules || o.pickupRules;
+    if (rules) {
+      if (rules.afterHours !== undefined) setPickupAfterHours(rules.afterHours);
+      if (rules.missedCalls !== undefined) setPickupMissedCalls(rules.missedCalls);
+      if (rules.alwaysOn !== undefined) setPickupAlwaysOn(rules.alwaysOn);
+    }
     if (o.city) setCity(o.city);
     if (o.state) setState(o.state);
     if (o.diagnosticFee) setDiagnosticFee(o.diagnosticFee);
@@ -237,15 +247,20 @@ export default function SetupWizard() {
     if (phoneChoice === 'keep' && !existingPhone.trim()) { setError('Enter your business phone number'); return; }
     setProvisioning(true); setError('');
     try {
-      // For "keep" flow, extract area code from their number, or use 845 as fallback
-      const effectiveAreaCode = isUK ? 'UK' : (phoneChoice === 'new' ? areaCode : (existingPhone.replace(/\D/g, '').slice(0, 3) || '845'));
-      const res = await provisionBusiness(effectiveAreaCode, agentName.trim());
-      setProvisionResult(res);
-      // Store phone preferences
+      const alreadyProvisioned = !!status?.provisioned;
+
+      if (!alreadyProvisioned) {
+        // First-time provisioning — create agent + phone number
+        const effectiveAreaCode = isUK ? 'UK' : (phoneChoice === 'new' ? areaCode : (existingPhone.replace(/\D/g, '').slice(0, 3) || '845'));
+        const res = await provisionBusiness(effectiveAreaCode, agentName.trim());
+        setProvisionResult(res);
+      }
+
+      // Save/update phone preferences (both new + edit flows)
       await saveBusinessDetails({
         phoneSetup: phoneChoice,
         existingBusinessPhone: phoneChoice === 'keep' ? existingPhone.trim() : null,
-        ownerPhone: phoneChoice === 'keep' ? existingPhone.trim() : null,
+        ownerPhone: phoneChoice === 'keep' ? existingPhone.trim() : (status?.overrides?.ownerPhone || undefined),
         pickupRules: {
           afterHours: pickupAfterHours,
           missedCalls: pickupMissedCalls,
@@ -256,8 +271,16 @@ export default function SetupWizard() {
       setStep('business-details');
     } catch (err: any) {
       const msg = err?.message || String(err) || '';
-      if (msg.includes('already provisioned')) window.location.reload();
-      else if (msg.includes('area code') || msg.includes('phone number') || msg.includes('not available') || msg.includes('Unable') || msg.includes('Twilio') || msg.includes('AvailablePhoneNumber')) setError(`No phone numbers available for area code ${areaCode || 'entered'}. Try a real US area code like 713 (Houston), 404 (Atlanta), or 845 (Hudson Valley).`);
+      if (msg.includes('already provisioned')) {
+        // Race condition — just save preferences and move on
+        await saveBusinessDetails({
+          phoneSetup: phoneChoice,
+          existingBusinessPhone: phoneChoice === 'keep' ? existingPhone.trim() : null,
+          pickupRules: { afterHours: pickupAfterHours, missedCalls: pickupMissedCalls, alwaysOn: pickupAlwaysOn },
+        });
+        await refreshStatus();
+        setStep('business-details');
+      } else if (msg.includes('area code') || msg.includes('phone number') || msg.includes('not available') || msg.includes('Unable') || msg.includes('Twilio') || msg.includes('AvailablePhoneNumber')) setError(`No phone numbers available for area code ${areaCode || 'entered'}. Try a real US area code like 713 (Houston), 404 (Atlanta), or 845 (Hudson Valley).`);
       else setError(`Something went wrong: ${msg || 'Provisioning failed'}. Try a different area code.`);
     } finally { setProvisioning(false); }
   }
@@ -409,7 +432,7 @@ export default function SetupWizard() {
           ))}
         </div>
         <h2 className="text-[18px] font-bold text-white">
-          {step === 'create-agent' && 'Set up your phone'}
+          {step === 'create-agent' && (status?.provisioned ? 'Edit phone setup' : 'Set up your phone')}
           {step === 'business-details' && `Tell ${displayName} about your business`}
           {step === 'test-call' && `Test ${displayName}`}
           {step === 'checklist' && 'Ready to go live'}
@@ -421,11 +444,19 @@ export default function SetupWizard() {
         {/* ====== STEP 1: Phone Setup ====== */}
         {step === 'create-agent' && (
           <div className="space-y-5">
-            <div className="bg-[#eff6ff] rounded-xl p-3 text-center">
-              <p className="text-[13px] text-[#1e40af] font-medium">🔒 Nothing goes live until you say so. Set up at your own pace.</p>
-            </div>
+            {status?.provisioned ? (
+              <div className="bg-[#f0fdf4] rounded-xl p-3 flex items-center gap-2">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2"><path d="M20 6L9 17l-5-5"/></svg>
+                <p className="text-[13px] text-[#059669] font-medium">{displayName} is set up at {displayPhone}. You can change your phone preferences below.</p>
+              </div>
+            ) : (
+              <div className="bg-[#eff6ff] rounded-xl p-3 text-center">
+                <p className="text-[13px] text-[#1e40af] font-medium">🔒 Nothing goes live until you say so. Set up at your own pace.</p>
+              </div>
+            )}
 
             {/* Agent name */}
+            {!status?.provisioned && (
             <div>
               <label className="block text-sm font-semibold text-[#1a2e3b] mb-1.5">Name your AI receptionist</label>
               <input type="text" value={agentName} onChange={e => setAgentName(e.target.value.slice(0, 20))}
@@ -438,6 +469,7 @@ export default function SetupWizard() {
                 ))}
               </div>
             </div>
+            )}
 
             {/* Phone choice */}
             <div>
@@ -535,9 +567,9 @@ export default function SetupWizard() {
                 {provisioning ? (
                   <span className="flex items-center justify-center gap-2">
                     <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                    Setting up {agentName || 'your AI'}...
+                    {status?.provisioned ? 'Saving...' : `Setting up ${agentName || 'your AI'}...`}
                   </span>
-                ) : `Continue →`}
+                ) : status?.provisioned ? 'Save changes →' : `Continue →`}
               </button>
             )}
 
@@ -771,6 +803,11 @@ export default function SetupWizard() {
                 ← Edit details
               </button>
             </div>
+            <p className="text-center mt-2">
+              <button onClick={() => setStep('create-agent')} className="text-[12px] text-[#94a7b8] hover:text-[#5a7184] underline bg-transparent border-none cursor-pointer">
+                Edit phone setup
+              </button>
+            </p>
           </div>
         )}
 
@@ -804,7 +841,7 @@ export default function SetupWizard() {
             <div>
               <p className="text-[11px] font-bold text-[#94a7b8] uppercase tracking-wider mb-2">Required</p>
               <div className="space-y-2">
-                <ChecklistItem done={status.checklist.agentCreated} label={`AI created: ${displayName}`} sublabel={displayPhone} />
+                <ChecklistItem done={status.checklist.agentCreated} label={`AI created: ${displayName}`} sublabel={displayPhone} onFix={() => setStep('create-agent')} fixLabel="Edit" />
                 <ChecklistItem done={status.checklist.ownerPhoneSet} label="Your phone number added" sublabel="SMS alerts for incoming calls" onFix={goToEdit} />
                 <ChecklistItem done={status.checklist.businessDetailsAdded} label="Business details added" sublabel="Pricing, services, credentials" onFix={goToEdit} />
                 <ChecklistItem done={status.checklist.testCallMade} label="Test call completed" sublabel={`Call ${displayPhone} to test`} />
