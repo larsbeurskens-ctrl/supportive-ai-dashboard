@@ -403,6 +403,7 @@ model OutreachContact {
   hasUnreadReply Boolean   @default(false)
   lastReplyAt    DateTime?
   lastReplyText  String?
+  emailOpenedAt  DateTime?
   activities     OutreachActivity[]
 
   @@unique([email, vertical])

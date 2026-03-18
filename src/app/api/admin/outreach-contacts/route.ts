@@ -30,6 +30,8 @@ export async function GET(req: Request) {
     where.NOT = [{ email: { contains: '@placeholder' } }];
   } else if (status === 'has_phone') {
     where.phone = { not: null };
+  } else if (status === 'opened') {
+    where.emailOpenedAt = { not: null };
   } else if (status) {
     where.status = status;
   }
@@ -65,6 +67,7 @@ export async function GET(req: Request) {
         COUNT(*) as total,
         COUNT(CASE WHEN status = 'unsent' THEN 1 END) as unsent,
         COUNT(CASE WHEN status = 'sent' THEN 1 END) as sent,
+        COUNT(CASE WHEN "emailOpenedAt" IS NOT NULL THEN 1 END) as opened,
         COUNT(CASE WHEN status = 'clicked' THEN 1 END) as clicked,
         COUNT(CASE WHEN status = 'texted' THEN 1 END) as texted,
         COUNT(CASE WHEN status IN ('called', 'voicemail') THEN 1 END) as called,
@@ -116,6 +119,7 @@ export async function GET(req: Request) {
       total: Number(pipeline.total),
       unsent: Number(pipeline.unsent),
       sent: Number(pipeline.sent),
+      opened: Number(pipeline.opened),
       clicked: Number(pipeline.clicked),
       texted: Number(pipeline.texted),
       called: Number(pipeline.called),
