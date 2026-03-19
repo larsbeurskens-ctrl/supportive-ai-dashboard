@@ -52,6 +52,9 @@ model Business {
   whatsappConversations WhatsAppConversation[]
   stripeConnectAccountId String?
   stripeConnectOnboarded Boolean @default(false)
+  stripeCustomerId       String?    // Stripe customer for billing Supportive AI subscription
+  stripeSubscriptionId   String?    // Stripe subscription ID
+  trialEndsAt            DateTime?  // When the 7-day trial ends
 
   @@index([email])
   @@index([twilioPhoneNumber])
@@ -404,6 +407,8 @@ model OutreachContact {
   lastReplyAt    DateTime?
   lastReplyText  String?
   emailOpenedAt  DateTime?
+  nextActionAt   DateTime?  // When the next action is due
+  nextActionNote String?    // What to do next (e.g. "Call back", "Send follow-up")
   activities     OutreachActivity[]
 
   @@unique([email, vertical])

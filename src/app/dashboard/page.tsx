@@ -109,18 +109,24 @@ export default function DashboardPage() {
             setPickupRulesText(parts.join(' and '));
             // Plan info
             setSelectedPlan((status as any).selectedPlan || 'starter');
-            // Calculate trial days remaining (7-day trial from createdAt)
-            const liveSince = localStorage.getItem('agent_live_since');
-            if (liveSince) {
-              const daysSinceLive = Math.floor((Date.now() - new Date(liveSince).getTime()) / (1000 * 60 * 60 * 24));
-              const daysLeft = Math.max(0, 7 - daysSinceLive);
-              setTrialDaysLeft(daysLeft);
+            // Calculate trial days remaining from server-side trialEndsAt
+            const hasSubscription = (status as any).hasSubscription;
+            if (!hasSubscription) {
+              const trialEnd = (status as any).trialEndsAt;
+              if (trialEnd) {
+                const daysLeft = Math.max(0, Math.ceil((new Date(trialEnd).getTime() - Date.now()) / (1000 * 60 * 60 * 24)));
+                setTrialDaysLeft(daysLeft);
+              } else {
+                // Fallback: localStorage for businesses that went live before trialEndsAt was added
+                const liveSince = localStorage.getItem('agent_live_since');
+                if (liveSince) {
+                  const daysSinceLive = Math.floor((Date.now() - new Date(liveSince).getTime()) / (1000 * 60 * 60 * 24));
+                  setTrialDaysLeft(Math.max(0, 7 - daysSinceLive));
+                }
+              }
             }
-            // Show banner for first 10 days
-            const key = 'dashboard_live_visits';
-            const visits = parseInt(localStorage.getItem(key) || '0') + 1;
-            localStorage.setItem(key, String(visits));
-            setShowLiveBanner(true); // Always show when live during trial
+            // Show banner when live
+            setShowLiveBanner(true);
           }
         } catch { /* not provisioned yet */ }
       } catch (err) {
@@ -172,8 +178,10 @@ export default function DashboardPage() {
 
       {/* Live agent banner — evolves over trial period */}
       {showLiveBanner && !loading && (() => {
-        const planLabels: Record<string, string> = { starter: 'Starter — $89/mo', standard: 'Standard — $149/mo', business: 'Business — $299/mo' };
-        const planLabel = planLabels[selectedPlan] || 'Starter — $89/mo';
+        const planLabelsUS: Record<string, string> = { starter: 'Starter — $89/mo', standard: 'Standard — $149/mo', business: 'Business — $299/mo' };
+        const planLabelsUK: Record<string, string> = { starter: 'Starter — £69/mo', standard: 'Standard — £119/mo', business: 'Business — £229/mo' };
+        const planLabels = isUK ? planLabelsUK : planLabelsUS;
+        const planLabel = planLabels[selectedPlan] || planLabels.starter;
         const trialExpired = trialDaysLeft !== null && trialDaysLeft <= 0;
         const trialUrgent = trialDaysLeft !== null && trialDaysLeft <= 2 && !trialExpired;
 
@@ -185,10 +193,16 @@ export default function DashboardPage() {
                   <p className="text-[15px] font-bold text-[#991b1b]">Your 7-day trial has ended</p>
                   <p className="text-[13px] text-[#dc2626] mt-0.5">Add your payment details to keep {agentName} running. Your plan: {planLabel}.</p>
                 </div>
-                <a href="https://cal.com/lars-beurskens-g1aaqy/15min" target="_blank" rel="noopener noreferrer"
-                  className="px-5 py-2.5 bg-[#e8930c] text-white text-[13px] font-bold rounded-xl no-underline hover:bg-[#d17f00] flex-shrink-0">
+                <button onClick={async () => {
+                  try {
+                    const { startSubscription } = await import('@/lib/api');
+                    const { url } = await startSubscription(selectedPlan || 'starter');
+                    if (url) window.location.href = url;
+                  } catch { window.open('https://cal.com/lars-beurskens-g1aaqy/15min', '_blank'); }
+                }}
+                  className="px-5 py-2.5 bg-[#e8930c] text-white text-[13px] font-bold rounded-xl border-none cursor-pointer hover:bg-[#d17f00] flex-shrink-0">
                   Set up billing →
-                </a>
+                </button>
               </div>
             </div>
           );

@@ -32,6 +32,23 @@ export async function GET(req: Request) {
     where.phone = { not: null };
   } else if (status === 'opened') {
     where.emailOpenedAt = { not: null };
+  } else if (status === 'action_due') {
+    where.nextActionAt = { lte: new Date() };
+  } else if (status === 'sent_today') {
+    const todayStart = new Date(); todayStart.setHours(0, 0, 0, 0);
+    where.sentAt = { gte: todayStart };
+  } else if (status === 'sent_yesterday') {
+    const yStart = new Date(); yStart.setDate(yStart.getDate() - 1); yStart.setHours(0, 0, 0, 0);
+    const yEnd = new Date(); yEnd.setHours(0, 0, 0, 0);
+    where.sentAt = { gte: yStart, lt: yEnd };
+  } else if (status === 'sent_2d') {
+    const dStart = new Date(); dStart.setDate(dStart.getDate() - 2); dStart.setHours(0, 0, 0, 0);
+    const dEnd = new Date(); dEnd.setDate(dEnd.getDate() - 1); dEnd.setHours(0, 0, 0, 0);
+    where.sentAt = { gte: dStart, lt: dEnd };
+  } else if (status === 'sent_3d_plus') {
+    const cutoff = new Date(); cutoff.setDate(cutoff.getDate() - 3); cutoff.setHours(0, 0, 0, 0);
+    where.sentAt = { lt: cutoff };
+    where.status = { in: ['sent', 'opened'] }; // only those who haven't progressed
   } else if (status) {
     where.status = status;
   }
@@ -53,7 +70,7 @@ export async function GET(req: Request) {
   const threeDaysAgo = new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000);
   const twoDaysAgo = new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000);
 
-  const [contacts, total, stats, emailFollowUps, callFollowUps, textFollowUps] = await Promise.all([
+  const [contacts, total, stats, emailFollowUps, callFollowUps, textFollowUps, actionItems] = await Promise.all([
     prisma.outreachContact.findMany({
       where, orderBy, take: limit, skip: offset,
       include: {
@@ -109,6 +126,16 @@ export async function GET(req: Request) {
       take: 20,
       include: { _count: { select: { activities: true } } },
     }),
+    // Action items due — contacts with nextActionAt <= now
+    prisma.outreachContact.findMany({
+      where: {
+        nextActionAt: { lte: new Date() },
+        status: { notIn: ["not_interested", "signed_up"] },
+      },
+      orderBy: { nextActionAt: "asc" },
+      take: 20,
+      include: { _count: { select: { activities: true } } },
+    }),
   ]);
 
   const pipeline = stats[0];
@@ -134,6 +161,7 @@ export async function GET(req: Request) {
       call: callFollowUps,
       text: textFollowUps,
     },
+    actionItems,
   });
 }
 

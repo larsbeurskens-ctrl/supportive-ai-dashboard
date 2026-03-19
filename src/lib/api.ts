@@ -211,6 +211,17 @@ export async function connectStripe(): Promise<{ success: boolean; onboardingUrl
   });
 }
 
+// Stripe Subscription — billing Supportive AI to the customer
+export async function startSubscription(plan?: string): Promise<{ url: string }> {
+  const res = await fetch('/api/stripe/subscribe', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ plan }),
+  });
+  if (!res.ok) throw new Error('Failed to create checkout session');
+  return res.json();
+}
+
 // Invoices
 export interface Invoice {
   id: string;

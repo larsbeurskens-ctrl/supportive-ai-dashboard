@@ -31,7 +31,7 @@ export async function POST(req: Request) {
     return Response.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const { contactId, type, outcome, notes } = await req.json();
+  const { contactId, type, outcome, notes, nextActionAt, nextActionNote } = await req.json();
   if (!contactId || !type) {
     return Response.json({ error: "contactId and type required" }, { status: 400 });
   }
@@ -54,13 +54,25 @@ export async function POST(req: Request) {
   };
   const newStatus = outcome ? STATUS_MAP[outcome] : undefined;
 
-  // Update contact's lastContactedAt and optionally status
+  // Update contact's lastContactedAt, optionally status, and next action
+  const updateData: Record<string, unknown> = {
+    lastContactedAt: new Date(),
+    ...(newStatus ? { status: newStatus } : {}),
+  };
+
+  // Set or clear next action
+  if (nextActionAt) {
+    updateData.nextActionAt = new Date(nextActionAt);
+    updateData.nextActionNote = nextActionNote || null;
+  } else if (nextActionAt === null) {
+    // Explicitly clearing next action
+    updateData.nextActionAt = null;
+    updateData.nextActionNote = null;
+  }
+
   await prisma.outreachContact.update({
     where: { id: contactId },
-    data: {
-      lastContactedAt: new Date(),
-      ...(newStatus ? { status: newStatus } : {}),
-    },
+    data: updateData,
   });
 
   return Response.json(activity);

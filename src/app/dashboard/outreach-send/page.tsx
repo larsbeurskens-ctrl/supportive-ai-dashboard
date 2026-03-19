@@ -36,6 +36,8 @@ interface Contact {
   lastReplyAt: string | null;
   lastReplyText: string | null;
   emailOpenedAt: string | null;
+  nextActionAt: string | null;
+  nextActionNote: string | null;
   _count: { activities: number };
   activities: Activity[];
 }
@@ -97,7 +99,8 @@ export default function OutreachSendPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchDebounce, setSearchDebounce] = useState('');
   const [sortBy, setSortBy] = useState('score');
-  const [followUps, setFollowUps] = useState<{ email: Contact[]; call: Contact[]; text: Contact[] }>({ email: [], call: [], text: [] });  const [sending, setSending] = useState<string | null>(null);
+  const [followUps, setFollowUps] = useState<{ email: Contact[]; call: Contact[]; text: Contact[] }>({ email: [], call: [], text: [] });
+  const [actionItems, setActionItems] = useState<Contact[]>([]);  const [sending, setSending] = useState<string | null>(null);
   const [importing, setImporting] = useState(false);
   const [importResult, setImportResult] = useState<string | null>(null);
   const [page, setPage] = useState(0);
@@ -119,6 +122,8 @@ export default function OutreachSendPage() {
   const [logCallId, setLogCallId] = useState<string | null>(null);
   const [logOutcome, setLogOutcome] = useState('no_answer');
   const [logNotes, setLogNotes] = useState('');
+  const [logNextDate, setLogNextDate] = useState('');
+  const [logNextNote, setLogNextNote] = useState('');
   const [savingLog, setSavingLog] = useState(false);
   const [callingId, setCallingId] = useState<string | null>(null);
 
@@ -190,6 +195,7 @@ export default function OutreachSendPage() {
       setPipeline(data.pipeline);
       setTotal(data.total);
       if (data.followUps) setFollowUps(data.followUps);
+      if (data.actionItems) setActionItems(data.actionItems);
     }
     setLoading(false);
   }, [filterVertical, filterStatus, searchDebounce, sortBy, page]);
@@ -258,11 +264,17 @@ export default function OutreachSendPage() {
     try {
       await fetch('/api/admin/outreach-contacts/activities', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ contactId: logCallId, type: 'call', outcome: logOutcome, notes: logNotes || null }),
+        body: JSON.stringify({
+          contactId: logCallId, type: 'call', outcome: logOutcome, notes: logNotes || null,
+          nextActionAt: logNextDate ? new Date(logNextDate + 'T09:00:00').toISOString() : null,
+          nextActionNote: logNextNote || null,
+        }),
       });
       setLogCallId(null);
       setLogOutcome('no_answer');
       setLogNotes('');
+      setLogNextDate('');
+      setLogNextNote('');
       await fetchContacts();
       if (expandedId) fetchActivities(expandedId);
     } catch { alert('Failed to save'); }
@@ -465,6 +477,17 @@ export default function OutreachSendPage() {
                 <textarea value={logNotes} onChange={e => setLogNotes(e.target.value)} rows={3} placeholder="Call back Thursday. Seemed interested but busy..."
                   className="w-full px-3 py-2.5 rounded-lg border border-[#d1ccc6] text-[14px] text-[#1a2e3b] placeholder-[#94a7b8] resize-none" />
               </div>
+              <div className="border-t border-[#f0eeeb] pt-3">
+                <label className="block text-[12px] font-semibold text-[#5a7184] mb-1.5">⚡ Next action (optional)</label>
+                <div className="flex gap-2">
+                  <input type="date" value={logNextDate} onChange={e => setLogNextDate(e.target.value)}
+                    className="px-3 py-2 rounded-lg border border-[#d1ccc6] text-[13px] text-[#1a2e3b] bg-white" />
+                  <input type="text" value={logNextNote} onChange={e => setLogNextNote(e.target.value)}
+                    placeholder="e.g. Call back, Send follow-up..."
+                    className="flex-1 px-3 py-2 rounded-lg border border-[#d1ccc6] text-[13px] text-[#1a2e3b] placeholder-[#94a7b8]" />
+                </div>
+                <p className="text-[11px] text-[#94a7b8] mt-1">Shows as an action item on the due date.</p>
+              </div>
             </div>
             <div className="px-6 py-4 border-t border-[#e5e0da] flex justify-end gap-3">
               <button onClick={() => setLogCallId(null)} className="px-4 py-2 rounded-lg text-[13px] font-semibold text-[#5a7184] border border-[#d1ccc6] bg-white hover:bg-[#f0eeeb] cursor-pointer transition-colors">Cancel</button>
@@ -658,6 +681,43 @@ export default function OutreachSendPage() {
           </div>
         ))}
       </div>
+      {/* ⚡ Action Items Due */}
+      {actionItems.length > 0 && (
+        <div className="mb-4 bg-[#fef8f0] border-2 border-[#e8930c] rounded-xl p-4">
+          <div className="flex items-center justify-between mb-2">
+            <h3 className="text-[14px] font-bold text-[#92400e]">⚡ {actionItems.length} action {actionItems.length === 1 ? 'item' : 'items'} due</h3>
+            <button onClick={() => { setFilterStatus('action_due'); setPage(0); }}
+              className="text-[12px] font-semibold text-[#e8930c] hover:underline cursor-pointer bg-transparent border-none">
+              View all →
+            </button>
+          </div>
+          <div className="space-y-2">
+            {actionItems.map(c => (
+              <div key={c.id} className="bg-white rounded-lg px-4 py-3 border border-[#f0dcc0] flex items-start justify-between gap-3">
+                <div className="min-w-0 flex-1">
+                  <div className="text-[13px] font-bold text-[#1a2e3b]">{c.businessName}</div>
+                  {c.nextActionNote && <p className="text-[13px] text-[#5a7184] mt-0.5">{c.nextActionNote}</p>}
+                  <div className="text-[11px] text-[#94a7b8] mt-0.5">
+                    Due {c.nextActionAt ? new Date(c.nextActionAt).toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' }) : ''} · {c.phone || 'no phone'}
+                  </div>
+                </div>
+                <div className="flex gap-1.5 flex-shrink-0">
+                  {c.phone && (
+                    <button onClick={() => handleTwilioCall(c)} disabled={callingId === c.id}
+                      className="bg-[#1a2e3b] text-white px-2.5 py-1 rounded-lg text-[11px] font-semibold hover:bg-[#243d4e] cursor-pointer border-none transition-colors disabled:opacity-50">
+                      {callingId === c.id ? '⏳' : '📞'}
+                    </button>
+                  )}
+                  <button onClick={() => { setLogCallId(c.id); setLogOutcome('spoke'); setLogNotes(''); setLogNextDate(''); setLogNextNote(''); }}
+                    className="bg-[#e8930c] text-white px-2.5 py-1 rounded-lg text-[11px] font-semibold hover:bg-[#d17f00] cursor-pointer border-none transition-colors">
+                    ✅ Done
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
       {/* Follow-ups Due */}
       {/* Unread Replies — URGENT */}
       {pipeline.unread_replies > 0 && (
@@ -827,6 +887,13 @@ export default function OutreachSendPage() {
           <option value="has_email">📧 Has email</option>
           <option value="has_phone">📞 Has phone</option>
           <option value="has_reply">💬 Has reply</option>
+          <option value="action_due">⚡ Action due</option>
+          <option disabled>── Sent date ──</option>
+          <option value="sent_today">📧 Emailed today</option>
+          <option value="sent_yesterday">📧 Emailed yesterday</option>
+          <option value="sent_2d">📧 Emailed 2 days ago</option>
+          <option value="sent_3d_plus">📧 Emailed 3+ days ago</option>
+          <option disabled>── Status ──</option>
           <option value="unsent">Unsent</option>
           <option value="sent">Emailed</option>
           <option value="opened">👀 Opened</option>
