@@ -198,7 +198,8 @@ export default function DashboardPage() {
                     const { startSubscription } = await import('@/lib/api');
                     const { url } = await startSubscription(selectedPlan || 'starter');
                     if (url) window.location.href = url;
-                  } catch { window.open('https://cal.com/lars-beurskens-g1aaqy/15min', '_blank'); }
+                    else alert('Could not create checkout session. Please try again or contact support.');
+                  } catch (err) { alert('Billing setup failed: ' + (err instanceof Error ? err.message : 'Unknown error. Please contact support.')); }
                 }}
                   className="px-5 py-2.5 bg-[#e8930c] text-white text-[13px] font-bold rounded-xl border-none cursor-pointer hover:bg-[#d17f00] flex-shrink-0">
                   Set up billing →
