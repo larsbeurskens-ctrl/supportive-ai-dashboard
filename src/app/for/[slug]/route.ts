@@ -42,7 +42,7 @@ export async function GET(
 
     // Update outreach contact status (fire-and-forget)
     prisma.outreachContact.updateMany({
-      where: { trackingSlug: slug, status: 'sent' },
+      where: { trackingSlug: slug, status: { in: ['sent', 'opened'] } },
       data: { status: 'clicked' },
     }).catch(() => {});
 
