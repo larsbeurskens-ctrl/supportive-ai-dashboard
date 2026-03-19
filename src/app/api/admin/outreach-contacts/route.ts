@@ -32,6 +32,8 @@ export async function GET(req: Request) {
     where.phone = { not: null };
   } else if (status === 'opened') {
     where.emailOpenedAt = { not: null };
+  } else if (status === 'clicked') {
+    where.linkClickedAt = { not: null };
   } else if (status === 'action_due') {
     where.nextActionAt = { lte: new Date() };
   } else if (status === 'sent_today') {
@@ -82,10 +84,10 @@ export async function GET(req: Request) {
     prisma.$queryRaw`
       SELECT 
         COUNT(*) as total,
-        COUNT(CASE WHEN status = 'unsent' THEN 1 END) as unsent,
-        COUNT(CASE WHEN status = 'sent' THEN 1 END) as sent,
+        COUNT(CASE WHEN status = 'unsent' AND email NOT LIKE '%@placeholder%' AND email != '' THEN 1 END) as has_email,
+        COUNT(CASE WHEN "sentAt" IS NOT NULL THEN 1 END) as emailed,
         COUNT(CASE WHEN "emailOpenedAt" IS NOT NULL THEN 1 END) as opened,
-        COUNT(CASE WHEN status = 'clicked' THEN 1 END) as clicked,
+        COUNT(CASE WHEN "linkClickedAt" IS NOT NULL THEN 1 END) as clicked,
         COUNT(CASE WHEN status = 'texted' THEN 1 END) as texted,
         COUNT(CASE WHEN status IN ('called', 'voicemail') THEN 1 END) as called,
         COUNT(CASE WHEN status IN ('spoke', 'demo_played') THEN 1 END) as spoke,
@@ -144,8 +146,8 @@ export async function GET(req: Request) {
     total,
     pipeline: {
       total: Number(pipeline.total),
-      unsent: Number(pipeline.unsent),
-      sent: Number(pipeline.sent),
+      has_email: Number(pipeline.has_email),
+      emailed: Number(pipeline.emailed),
       opened: Number(pipeline.opened),
       clicked: Number(pipeline.clicked),
       texted: Number(pipeline.texted),

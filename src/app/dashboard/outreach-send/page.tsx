@@ -36,13 +36,14 @@ interface Contact {
   lastReplyAt: string | null;
   lastReplyText: string | null;
   emailOpenedAt: string | null;
+  linkClickedAt: string | null;
   nextActionAt: string | null;
   nextActionNote: string | null;
   _count: { activities: number };
   activities: Activity[];
 }
 
-interface Pipeline { total: number; unsent: number; sent: number; opened: number; clicked: number; texted: number; called: number; spoke: number; interested: number; not_interested: number; signed_up: number; unread_replies: number; }
+interface Pipeline { total: number; has_email: number; emailed: number; opened: number; clicked: number; texted: number; called: number; spoke: number; interested: number; not_interested: number; signed_up: number; unread_replies: number; }
 
 interface SMSMessage { id: string; direction: string; body: string; createdAt: string; status: string; }
 interface SMSConversation { id: string; fromNumber: string; toNumber: string; toName: string | null; toCompany: string | null; unread: boolean; lastMessage: string; lastAt: string; messages: SMSMessage[]; }
@@ -92,7 +93,7 @@ export default function OutreachSendPage() {
   const { data: session, status: authStatus } = useSession();
   const router = useRouter();
   const [contacts, setContacts] = useState<Contact[]>([]);
-  const [pipeline, setPipeline] = useState<Pipeline>({ total: 0, unsent: 0, sent: 0, opened: 0, clicked: 0, texted: 0, called: 0, spoke: 0, interested: 0, not_interested: 0, signed_up: 0, unread_replies: 0 });
+  const [pipeline, setPipeline] = useState<Pipeline>({ total: 0, has_email: 0, emailed: 0, opened: 0, clicked: 0, texted: 0, called: 0, spoke: 0, interested: 0, not_interested: 0, signed_up: 0, unread_replies: 0 });
   const [loading, setLoading] = useState(true);
   const [filterVertical, setFilterVertical] = useState('');
   const [filterStatus, setFilterStatus] = useState('');
@@ -664,10 +665,10 @@ export default function OutreachSendPage() {
       <div className="grid grid-cols-3 lg:grid-cols-10 gap-3 mb-6">
         {[
           { label: 'Total', value: pipeline.total, color: '#1a2e3b' },
-          { label: 'Unsent', value: pipeline.unsent, color: '#94a7b8' },
-          { label: 'Emailed', value: pipeline.sent, color: '#3b82f6' },
+          { label: 'Has email', value: pipeline.has_email, color: '#3b82f6', filter: 'has_email' },
+          { label: 'Emailed', value: pipeline.emailed, color: '#6366f1' },
           { label: '👀 Opened', value: pipeline.opened, color: pipeline.opened > 0 ? '#d97706' : '#94a7b8', filter: 'opened' },
-          { label: '🔗 Clicked', value: pipeline.clicked, color: '#e8930c', filter: 'clicked' },
+          { label: '🔗 Clicked', value: pipeline.clicked, color: pipeline.clicked > 0 ? '#e8930c' : '#94a7b8', filter: 'clicked' },
           { label: 'Called', value: pipeline.called, color: '#e8930c' },
           { label: 'Texted', value: pipeline.texted, color: '#059669' },
           { label: '💬 Replies', value: pipeline.unread_replies, color: pipeline.unread_replies > 0 ? '#dc2626' : '#94a7b8' },

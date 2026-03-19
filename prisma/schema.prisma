@@ -407,6 +407,7 @@ model OutreachContact {
   lastReplyAt    DateTime?
   lastReplyText  String?
   emailOpenedAt  DateTime?
+  linkClickedAt  DateTime?  // When they first clicked a tracked link (independent of status)
   nextActionAt   DateTime?  // When the next action is due
   nextActionNote String?    // What to do next (e.g. "Call back", "Send follow-up")
   activities     OutreachActivity[]

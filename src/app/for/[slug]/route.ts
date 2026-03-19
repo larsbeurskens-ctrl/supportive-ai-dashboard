@@ -40,10 +40,16 @@ export async function GET(
       },
     }).catch(() => {});
 
-    // Update outreach contact status (fire-and-forget)
-    prisma.outreachContact.updateMany({
-      where: { trackingSlug: slug, status: { in: ['sent', 'opened'] } },
-      data: { status: 'clicked' },
+    // Update outreach contact — set linkClickedAt (first click wins) + upgrade status only if lower
+    const LOW_STATUSES = ['sent', 'opened'];
+    prisma.outreachContact.findFirst({ where: { trackingSlug: slug } }).then(contact => {
+      if (!contact) return;
+      const updates: Record<string, unknown> = {};
+      if (!contact.linkClickedAt) updates.linkClickedAt = new Date();
+      if (LOW_STATUSES.includes(contact.status)) updates.status = 'clicked';
+      if (Object.keys(updates).length > 0) {
+        prisma.outreachContact.update({ where: { id: contact.id }, data: updates }).catch(() => {});
+      }
     }).catch(() => {});
 
     const destination = link.destination.startsWith('http')
