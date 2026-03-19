@@ -27,7 +27,7 @@ export async function GET(req: Request) {
     where.hasUnreadReply = true;
   } else if (status === 'has_email') {
     where.email = { not: null, notIn: [''] };
-    where.NOT = [{ email: { contains: '@placeholder' } }];
+    where.NOT = [{ email: { contains: 'placeholder' } }];
   } else if (status === 'has_phone') {
     where.phone = { not: null };
   } else if (status === 'opened') {
@@ -84,7 +84,7 @@ export async function GET(req: Request) {
     prisma.$queryRaw`
       SELECT 
         COUNT(*) as total,
-        COUNT(CASE WHEN status = 'unsent' AND email NOT LIKE '%@placeholder%' AND email != '' THEN 1 END) as has_email,
+        COUNT(CASE WHEN status = 'unsent' AND email NOT LIKE '%placeholder%' AND email != '' THEN 1 END) as has_email,
         COUNT(CASE WHEN "sentAt" IS NOT NULL THEN 1 END) as emailed,
         COUNT(CASE WHEN "emailOpenedAt" IS NOT NULL THEN 1 END) as opened,
         COUNT(CASE WHEN "linkClickedAt" IS NOT NULL THEN 1 END) as clicked,
