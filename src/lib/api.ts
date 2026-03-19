@@ -218,7 +218,10 @@ export async function startSubscription(plan?: string): Promise<{ url: string }>
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ plan }),
   });
-  if (!res.ok) throw new Error('Failed to create checkout session');
+  if (!res.ok) {
+    const data = await res.json().catch(() => ({}));
+    throw new Error(data.error || `HTTP ${res.status}`);
+  }
   return res.json();
 }
 
