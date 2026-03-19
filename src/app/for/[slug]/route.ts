@@ -46,6 +46,7 @@ export async function GET(
       if (!contact) return;
       const updates: Record<string, unknown> = {};
       if (!contact.linkClickedAt) updates.linkClickedAt = new Date();
+      if (!contact.emailOpenedAt) updates.emailOpenedAt = new Date(); // clicked = definitely opened
       if (LOW_STATUSES.includes(contact.status)) updates.status = 'clicked';
       if (Object.keys(updates).length > 0) {
         prisma.outreachContact.update({ where: { id: contact.id }, data: updates }).catch(() => {});
