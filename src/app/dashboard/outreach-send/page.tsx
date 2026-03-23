@@ -357,7 +357,7 @@ export default function OutreachSendPage() {
     plumbing: 'https://supportive-ai.com/plumbing#hear-it',
     window_cleaning: 'https://supportive-ai.com/window-cleaning#hear-it',
     hvac: 'https://supportive-ai.com/hvac#hear-it',
-    plumbing_uk: 'https://supportive-ai.com/#hear-it',
+    plumbing_uk: 'https://supportive-ai.com/plumbing#hear-it',
   };
 
   function openSmsModal(contact: Contact, isFollowUp: boolean) {

@@ -226,6 +226,35 @@ export function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {[
               {
+                id: 'uk-robert-pricing',
+                src: '/audio/demo-call-uk-robert-pricing.m4a',
+                label: '🇬🇧 UK Price Enquiry',
+                scenario: 'Pricing questions — leaky tap',
+                bubbles: [
+                  { role: 'ai', text: "Hello, thank you for calling London Plumbing Services! This is Sarah. How can I help you today?" },
+                  { role: 'customer', text: "Hi, this is Robert. I have a question about your pricing and services." },
+                  { role: 'ai', text: "Our call-out fee is £65. A leaky tap runs about £80 to £150, blocked drains £80 to £200, boiler repairs £150 to £400." },
+                  { role: 'customer', text: "Is the call-out fee deducted from the repair cost?" },
+                  { role: 'ai', text: "The £65 call-out fee gets applied to the repair cost if you go ahead — so it's essentially free." },
+                  { role: 'customer', text: "That would be great. Thank you so much." },
+                ],
+              },
+              {
+                id: 'uk-maria-booking',
+                src: '/audio/demo-call-uk-maria-booking.m4a',
+                label: '🇬🇧 UK Booking',
+                scenario: 'Clogged drain — full booking flow',
+                bubbles: [
+                  { role: 'ai', text: "Hello, thank you for calling London Plumbing Services! This is Sarah. How can I help you today?" },
+                  { role: 'customer', text: "I'm calling regarding a clogged drain in my kitchen." },
+                  { role: 'ai', text: "We can definitely help with that. Can I start by getting your name?" },
+                  { role: 'customer', text: "My name is Maria. 9 Japan Crescent, N4 4BB, London." },
+                  { role: 'ai', text: "We've got openings at 8 AM and 3 PM on Wednesday. Which works better?" },
+                  { role: 'customer', text: "Three would be perfect." },
+                  { role: 'ai', text: "You're all set for Wednesday at 3 PM! £65 call-out fee gets applied to the repair. No surprises." },
+                ],
+              },
+              {
                 id: 'wc-mike',
                 src: '/audio/demo-call-wc-booking-mike.m4a',
                 label: '🇺🇸 Window Cleaning',
@@ -253,35 +282,6 @@ export function HomePage() {
                   { role: 'ai', text: "Okay, I'm going to get someone out to you right away. First, I need your name please." },
                   { role: 'customer', text: "My name is John. I'm at 60 Market Street in Poughkeepsie." },
                   { role: 'ai', text: "I've escalated this as an emergency and our team will call you right back to get someone out there immediately. Stay safe, John." },
-                ],
-              },
-              {
-                id: 'uk-robert-pricing',
-                src: '/audio/demo-call-uk-robert-pricing.m4a',
-                label: '🇬🇧 UK Price Enquiry',
-                scenario: 'Pricing questions — leaky tap',
-                bubbles: [
-                  { role: 'ai', text: "Hello, thank you for calling London Plumbing Services! This is Sarah. How can I help you today?" },
-                  { role: 'customer', text: "Hi, this is Robert. I have a question about your pricing and services." },
-                  { role: 'ai', text: "Our call-out fee is £65. A leaky tap runs about £80 to £150, blocked drains £80 to £200, boiler repairs £150 to £400." },
-                  { role: 'customer', text: "Is the call-out fee deducted from the repair cost?" },
-                  { role: 'ai', text: "The £65 call-out fee gets applied to the repair cost if you go ahead — so it's essentially free." },
-                  { role: 'customer', text: "That would be great. Thank you so much." },
-                ],
-              },
-              {
-                id: 'uk-maria-booking',
-                src: '/audio/demo-call-uk-maria-booking.m4a',
-                label: '🇬🇧 UK Booking',
-                scenario: 'Clogged drain — full booking flow',
-                bubbles: [
-                  { role: 'ai', text: "Hello, thank you for calling London Plumbing Services! This is Sarah. How can I help you today?" },
-                  { role: 'customer', text: "I'm calling regarding a clogged drain in my kitchen." },
-                  { role: 'ai', text: "We can definitely help with that. Can I start by getting your name?" },
-                  { role: 'customer', text: "My name is Maria. 9 Japan Crescent, N4 4BB, London." },
-                  { role: 'ai', text: "We've got openings at 8 AM and 3 PM on Wednesday. Which works better?" },
-                  { role: 'customer', text: "Three would be perfect." },
-                  { role: 'ai', text: "You're all set for Wednesday at 3 PM! £65 call-out fee gets applied to the repair. No surprises." },
                 ],
               },
             ].map((conv) => (
