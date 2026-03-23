@@ -111,7 +111,8 @@ export function buildEmail(
 <p style="margin:12px 0 12px 8px;">
 • picks up when you can't - nights, weekends, or when you're on a job<br/>
 • or have it answer every call - completely up to you<br/>
-• books jobs straight into your Google Calendar<br/>
+• answers customer questions just like a real receptionist<br/>
+• books jobs straight into your calendar<br/>
 • flags emergencies and texts you immediately<br/>
 • keeps your existing number (just forwards to the AI)
 </p>
