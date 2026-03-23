@@ -109,13 +109,12 @@ export function buildEmail(
 <p style="margin-top:16px;">I founded Supportive AI, a 24/7 receptionist specifically built for ${trade} that:</p>
 
 <p style="margin:12px 0 12px 8px;">
-• picks up when you can't — nights, weekends, or when you're on a job<br/>
+• picks up when you can't - nights, weekends, or when you're on a job<br/>
+• or have it answer every call - completely up to you<br/>
 • books jobs straight into your Google Calendar<br/>
 • flags emergencies and texts you immediately<br/>
-• keeps your existing number (just forwards to the AI)<br/>
-• sends payment links after the job
+• keeps your existing number (just forwards to the AI)
 </p>
-<p style="margin:4px 0 0 8px;color:#5a7184;font-size:14px;">Or have it answer every call — completely up to you.</p>
 <p style="margin-top:16px;">Want to hear what it sounds like? 👉 2-min demo call: <a href="${trackingUrl}" style="${LINK}">${trackingUrl}</a></p>
 
 <p style="margin-top:8px;">You can also try it yourself by calling the demo number: <strong>${demoPhone}</strong></p>
