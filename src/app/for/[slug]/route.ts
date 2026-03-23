@@ -26,7 +26,7 @@ export async function GET(
     const link = await prisma.trackedLink.findUnique({ where: { slug } });
 
     if (!link) {
-      return jsRedirect(`${baseUrl}/#hear-it`);
+      return jsRedirect(`${baseUrl}/plumbing#hear-it`);
     }
 
     // Log click (fire-and-forget)
@@ -59,6 +59,6 @@ export async function GET(
 
     return jsRedirect(destination);
   } catch {
-    return jsRedirect(baseUrl);
+    return jsRedirect(`${baseUrl}/plumbing#hear-it`);
   }
 }
