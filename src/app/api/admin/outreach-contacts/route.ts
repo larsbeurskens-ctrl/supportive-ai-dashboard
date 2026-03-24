@@ -81,22 +81,41 @@ export async function GET(req: Request) {
       },
     }),
     prisma.outreachContact.count({ where }),
-    prisma.$queryRaw`
-      SELECT 
-        COUNT(*) as total,
-        COUNT(CASE WHEN status = 'unsent' AND email NOT LIKE '%placeholder%' AND email != '' THEN 1 END) as has_email,
-        COUNT(CASE WHEN "sentAt" IS NOT NULL THEN 1 END) as emailed,
-        COUNT(CASE WHEN "emailOpenedAt" IS NOT NULL THEN 1 END) as opened,
-        COUNT(CASE WHEN "linkClickedAt" IS NOT NULL THEN 1 END) as clicked,
-        COUNT(CASE WHEN status = 'texted' THEN 1 END) as texted,
-        COUNT(CASE WHEN status IN ('called', 'voicemail') THEN 1 END) as called,
-        COUNT(CASE WHEN status IN ('spoke', 'demo_played') THEN 1 END) as spoke,
-        COUNT(CASE WHEN status = 'interested' THEN 1 END) as interested,
-        COUNT(CASE WHEN status = 'not_interested' THEN 1 END) as not_interested,
-        COUNT(CASE WHEN status = 'signed_up' THEN 1 END) as signed_up,
-        COUNT(CASE WHEN "hasUnreadReply" = true THEN 1 END) as unread_replies
-      FROM "OutreachContact"
-    ` as Promise<Array<Record<string, bigint>>>,
+    // Pipeline stats — filtered by vertical if selected
+    vertical
+      ? prisma.$queryRaw`
+        SELECT 
+          COUNT(*) as total,
+          COUNT(CASE WHEN status = 'unsent' AND email NOT LIKE '%placeholder%' AND email != '' THEN 1 END) as has_email,
+          COUNT(CASE WHEN "sentAt" IS NOT NULL THEN 1 END) as emailed,
+          COUNT(CASE WHEN "emailOpenedAt" IS NOT NULL THEN 1 END) as opened,
+          COUNT(CASE WHEN "linkClickedAt" IS NOT NULL THEN 1 END) as clicked,
+          COUNT(CASE WHEN status = 'texted' THEN 1 END) as texted,
+          COUNT(CASE WHEN status IN ('called', 'voicemail') THEN 1 END) as called,
+          COUNT(CASE WHEN status IN ('spoke', 'demo_played') THEN 1 END) as spoke,
+          COUNT(CASE WHEN status = 'interested' THEN 1 END) as interested,
+          COUNT(CASE WHEN status = 'not_interested' THEN 1 END) as not_interested,
+          COUNT(CASE WHEN status = 'signed_up' THEN 1 END) as signed_up,
+          COUNT(CASE WHEN "hasUnreadReply" = true THEN 1 END) as unread_replies
+        FROM "OutreachContact"
+        WHERE vertical = ${vertical}
+      ` as Promise<Array<Record<string, bigint>>>
+      : prisma.$queryRaw`
+        SELECT 
+          COUNT(*) as total,
+          COUNT(CASE WHEN status = 'unsent' AND email NOT LIKE '%placeholder%' AND email != '' THEN 1 END) as has_email,
+          COUNT(CASE WHEN "sentAt" IS NOT NULL THEN 1 END) as emailed,
+          COUNT(CASE WHEN "emailOpenedAt" IS NOT NULL THEN 1 END) as opened,
+          COUNT(CASE WHEN "linkClickedAt" IS NOT NULL THEN 1 END) as clicked,
+          COUNT(CASE WHEN status = 'texted' THEN 1 END) as texted,
+          COUNT(CASE WHEN status IN ('called', 'voicemail') THEN 1 END) as called,
+          COUNT(CASE WHEN status IN ('spoke', 'demo_played') THEN 1 END) as spoke,
+          COUNT(CASE WHEN status = 'interested' THEN 1 END) as interested,
+          COUNT(CASE WHEN status = 'not_interested' THEN 1 END) as not_interested,
+          COUNT(CASE WHEN status = 'signed_up' THEN 1 END) as signed_up,
+          COUNT(CASE WHEN "hasUnreadReply" = true THEN 1 END) as unread_replies
+        FROM "OutreachContact"
+      ` as Promise<Array<Record<string, bigint>>>,
     // Email follow-ups: sent 4+ days ago, no activity since
     prisma.outreachContact.findMany({
       where: {
