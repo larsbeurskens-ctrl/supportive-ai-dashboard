@@ -233,9 +233,9 @@ export function HomePage() {
                 bubbles: [
                   { role: 'ai', text: "Hello, thank you for calling London Plumbing Services! This is Sarah. How can I help you today?" },
                   { role: 'customer', text: "Hi, this is Robert. I have a question about your pricing and services." },
-                  { role: 'ai', text: "Our call-out fee is £65. A leaky tap runs about £80 to £150, blocked drains £80 to £200, boiler repairs £150 to £400." },
-                  { role: 'customer', text: "Is the call-out fee deducted from the repair cost?" },
-                  { role: 'ai', text: "The £65 call-out fee gets applied to the repair cost if you go ahead — so it's essentially free." },
+                  { role: 'ai', text: "Our call-out fee is £65. A leaky tap runs about £80 to £150, blocked drains £80 to £200, boiler repairs £150 to £400. Every job is different so the plumber quotes on site." },
+                  { role: 'customer', text: "Is the call-out fee on top of the repair cost?" },
+                  { role: 'ai', text: "No — if you go ahead with the repair, the £65 comes off the final bill. So you're not paying extra." },
                   { role: 'customer', text: "That would be great. Thank you so much." },
                 ],
               },
@@ -251,7 +251,7 @@ export function HomePage() {
                   { role: 'customer', text: "My name is Maria. 9 Japan Crescent, N4 4BB, London." },
                   { role: 'ai', text: "We've got openings at 8 AM and 3 PM on Wednesday. Which works better?" },
                   { role: 'customer', text: "Three would be perfect." },
-                  { role: 'ai', text: "You're all set for Wednesday at 3 PM! £65 call-out fee gets applied to the repair. No surprises." },
+                  { role: 'ai', text: "You're all set for Wednesday at 3 PM! There's a £65 call-out fee, but that comes off the bill if you go ahead with the repair. No surprises." },
                 ],
               },
               {

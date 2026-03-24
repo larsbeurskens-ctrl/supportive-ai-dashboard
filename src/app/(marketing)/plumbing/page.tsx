@@ -18,9 +18,9 @@ const plumbingRecordings = [
     bubbles: [
       { role: 'ai' as const, text: "Hello, thank you for calling London Plumbing Services! This is Sarah. How can I help you today?" },
       { role: 'customer' as const, text: "Hi, this is Robert. I have a question about your pricing and services." },
-      { role: 'ai' as const, text: "Our call-out fee is £65. A leaky tap runs £80–£150, blocked drains £80–£200, boiler repairs £150–£400." },
-      { role: 'customer' as const, text: "Is the call-out fee deducted from the repair cost?" },
-      { role: 'ai' as const, text: "The £65 call-out fee gets applied to the repair cost if you go ahead — so it's essentially free." },
+      { role: 'ai' as const, text: "Our call-out fee is £65. A leaky tap runs £80–£150, blocked drains £80–£200, boiler repairs £150–£400. Every job is different so the plumber quotes on site." },
+      { role: 'customer' as const, text: "Is the call-out fee on top of the repair cost?" },
+      { role: 'ai' as const, text: "No — if you go ahead with the repair, the £65 comes off the final bill. So you're not paying extra." },
       { role: 'customer' as const, text: "That would be great. Thank you so much." },
     ],
   },
@@ -35,7 +35,7 @@ const plumbingRecordings = [
       { role: 'customer' as const, text: "My name is Maria. 9 Japan Crescent, N4 4BB, London." },
       { role: 'ai' as const, text: "We've got openings at 8 AM and 3 PM on Wednesday. Which works better?" },
       { role: 'customer' as const, text: "Three would be perfect." },
-      { role: 'ai' as const, text: "You're all set for Wednesday at 3 PM! £65 call-out fee gets applied to the repair. No surprises." },
+      { role: 'ai' as const, text: "You're all set for Wednesday at 3 PM! There's a £65 call-out fee, but that comes off the bill if you go ahead with the repair. No surprises." },
     ],
   },
   {
