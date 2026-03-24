@@ -76,6 +76,22 @@ const plumbingRecordings = [
       { role: 'ai' as const, text: "Our team is being notified now and will call you right back. Stay safe, John." },
     ],
   },
+  {
+    id: 'uk-bob-booking',
+    src: '/audio/demo-call-uk-bob-booking.m4a',
+    scenario: '🇬🇧 UK — Full booking, leaky tap',
+    bubbles: [
+      { role: 'ai' as const, text: "Hello, thank you for calling London Plumbing Services! This is Sarah. How can I help you today?" },
+      { role: 'customer' as const, text: "Hi Sarah, this is Bob. I'd like to book an appointment — my tap upstairs in the bathroom is leaking." },
+      { role: 'ai' as const, text: "Hi Bob! Leaky tap in the upstairs bathroom — what's the postcode there?" },
+      { role: 'customer' as const, text: "SE20 8NE. Two Emily Park Mansions." },
+      { role: 'ai' as const, text: "On Thursday we've got 11 AM, 12 PM, and 1 PM. Which works best?" },
+      { role: 'customer' as const, text: "One PM." },
+      { role: 'ai' as const, text: "You're all set for Thursday at 1 PM! There's a £65 call-out fee, but if you go ahead with the repair, that comes off the final bill. No surprises." },
+      { role: 'customer' as const, text: "How much do you think the repair will be?" },
+      { role: 'ai' as const, text: "It really depends on what's causing the leak — could be a washer or something with the valve. Our plumber will quote on site before doing any work. No surprises." },
+    ],
+  },
 ];
 
 export default function PlumbingPage() {

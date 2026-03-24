@@ -284,6 +284,23 @@ export function HomePage() {
                   { role: 'ai', text: "I've escalated this as an emergency and our team will call you right back to get someone out there immediately. Stay safe, John." },
                 ],
               },
+              {
+                id: 'uk-bob-booking',
+                src: '/audio/demo-call-uk-bob-booking.m4a',
+                label: '🇬🇧 UK Full Booking',
+                scenario: 'Leaky tap — address, scheduling & pricing',
+                bubbles: [
+                  { role: 'ai', text: "Hello, thank you for calling London Plumbing Services! This is Sarah. How can I help you today?" },
+                  { role: 'customer', text: "Hi Sarah, this is Bob. My tap upstairs in the bathroom is leaking." },
+                  { role: 'ai', text: "Hi Bob! Leaky tap in the upstairs bathroom — what's the postcode there?" },
+                  { role: 'customer', text: "SE20 8NE. Two Emily Park Mansions." },
+                  { role: 'ai', text: "On Thursday we've got 11 AM, 12 PM, and 1 PM. Which works best?" },
+                  { role: 'customer', text: "One PM." },
+                  { role: 'ai', text: "You're all set for Thursday at 1 PM! There's a £65 call-out fee, but if you go ahead with the repair, that comes off the final bill. No surprises." },
+                  { role: 'customer', text: "How much do you think the repair will be?" },
+                  { role: 'ai', text: "It depends on what's causing the leak — our plumber will quote on site before doing any work. No surprises." },
+                ],
+              },
             ].map((conv) => (
               <div key={conv.id} className="bg-white rounded-2xl border border-[#e5e0da] overflow-hidden">
                 {/* Header */}
