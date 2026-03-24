@@ -197,6 +197,10 @@ export default function OutreachSendPage() {
       setTotal(data.total);
       if (data.followUps) setFollowUps(data.followUps);
       if (data.actionItems) setActionItems(data.actionItems);
+    } else {
+      console.error('Outreach API error:', res.status, await res.text().catch(() => ''));
+      setContacts([]);
+      setTotal(0);
     }
     setLoading(false);
   }, [filterVertical, filterStatus, searchDebounce, sortBy, page]);
