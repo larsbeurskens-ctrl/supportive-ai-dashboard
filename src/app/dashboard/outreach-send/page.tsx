@@ -51,7 +51,7 @@ interface SMSConversation { id: string; fromNumber: string; toNumber: string; to
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'https://supportive-ai-backend-production.up.railway.app';
 
 const VERTICAL_LABELS: Record<string, string> = {
-  plumbing: '🔧 Plumbing', window_cleaning: '🪟 Window Cleaning', hvac: '❄️ HVAC', plumbing_uk: '🔧 Plumbing (UK)',
+  plumbing: '🔧 Plumbing', window_cleaning: '🪟 Window Cleaning', hvac: '❄️ HVAC', plumbing_uk: '🔧 Plumbing (UK)', window_cleaning_uk: '🪟 Window Cleaning (UK)',
 };
 const STATUS_STYLES: Record<string, { bg: string; text: string; label: string }> = {
   unsent: { bg: 'bg-[#f5f4f2]', text: 'text-[#5a7184]', label: 'Unsent' },
@@ -355,19 +355,20 @@ export default function OutreachSendPage() {
 
   const DEMO_NUMBERS: Record<string, string> = {
     plumbing: '(240) 301-1473', window_cleaning: '(845) 209-2401', hvac: '(737) 327-8220',
-    plumbing_uk: '+44 7427 846243',
+    plumbing_uk: '+44 7427 846243', window_cleaning_uk: '+44 7427 846243',
   };
   const LANDING_PAGES: Record<string, string> = {
     plumbing: 'https://supportive-ai.com/plumbing#hear-it',
     window_cleaning: 'https://supportive-ai.com/window-cleaning#hear-it',
     hvac: 'https://supportive-ai.com/hvac#hear-it',
     plumbing_uk: 'https://supportive-ai.com/plumbing#hear-it',
+    window_cleaning_uk: 'https://supportive-ai.com/window-cleaning#hear-it',
   };
 
   function openSmsModal(contact: Contact, isFollowUp: boolean) {
     setSmsContact(contact);
     setSmsIsFollowUp(isFollowUp);
-    const verticalLabel = contact.vertical === 'window_cleaning' ? 'window cleaning' : contact.vertical === 'plumbing_uk' ? 'plumbing' : contact.vertical;
+    const verticalLabel = contact.vertical === 'window_cleaning' ? 'window cleaning' : contact.vertical === 'window_cleaning_uk' ? 'window cleaning' : contact.vertical === 'plumbing_uk' ? 'plumbing' : contact.vertical;
     const demo = DEMO_NUMBERS[contact.vertical] || DEMO_NUMBERS.plumbing;
     const link = LANDING_PAGES[contact.vertical] || LANDING_PAGES.plumbing;
     const isUKContact = contact.vertical.endsWith('_uk');
@@ -883,7 +884,8 @@ export default function OutreachSendPage() {
           <option value="">All verticals</option>
           <option value="plumbing">Plumbing (US)</option>
           <option value="plumbing_uk">Plumbing (UK)</option>
-          <option value="window_cleaning">Window Cleaning</option>
+          <option value="window_cleaning">Window Cleaning (US)</option>
+          <option value="window_cleaning_uk">Window Cleaning (UK)</option>
           <option value="hvac">HVAC</option>
         </select>
         <select value={filterStatus} onChange={e => { setFilterStatus(e.target.value); setPage(0); }}
