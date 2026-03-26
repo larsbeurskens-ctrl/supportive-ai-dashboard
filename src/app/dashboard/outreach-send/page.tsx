@@ -1104,11 +1104,11 @@ export default function OutreachSendPage() {
                         {activities.map(a => (
                           <div key={a.id} className="flex items-start gap-3 py-2 border-b border-[#e5e0da] last:border-0">
                             <div className="w-6 h-6 rounded-full bg-[#eff6ff] flex items-center justify-center flex-shrink-0 mt-0.5">
-                              <span className="text-[11px]">{a.type === 'call' ? '📞' : a.type === 'email' ? '✉️' : a.type === 'text' || a.type === 'text_follow_up' ? '💬' : '📝'}</span>
+                              <span className="text-[11px]">{a.type === 'call' ? '📞' : a.type === 'email' ? '✉️' : a.type === 'text' || a.type === 'text_follow_up' ? '💬' : a.type === 'email_opened' ? '👀' : a.type === 'link_clicked' ? '🔗' : a.type === 'email_bounced' ? '⚠️' : '📝'}</span>
                             </div>
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center gap-2">
-                                <span className="text-[13px] font-semibold text-[#1a2e3b] capitalize">{a.type === 'text_follow_up' ? 'Text follow-up' : a.type}</span>
+                                <span className="text-[13px] font-semibold text-[#1a2e3b] capitalize">{a.type === 'text_follow_up' ? 'Text follow-up' : a.type === 'email_opened' ? 'Email opened' : a.type === 'link_clicked' ? 'Link clicked' : a.type === 'email_bounced' ? 'Email bounced' : a.type}</span>
                                 {a.outcome && <span className={`text-[11px] font-semibold px-1.5 py-0.5 rounded-full ${(STATUS_STYLES[a.outcome] || STATUS_STYLES.unsent).bg} ${(STATUS_STYLES[a.outcome] || STATUS_STYLES.unsent).text}`}>
                                   {OUTCOME_OPTIONS.find(o => o.value === a.outcome)?.label || a.outcome}
                                 </span>}

@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
+import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
@@ -45,6 +46,14 @@ export async function POST(req: NextRequest) {
             data: updates,
           });
         }
+        // Log activity for history
+        await prisma.outreachActivity.create({
+          data: {
+            contactId: contact.id,
+            type: 'email_opened',
+            notes: `Email opened${contact.emailOpenedAt ? ' (again)' : ''}`,
+          },
+        });
       }
     }
 
@@ -58,6 +67,13 @@ export async function POST(req: NextRequest) {
           await prisma.outreachContact.update({
             where: { id: contact.id },
             data: { status: "bounced", notes: `Bounced: ${data.bounce?.message || "unknown reason"}` },
+          });
+          await prisma.outreachActivity.create({
+            data: {
+              contactId: contact.id,
+              type: 'email_bounced',
+              notes: `Email bounced: ${data.bounce?.message || 'unknown reason'}`,
+            },
           });
         }
       }

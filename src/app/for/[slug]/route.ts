@@ -51,6 +51,14 @@ export async function GET(
       if (Object.keys(updates).length > 0) {
         prisma.outreachContact.update({ where: { id: contact.id }, data: updates }).catch(() => {});
       }
+      // Log activity for history
+      prisma.outreachActivity.create({
+        data: {
+          contactId: contact.id,
+          type: 'link_clicked',
+          notes: `Clicked link to ${link.destination}`,
+        },
+      }).catch(() => {});
     }).catch(() => {});
 
     const destination = link.destination.startsWith('http')
