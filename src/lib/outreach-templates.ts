@@ -88,8 +88,9 @@ export function buildEmail(
       subject: `Re: 24/7 phone answering + booking for ${vLabel}`,
       html: `<div style="${STYLE}">
 <p>${greet}</p>
-<p>Just following up - I know ${vLabel} work keeps you busy (which is exactly why I built this).</p>
-<p style="margin-top:16px;">If you're curious, the fastest way to see what Supportive AI does is to hear a real call recording:</p>
+<p>Just following up on the voicemail I just left - I know ${vLabel} work keeps you busy (which is exactly why I built this).</p>
+<p style="margin-top:16px;">I created a human-like AI receptionist that picks up the phone when you can't, answers customer questions, and books appointments straight into your live calendar.</p>
+<p style="margin-top:16px;">If you're curious, the fastest way to see what it does is to hear a real call recording:</p>
 
 <p>👉 2-min demo call: <a href="${trackingUrl}" style="${LINK}">${trackingUrl}</a></p>
 
