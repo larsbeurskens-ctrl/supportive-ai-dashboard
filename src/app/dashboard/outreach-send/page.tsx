@@ -1070,7 +1070,7 @@ export default function OutreachSendPage() {
                           {previewing === c.id ? '...' : '✉️ Email'}
                         </button>
                       )}
-                      {hasEmail && (c.status === 'sent' || c.status === 'called' || c.status === 'voicemail') && (
+                      {hasEmail && (c.status === 'sent' || c.status === 'opened' || c.status === 'called' || c.status === 'voicemail') && (
                         <button onClick={() => handlePreview(c.id, 'follow_up')} disabled={previewing === c.id}
                           className="bg-white text-[#1a2e3b] px-2.5 py-1 rounded-lg text-[11px] font-semibold border border-[#d1ccc6] hover:bg-[#f0eeeb] disabled:opacity-50 cursor-pointer transition-colors">
                           {previewing === c.id ? '...' : 'Follow up'}
