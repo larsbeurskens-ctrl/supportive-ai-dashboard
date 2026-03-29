@@ -3,6 +3,7 @@
 import { useState, useRef } from 'react';
 import Link from 'next/link';
 import { DemoOverlay } from '@/components/marketing/DemoOverlay';
+import { GetCalledNow } from '@/components/marketing/GetCalledNow';
 
 const DEMO_CONFIG = {
   label: 'UK Plumbing Demo',
@@ -251,6 +252,13 @@ export default function UKPlumbingLandingPage() {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* === GET CALLED NOW === */}
+      <section className="px-6 md:px-10 py-12">
+        <div className="max-w-[500px] mx-auto">
+          <GetCalledNow variant="dark" />
         </div>
       </section>
 
