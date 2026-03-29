@@ -26,14 +26,14 @@ export function MarketingNav() {
 
         {/* Desktop nav */}
         <div className="hidden md:flex items-center gap-8">
-          <Link href="/#how-it-works" className="text-sm text-[#2a4a5e] font-medium no-underline hover:text-[#1a2e3b]">
-            How it works
+          <Link href="/how-it-works" className="text-sm text-[#2a4a5e] font-medium no-underline hover:text-[#1a2e3b]">
+            How It Works
           </Link>
-          <Link href="/#pricing" className="text-sm text-[#2a4a5e] font-medium no-underline hover:text-[#1a2e3b]">
+          <Link href="/pricing" className="text-sm text-[#2a4a5e] font-medium no-underline hover:text-[#1a2e3b]">
             Pricing
           </Link>
-          <Link href="/faq" className="text-sm text-[#2a4a5e] font-medium no-underline hover:text-[#1a2e3b]">
-            FAQ
+          <Link href="/demo" className="text-sm text-[#2a4a5e] font-medium no-underline hover:text-[#1a2e3b]">
+            Try Demo
           </Link>
           <div className="relative group">
             <button className={`text-sm font-medium cursor-pointer bg-transparent border-none transition-colors ${banner ? 'text-[#e8930c]' : 'text-[#2a4a5e]'}`}>
@@ -75,9 +75,9 @@ export function MarketingNav() {
         {/* Mobile menu */}
         {mobileOpen && (
           <div className="absolute top-full left-0 right-0 bg-white border-b border-[#e5e0da] shadow-lg p-4 md:hidden z-50">
-            <Link href="/#how-it-works" onClick={() => setMobileOpen(false)} className="block py-3 text-[#2a4a5e] font-medium no-underline border-b border-[#f0eeeb]">How it works</Link>
-            <Link href="/#pricing" onClick={() => setMobileOpen(false)} className="block py-3 text-[#2a4a5e] font-medium no-underline border-b border-[#f0eeeb]">Pricing</Link>
-            <Link href="/faq" onClick={() => setMobileOpen(false)} className="block py-3 text-[#2a4a5e] font-medium no-underline border-b border-[#f0eeeb]">FAQ</Link>
+            <Link href="/how-it-works" onClick={() => setMobileOpen(false)} className="block py-3 text-[#2a4a5e] font-medium no-underline border-b border-[#f0eeeb]">How It Works</Link>
+            <Link href="/pricing" onClick={() => setMobileOpen(false)} className="block py-3 text-[#2a4a5e] font-medium no-underline border-b border-[#f0eeeb]">Pricing</Link>
+            <Link href="/demo" onClick={() => setMobileOpen(false)} className="block py-3 text-[#2a4a5e] font-medium no-underline border-b border-[#f0eeeb]">Try Demo</Link>
             <div className="py-2 border-b border-[#f0eeeb]">
               <p className="text-[11px] font-bold text-[#94a7b8] uppercase tracking-wider mb-2 px-0">Industries</p>
               <Link href="/plumbing" onClick={() => setMobileOpen(false)} className="flex items-center gap-2 py-2 text-[#2a4a5e] font-medium no-underline">🔧 Plumbing</Link>
