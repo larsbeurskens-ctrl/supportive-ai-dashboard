@@ -9,6 +9,8 @@ export const VERTICAL_DESTINATIONS: Record<string, string> = {
   hvac: "/hvac#hear-it",
   plumbing_uk: "/#hear-it",
   window_cleaning_uk: "/window-cleaning#hear-it",
+  electrical: "/ai-receptionist-for-electricians",
+  electrical_uk: "/ai-receptionist-for-electricians",
 };
 
 const VERTICAL_LABELS: Record<string, string> = {
@@ -17,6 +19,8 @@ const VERTICAL_LABELS: Record<string, string> = {
   hvac: "HVAC",
   plumbing_uk: "plumbing",
   window_cleaning_uk: "window cleaning",
+  electrical: "electrical",
+  electrical_uk: "electrical",
 };
 
 const DEMO_PHONES: Record<string, string> = {
@@ -25,6 +29,8 @@ const DEMO_PHONES: Record<string, string> = {
   hvac: "(845) 209-2401",
   plumbing_uk: "+44 7427 846243",
   window_cleaning_uk: "+44 7427 846243",
+  electrical: "+44 7886 080139",
+  electrical_uk: "+44 7886 080139",
 };
 
 const SALES_PHONES: Record<string, string> = {
@@ -33,6 +39,8 @@ const SALES_PHONES: Record<string, string> = {
   hvac: "(832) 346-6405",
   plumbing_uk: "+44 7414 153843",
   window_cleaning_uk: "+44 7414 153843",
+  electrical: "+44 7414 153843",
+  electrical_uk: "+44 7414 153843",
 };
 
 const PAIN_OPENERS: Record<string, string> = {
@@ -41,6 +49,8 @@ const PAIN_OPENERS: Record<string, string> = {
   hvac: "When a customer calls and you're in an attic, on a rooftop, or running between service calls - you can't always pick up. And the calls you miss usually go to the next HVAC company.",
   plumbing_uk: "When a customer rings and you're under a sink, driving between jobs, or on a call-out — you can't always pick up. And the calls you miss usually go to the next plumber on the list.",
   window_cleaning_uk: "When a customer rings and you're up a ladder, driving between jobs, or quoting another property — you can't always pick up. And the calls you miss usually go to the next window cleaner.",
+  electrical: "When a customer rings and you're up a ladder, in a loft, or mid-rewire — you can't always pick up. And the calls you miss usually go to the next electrician on Google.",
+  electrical_uk: "When a customer rings and you're up a ladder, in a loft, or mid-rewire — you can't always pick up. And the calls you miss usually go to the next electrician on Google.",
 };
 
 const VERTICAL_TRADE: Record<string, string> = {
@@ -49,6 +59,8 @@ const VERTICAL_TRADE: Record<string, string> = {
   hvac: "HVAC companies",
   plumbing_uk: "plumbers",
   window_cleaning_uk: "window cleaning businesses",
+  electrical: "electricians",
+  electrical_uk: "electricians",
 };
 
 const STYLE = `font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;max-width:560px;color:#1a2e3b;font-size:15px;line-height:1.7;`;

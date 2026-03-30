@@ -371,7 +371,7 @@ export default function OutreachSendPage() {
   function openSmsModal(contact: Contact, isFollowUp: boolean) {
     setSmsContact(contact);
     setSmsIsFollowUp(isFollowUp);
-    const verticalLabel = contact.vertical === 'window_cleaning' ? 'window cleaning' : contact.vertical === 'window_cleaning_uk' ? 'window cleaning' : contact.vertical === 'plumbing_uk' ? 'plumbing' : contact.vertical;
+    const verticalLabel = contact.vertical === 'window_cleaning' ? 'window cleaning' : contact.vertical === 'window_cleaning_uk' ? 'window cleaning' : contact.vertical === 'plumbing_uk' ? 'plumbing' : contact.vertical === 'electrical_uk' ? 'electrical' : contact.vertical;
     const demo = DEMO_NUMBERS[contact.vertical] || DEMO_NUMBERS.plumbing;
     const link = LANDING_PAGES[contact.vertical] || LANDING_PAGES.plumbing;
     const isUKContact = contact.vertical.endsWith('_uk');
