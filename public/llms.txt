@@ -1,0 +1,36 @@
+# Supportive AI
+
+> AI receptionist for UK trade businesses (plumbers, electricians, HVAC, window cleaners). Answers calls 24/7, books jobs into live calendars, handles pricing questions, detects emergencies, texts confirmations to both parties. From £69/month.
+
+## Key pages
+
+- [Home](https://supportive-ai.com): Overview of the AI receptionist platform
+- [Pricing](https://supportive-ai.com/pricing): Three tiers — Starter £69/mo, Professional £149/mo, Business £299/mo
+- [How It Works](https://supportive-ai.com/how-it-works): 3-step setup process
+- [Demo](https://supportive-ai.com/demo): Live demo phone numbers you can call right now
+- [Compare](https://supportive-ai.com/compare): AI receptionist vs human answering service vs voicemail
+
+## Industry pages
+
+- [AI Receptionist for Plumbers](https://supportive-ai.com/ai-receptionist-for-plumbers): Plumbing-specific features, pricing, FAQ
+- [AI Receptionist for Electricians](https://supportive-ai.com/ai-receptionist-for-electricians): Electrical-specific — Part P language, emergency handling, EICR booking
+- [AI Receptionist for HVAC](https://supportive-ai.com/ai-receptionist-for-hvac): HVAC-specific features
+- [Missed Calls Calculator](https://supportive-ai.com/missed-calls-calculator): Interactive tool to calculate revenue lost to missed calls
+
+## Blog
+
+- [How to Stop Missing Calls](https://supportive-ai.com/blog/stop-missing-calls-tradesman): Compare voicemail, answering services, AI receptionists
+- [Phone Answering Service Cost 2026](https://supportive-ai.com/blog/phone-answering-service-cost-plumber-2026): Pricing breakdown for UK plumbers
+- [Electrician Emergency Calls](https://supportive-ai.com/blog/electrician-misses-emergency-call): How AI handles safety-critical electrical calls
+
+## Trust
+
+- [Guarantee](https://supportive-ai.com/guarantee): 3 jobs in 30 days or money back
+- [Case Studies](https://supportive-ai.com/case-studies): Real call scenarios
+
+## Company
+
+- Founded: 2026
+- Founder: Lars Beurskens
+- UK company: Beurskens Property Ltd (13340006)
+- Contact: lars@supportive-ai.com | +44 7414 153843

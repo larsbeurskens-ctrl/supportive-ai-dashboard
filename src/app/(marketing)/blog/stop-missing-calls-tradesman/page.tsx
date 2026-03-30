@@ -6,9 +6,21 @@ export const metadata: Metadata = {
   description: 'UK tradespeople lose thousands every year to missed calls. Compare voicemail, answering services, and AI receptionists to find the best solution for your trade business.',
 };
 
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "How to Stop Missing Calls When You Are on a Job",
+  "description": "UK tradespeople lose thousands every year to missed calls. Compare voicemail, answering services, and AI receptionists.",
+  "author": { "@type": "Person", "name": "Lars Beurskens" },
+  "publisher": { "@type": "Organization", "name": "Supportive AI", "url": "https://supportive-ai.com" },
+  "datePublished": "2026-03-30",
+  "url": "https://supportive-ai.com/blog/stop-missing-calls-tradesman",
+};
+
 export default function BlogPost() {
   return (
     <article className="pt-16 pb-14 px-6 md:px-10">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="max-w-[680px] mx-auto">
         <div className="mb-10">
           <p className="text-[13px] font-semibold text-[#e8930c] uppercase tracking-wider mb-3">Blog</p>
@@ -60,6 +72,14 @@ export default function BlogPost() {
           <p>If your calls are mostly informational and you do not mind calling people back, voicemail might be enough. But if your customers are comparing quotes and calling multiple tradespeople, whoever answers first wins. And that is the reality for most plumbers, electricians, and trade businesses in the UK today.</p>
 
           <p>The maths is simple. At £69 per month, an AI receptionist costs £828 per year. If it catches just one extra job per month that you would have missed, it pays for itself many times over. Most users report 5-10 additional bookings per month.</p>
+
+          <h2 className="text-[24px] font-bold text-[#1a2e3b] mt-10 mb-4">Related reading</h2>
+          <div className="space-y-2 text-[15px]">
+            <p>→ <Link href="/blog/phone-answering-service-cost-plumber-2026" className="text-[#1a6dca] underline">How much does a phone answering service cost for plumbers in 2026?</Link></p>
+            <p>→ <Link href="/blog/electrician-misses-emergency-call" className="text-[#1a6dca] underline">What happens when an electrician misses an emergency call?</Link></p>
+            <p>→ <Link href="/compare" className="text-[#1a6dca] underline">AI receptionist vs answering service vs voicemail — full comparison</Link></p>
+            <p>→ <Link href="/missed-calls-calculator" className="text-[#1a6dca] underline">Calculate how much missed calls cost your business</Link></p>
+          </div>
         </div>
 
 

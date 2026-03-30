@@ -4,6 +4,25 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { DemoOverlay } from '@/components/marketing/DemoOverlay';
 
+const FAQ_ITEMS = [
+  { q: 'Can it handle Part P enquiries?', a: "It tells callers that all work is carried out by Part P registered electricians with full certification. It asks about the type of work and property details so you know whether it is notifiable before you arrive." },
+  { q: 'What about emergency callouts?', a: "It detects urgent situations - burning smells, sparking, power out, exposed wires. Emergency calls trigger an immediate text to you with all the details. Critically, it never gives DIY electrical advice to callers. Safety first." },
+  { q: 'Does it know about EICRs?', a: "Yes. It can explain what an EICR is, quote your pricing, and book the inspection into your calendar. It also asks about property size to help you prepare." },
+  { q: 'Can it handle EV charger enquiries?', a: "Yes. It quotes your installation price, explains what is involved, and books a site visit. EV charger installation is the fastest growing segment - make sure every enquiry gets answered." },
+  { q: 'Do I need to change my number?', a: "No. Keep your existing number. Just forward calls to us when you want. You control when the AI answers - after hours, when you miss a call, or all the time." },
+  { q: 'How fast can I get set up?', a: "Live in a day. We build a version tailored to your electrical business - your pricing, your service area, your calendar. You approve it before it goes live." },
+];
+
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": FAQ_ITEMS.map(item => ({
+    "@type": "Question",
+    "name": item.q,
+    "acceptedAnswer": { "@type": "Answer", "text": item.a },
+  })),
+};
+
 const DEMO_CONFIG = {
   label: 'UK Electrical Demo',
   phone: '07886 080 139',
@@ -17,6 +36,7 @@ export default function AIReceptionistForElectricians() {
 
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
       {showDemo && <DemoOverlay onClose={() => setShowDemo(false)} configs={[DEMO_CONFIG]} />}
 
       {/* HERO */}
@@ -135,19 +155,37 @@ export default function AIReceptionistForElectricians() {
         <div className="max-w-[820px] mx-auto">
           <h2 className="text-[26px] font-bold text-[#1a2e3b] mb-6">Questions from electricians</h2>
           <div className="space-y-4">
-            {[
-              { q: 'Can it handle Part P enquiries?', a: "It tells callers that all work is carried out by Part P registered electricians with full certification. It asks about the type of work and property details so you know whether it is notifiable before you arrive." },
-              { q: 'What about emergency callouts?', a: "It detects urgent situations - burning smells, sparking, power out, exposed wires. Emergency calls trigger an immediate text to you with all the details. Critically, it never gives DIY electrical advice to callers. Safety first." },
-              { q: 'Does it know about EICRs?', a: "Yes. It can explain what an EICR is, quote your pricing, and book the inspection into your calendar. It also asks about property size to help you prepare." },
-              { q: 'Can it handle EV charger enquiries?', a: "Yes. It quotes your installation price, explains what is involved, and books a site visit. EV charger installation is the fastest growing segment - make sure every enquiry gets answered." },
-              { q: 'Do I need to change my number?', a: "No. Keep your existing number. Just forward calls to us when you want. You control when the AI answers - after hours, when you miss a call, or all the time." },
-              { q: 'How fast can I get set up?', a: "Live in a day. We build a version tailored to your electrical business - your pricing, your service area, your calendar. You approve it before it goes live." },
-            ].map((item, i) => (
+            {FAQ_ITEMS.map((item, i) => (
               <div key={i} className="bg-[#faf9f7] rounded-xl px-5 py-4 border border-[#e5e0da]">
                 <h3 className="text-[14px] font-bold text-[#1a2e3b] mb-2">{item.q}</h3>
                 <p className="text-[13px] text-[#5a7184] leading-relaxed">{item.a}</p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* RELATED */}
+      <section className="py-10 px-6 md:px-10">
+        <div className="max-w-[820px] mx-auto">
+          <h2 className="text-[18px] font-bold text-[#1a2e3b] mb-4">Learn more</h2>
+          <div className="grid sm:grid-cols-2 gap-3">
+            <Link href="/blog/electrician-misses-emergency-call" className="bg-[#faf9f7] rounded-xl px-4 py-3 border border-[#e5e0da] no-underline hover:border-[#e8930c] transition-colors block">
+              <p className="text-[13px] font-bold text-[#1a2e3b]">What happens when you miss an emergency call?</p>
+              <p className="text-[11px] text-[#94a7b8]">Blog post · 5 min read</p>
+            </Link>
+            <Link href="/blog/phone-answering-service-cost-plumber-2026" className="bg-[#faf9f7] rounded-xl px-4 py-3 border border-[#e5e0da] no-underline hover:border-[#e8930c] transition-colors block">
+              <p className="text-[13px] font-bold text-[#1a2e3b]">How much does phone answering cost?</p>
+              <p className="text-[11px] text-[#94a7b8]">Blog post · 6 min read</p>
+            </Link>
+            <Link href="/compare" className="bg-[#faf9f7] rounded-xl px-4 py-3 border border-[#e5e0da] no-underline hover:border-[#e8930c] transition-colors block">
+              <p className="text-[13px] font-bold text-[#1a2e3b]">AI vs answering service vs voicemail</p>
+              <p className="text-[11px] text-[#94a7b8]">Comparison</p>
+            </Link>
+            <Link href="/guarantee" className="bg-[#faf9f7] rounded-xl px-4 py-3 border border-[#e5e0da] no-underline hover:border-[#e8930c] transition-colors block">
+              <p className="text-[13px] font-bold text-[#1a2e3b]">3 jobs in 30 days or your money back</p>
+              <p className="text-[11px] text-[#94a7b8]">Our guarantee</p>
+            </Link>
           </div>
         </div>
       </section>

@@ -98,16 +98,20 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "https://schema.org",
-              "@type": "SoftwareApplication",
+              "@type": "Organization",
               "name": "Supportive AI",
-              "applicationCategory": "BusinessApplication",
-              "description": "AI receptionist for home service businesses. Answers calls, books jobs, sends confirmations, handles payments.",
               "url": "https://supportive-ai.com",
+              "description": "AI receptionist for UK trade businesses. Answers calls 24/7, books jobs into your calendar, handles pricing and emergencies.",
+              "foundingDate": "2026",
+              "founder": { "@type": "Person", "name": "Lars Beurskens" },
+              "contactPoint": { "@type": "ContactPoint", "telephone": "+447414153843", "contactType": "sales", "areaServed": "GB" },
+              "sameAs": ["https://www.linkedin.com/in/lars-beurskens-19642a8/"],
               "offers": {
-                "@type": "Offer",
-                "price": "89",
-                "priceCurrency": "USD",
-                "priceValidUntil": "2026-12-31",
+                "@type": "AggregateOffer",
+                "lowPrice": "69",
+                "highPrice": "299",
+                "priceCurrency": "GBP",
+                "offerCount": "3",
               },
             }),
           }}

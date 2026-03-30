@@ -6,9 +6,21 @@ export const metadata: Metadata = {
   description: 'Compare the real cost of phone answering for UK plumbers: voicemail (free), human answering (£200-400/mo), AI receptionist (£69/mo), in-house receptionist (£24k/yr).',
 };
 
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "How Much Does a Phone Answering Service Cost for Plumbers in 2026?",
+  "description": "Compare the real cost of phone answering for UK plumbers in 2026.",
+  "author": { "@type": "Person", "name": "Lars Beurskens" },
+  "publisher": { "@type": "Organization", "name": "Supportive AI", "url": "https://supportive-ai.com" },
+  "datePublished": "2026-03-30",
+  "url": "https://supportive-ai.com/blog/phone-answering-service-cost-plumber-2026",
+};
+
 export default function BlogPost() {
   return (
     <article className="pt-16 pb-14 px-6 md:px-10">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="max-w-[680px] mx-auto">
         <div className="mb-10">
           <p className="text-[13px] font-semibold text-[#e8930c] uppercase tracking-wider mb-3">Blog</p>
@@ -78,6 +90,14 @@ export default function BlogPost() {
           <p>For a solo plumber or small team, the economics are clear. A human answering service costs 3-5x more than an AI receptionist and does less (takes messages vs books jobs). A hired receptionist costs 15-20x more and only covers business hours. Voicemail costs nothing and achieves nothing.</p>
 
           <p>An AI receptionist at £69 per month pays for itself if it catches one extra job per month. Most plumbers report it catches 5-10. The ROI is not close.</p>
+
+          <h2 className="text-[24px] font-bold text-[#1a2e3b] mt-10 mb-4">Related reading</h2>
+          <div className="space-y-2 text-[15px]">
+            <p>→ <Link href="/blog/stop-missing-calls-tradesman" className="text-[#1a6dca] underline">How to stop missing calls when you are on a job</Link></p>
+            <p>→ <Link href="/blog/electrician-misses-emergency-call" className="text-[#1a6dca] underline">What happens when an electrician misses an emergency call?</Link></p>
+            <p>→ <Link href="/pricing" className="text-[#1a6dca] underline">Supportive AI pricing — from £69/month</Link></p>
+            <p>→ <Link href="/ai-receptionist-for-plumbers" className="text-[#1a6dca] underline">AI receptionist built specifically for plumbers</Link></p>
+          </div>
         </div>
 
         <div className="mt-12 bg-[#faf9f7] rounded-xl p-6 border border-[#e5e0da]">

@@ -6,9 +6,21 @@ export const metadata: Metadata = {
   description: 'Burning smells, sparking sockets, total power loss — electrical emergencies cannot wait. How AI answering handles safety-critical calls differently from voicemail.',
 };
 
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "What Happens When an Electrician Misses an Emergency Call?",
+  "description": "Electrical emergencies cannot wait. How AI answering handles safety-critical calls differently from voicemail.",
+  "author": { "@type": "Person", "name": "Lars Beurskens" },
+  "publisher": { "@type": "Organization", "name": "Supportive AI", "url": "https://supportive-ai.com" },
+  "datePublished": "2026-03-30",
+  "url": "https://supportive-ai.com/blog/electrician-misses-emergency-call",
+};
+
 export default function BlogPost() {
   return (
     <article className="pt-16 pb-14 px-6 md:px-10">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="max-w-[680px] mx-auto">
         <div className="mb-10">
           <p className="text-[13px] font-semibold text-[#e8930c] uppercase tracking-wider mb-3">Blog</p>
@@ -62,6 +74,14 @@ export default function BlogPost() {
           <p>Missing these calls does not just cost you one job. It costs you the customer for life. An AI receptionist at £69 per month ensures you never miss an emergency call again. It answers instantly, stays calm, collects the details, and gets you the message within seconds.</p>
 
           <p>Your customer is safe. Your reputation is intact. And the job is yours.</p>
+
+          <h2 className="text-[24px] font-bold text-[#1a2e3b] mt-10 mb-4">Related reading</h2>
+          <div className="space-y-2 text-[15px]">
+            <p>→ <Link href="/blog/stop-missing-calls-tradesman" className="text-[#1a6dca] underline">How to stop missing calls when you are on a job</Link></p>
+            <p>→ <Link href="/blog/phone-answering-service-cost-plumber-2026" className="text-[#1a6dca] underline">How much does a phone answering service cost for plumbers in 2026?</Link></p>
+            <p>→ <Link href="/ai-receptionist-for-electricians" className="text-[#1a6dca] underline">AI receptionist built for UK electricians</Link></p>
+            <p>→ <Link href="/case-studies" className="text-[#1a6dca] underline">Real call scenarios — see how the AI handles different situations</Link></p>
+          </div>
         </div>
 
 
