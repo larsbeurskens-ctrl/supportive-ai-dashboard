@@ -9,6 +9,7 @@ const ADMIN_EMAIL = 'larsbeurskens@gmail.com';
 
 const VERTICAL_OPTIONS = [
   { value: 'plumbing', label: '🔧 Plumbing', destination: '/plumbing#hear-it' },
+  { value: 'electrical', label: '⚡ Electrical', destination: '/ai-receptionist-for-electricians' },
   { value: 'window-cleaning', label: '🪟 Window Cleaning', destination: '/window-cleaning#hear-it' },
   { value: 'hvac', label: '❄️ HVAC', destination: '/hvac#hear-it' },
   { value: 'homepage', label: '🏠 Homepage', destination: '/#hear-it' },

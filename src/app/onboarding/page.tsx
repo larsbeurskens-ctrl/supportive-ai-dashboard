@@ -36,9 +36,10 @@ class OnboardingErrorBoundary extends Component<{ children: ReactNode }, { hasEr
 }
 
 const TRADES = [
-  { value: 'window_cleaning', label: 'Window Cleaning' },
   { value: 'plumbing', label: 'Plumbing' },
+  { value: 'electrical', label: 'Electrical' },
   { value: 'hvac', label: 'HVAC' },
+  { value: 'window_cleaning', label: 'Window Cleaning' },
 ];
 
 const PLAN_LABELS: Record<string, string> = {
