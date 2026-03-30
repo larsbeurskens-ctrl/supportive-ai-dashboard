@@ -7,9 +7,23 @@ export const metadata: Metadata = {
   keywords: 'AI receptionist plumber, AI phone answering plumber UK, plumber answering service, 24/7 plumber receptionist, virtual receptionist plumber',
 };
 
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    { "@type": "Question", "name": "Do I need to change my phone number?", "acceptedAnswer": { "@type": "Answer", "text": "No. Keep your existing number. Just forward calls when you want. You control when the AI answers." } },
+    { "@type": "Question", "name": "How does it know my availability?", "acceptedAnswer": { "@type": "Answer", "text": "It connects to your Google Calendar. When a customer asks for a time, it checks your real diary and only offers slots that are genuinely free." } },
+    { "@type": "Question", "name": "Can it handle emergency calls?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. It detects burst pipes, flooding, and gas leaks. Emergency calls trigger an instant text to you. Non-urgent enquiries get booked normally." } },
+    { "@type": "Question", "name": "What if the customer asks something it cannot answer?", "acceptedAnswer": { "@type": "Answer", "text": "It takes their details and lets them know someone will call back shortly. You get a text immediately with the customer name, number, and what they asked." } },
+    { "@type": "Question", "name": "Will customers know it is AI?", "acceptedAnswer": { "@type": "Answer", "text": "Most callers don't notice. It sounds natural, uses your business name, and knows your pricing." } },
+    { "@type": "Question", "name": "How quickly can I get set up?", "acceptedAnswer": { "@type": "Answer", "text": "You can be live in a day. We set up a version tailored to your plumbing business. You hear it and approve it before it goes live." } },
+  ],
+};
+
 export default function AIReceptionistForPlumbers() {
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
       <section className="pt-16 pb-10 px-6 md:px-10 max-w-[820px] mx-auto text-center">
         <p className="text-[13px] font-semibold text-[#e8930c] uppercase tracking-wider mb-3">AI receptionist for plumbers</p>
         <h1 className="text-[36px] md:text-[44px] font-extrabold text-[#1a2e3b] leading-[1.15] mb-5 tracking-tight">Every call answered. Every job booked. Even when you can&apos;t pick up.</h1>
@@ -96,6 +110,19 @@ export default function AIReceptionistForPlumbers() {
                 <p className="text-[13px] text-[#5a7184] leading-relaxed">{item.a}</p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* RELATED */}
+      <section className="py-10 px-6 md:px-10">
+        <div className="max-w-[820px] mx-auto">
+          <h2 className="text-[18px] font-bold text-[#1a2e3b] mb-4">Learn more</h2>
+          <div className="grid sm:grid-cols-2 gap-3">
+            <Link href="/blog/stop-missing-calls-tradesman" className="bg-[#faf9f7] rounded-xl px-4 py-3 border border-[#e5e0da] no-underline hover:border-[#e8930c] transition-colors block"><p className="text-[13px] font-bold text-[#1a2e3b]">How to stop missing calls on a job</p><p className="text-[11px] text-[#94a7b8]">Blog · 5 min</p></Link>
+            <Link href="/blog/phone-answering-service-cost-plumber-2026" className="bg-[#faf9f7] rounded-xl px-4 py-3 border border-[#e5e0da] no-underline hover:border-[#e8930c] transition-colors block"><p className="text-[13px] font-bold text-[#1a2e3b]">Phone answering cost breakdown 2026</p><p className="text-[11px] text-[#94a7b8]">Blog · 6 min</p></Link>
+            <Link href="/compare" className="bg-[#faf9f7] rounded-xl px-4 py-3 border border-[#e5e0da] no-underline hover:border-[#e8930c] transition-colors block"><p className="text-[13px] font-bold text-[#1a2e3b]">AI vs answering service vs voicemail</p><p className="text-[11px] text-[#94a7b8]">Comparison</p></Link>
+            <Link href="/guarantee" className="bg-[#faf9f7] rounded-xl px-4 py-3 border border-[#e5e0da] no-underline hover:border-[#e8930c] transition-colors block"><p className="text-[13px] font-bold text-[#1a2e3b]">3 jobs in 30 days or your money back</p><p className="text-[11px] text-[#94a7b8]">Guarantee</p></Link>
           </div>
         </div>
       </section>

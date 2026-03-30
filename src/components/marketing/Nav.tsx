@@ -36,6 +36,9 @@ export function MarketingNav() {
           <Link href="/demo" className="text-sm text-[#2a4a5e] font-medium no-underline hover:text-[#1a2e3b]">
             Try Demo
           </Link>
+          <Link href="/blog" className="text-sm text-[#2a4a5e] font-medium no-underline hover:text-[#1a2e3b]">
+            Blog
+          </Link>
           <div className="relative group">
             <button className={`text-sm font-medium cursor-pointer bg-transparent border-none transition-colors ${banner ? 'text-[#e8930c]' : 'text-[#2a4a5e]'}`}>
               Industries ▾
@@ -82,6 +85,7 @@ export function MarketingNav() {
             <Link href="/how-it-works" onClick={() => setMobileOpen(false)} className="block py-3 text-[#2a4a5e] font-medium no-underline border-b border-[#f0eeeb]">How It Works</Link>
             <Link href="/pricing" onClick={() => setMobileOpen(false)} className="block py-3 text-[#2a4a5e] font-medium no-underline border-b border-[#f0eeeb]">Pricing</Link>
             <Link href="/demo" onClick={() => setMobileOpen(false)} className="block py-3 text-[#2a4a5e] font-medium no-underline border-b border-[#f0eeeb]">Try Demo</Link>
+            <Link href="/blog" onClick={() => setMobileOpen(false)} className="block py-3 text-[#2a4a5e] font-medium no-underline border-b border-[#f0eeeb]">Blog</Link>
             <div className="py-2 border-b border-[#f0eeeb]">
               <p className="text-[11px] font-bold text-[#94a7b8] uppercase tracking-wider mb-2 px-0">Industries</p>
               <Link href="/plumbing" onClick={() => setMobileOpen(false)} className="flex items-center gap-2 py-2 text-[#2a4a5e] font-medium no-underline">🔧 Plumbing</Link>

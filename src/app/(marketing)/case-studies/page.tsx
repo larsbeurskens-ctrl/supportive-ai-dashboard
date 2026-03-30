@@ -64,6 +64,13 @@ export default function CaseStudiesPage() {
         </section>
       ))}
 
+      <section className="py-10 px-6 md:px-10"><div className="max-w-[820px] mx-auto"><h2 className="text-[18px] font-bold text-[#1a2e3b] mb-4">Related</h2><div className="grid sm:grid-cols-2 gap-3">
+        <Link href="/blog/electrician-misses-emergency-call" className="bg-[#faf9f7] rounded-xl px-4 py-3 border border-[#e5e0da] no-underline hover:border-[#e8930c] block"><p className="text-[13px] font-bold text-[#1a2e3b]">What happens when you miss an emergency call?</p><p className="text-[11px] text-[#94a7b8]">Blog · 5 min</p></Link>
+        <Link href="/guarantee" className="bg-[#faf9f7] rounded-xl px-4 py-3 border border-[#e5e0da] no-underline hover:border-[#e8930c] block"><p className="text-[13px] font-bold text-[#1a2e3b]">3 jobs in 30 days or your money back</p><p className="text-[11px] text-[#94a7b8]">Guarantee</p></Link>
+        <Link href="/ai-receptionist-for-plumbers" className="bg-[#faf9f7] rounded-xl px-4 py-3 border border-[#e5e0da] no-underline hover:border-[#e8930c] block"><p className="text-[13px] font-bold text-[#1a2e3b]">AI receptionist for plumbers</p><p className="text-[11px] text-[#94a7b8]">Industry</p></Link>
+        <Link href="/ai-receptionist-for-electricians" className="bg-[#faf9f7] rounded-xl px-4 py-3 border border-[#e5e0da] no-underline hover:border-[#e8930c] block"><p className="text-[13px] font-bold text-[#1a2e3b]">AI receptionist for electricians</p><p className="text-[11px] text-[#94a7b8]">Industry</p></Link>
+      </div></div></section>
+
       <section className="py-14 px-6 md:px-10 bg-white border-t border-[#e5e0da] text-center">
         <div className="max-w-lg mx-auto">
           <h2 className="text-[26px] font-extrabold text-[#1a2e3b] mb-3">Want this for your business?</h2>
