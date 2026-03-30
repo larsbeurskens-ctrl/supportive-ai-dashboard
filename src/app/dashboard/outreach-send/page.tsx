@@ -356,6 +356,7 @@ export default function OutreachSendPage() {
   const DEMO_NUMBERS: Record<string, string> = {
     plumbing: '(240) 301-1473', window_cleaning: '(845) 209-2401', hvac: '(737) 327-8220',
     plumbing_uk: '+44 7427 846243', window_cleaning_uk: '+44 7427 846243',
+    electrical: '+44 7886 080139', electrical_uk: '+44 7886 080139',
   };
   const LANDING_PAGES: Record<string, string> = {
     plumbing: 'https://supportive-ai.com/plumbing#hear-it',
@@ -363,6 +364,8 @@ export default function OutreachSendPage() {
     hvac: 'https://supportive-ai.com/hvac#hear-it',
     plumbing_uk: 'https://supportive-ai.com/plumbing#hear-it',
     window_cleaning_uk: 'https://supportive-ai.com/window-cleaning#hear-it',
+    electrical: 'https://supportive-ai.com/ai-receptionist-for-electricians',
+    electrical_uk: 'https://supportive-ai.com/ai-receptionist-for-electricians',
   };
 
   function openSmsModal(contact: Contact, isFollowUp: boolean) {

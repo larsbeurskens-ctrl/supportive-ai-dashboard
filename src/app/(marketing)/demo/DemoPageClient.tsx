@@ -128,6 +128,32 @@ export function DemoPageClient() {
             </div>
           ))}
         </div>
+        {/* TRY IT YOURSELF */}
+        <div className="mt-16 mb-16">
+          <div className="text-center mb-8">
+            <h2 className="text-[24px] font-bold text-[#1a2e3b] mb-2">Try it yourself - right now</h2>
+            <p className="text-[15px] text-[#5a7184]">Call from your phone. Pretend you need a plumber or electrician. It is a live demo - no script.</p>
+          </div>
+          <div className="grid sm:grid-cols-2 gap-4">
+            {[
+              { label: 'UK Plumbing', emoji: '🔧', phone: '07427 846 243', tel: '+447427846243', tip: 'Report a leaky tap, ask about call-out fees, or try booking a job. Use postcode SE20 8NE.' },
+              { label: 'UK Electrical', emoji: '⚡', phone: '07886 080 139', tel: '+447886080139', tip: 'Report a tripping fuse board, ask about socket pricing, or try a burning smell emergency.' },
+              { label: 'US Plumbing', emoji: '🔧', phone: '(240) 301-1473', tel: '+12403011473', tip: 'Report a leak, ask about pricing, or try booking a repair.' },
+              { label: 'Window Cleaning', emoji: '🪟', phone: '(845) 209-2401', tel: '+18452092401', tip: 'Book an exterior clean, ask about pricing for a 2-story home.' },
+            ].map((demo, i) => (
+              <div key={i} className={`rounded-xl px-5 py-4 border ${i === 0 ? 'border-[#e8930c] bg-white' : 'border-[#e5e0da] bg-[#faf9f7]'}`}>
+                <div className="flex items-center gap-2 mb-1">
+                  <span>{demo.emoji}</span>
+                  <span className="text-[14px] font-bold text-[#1a2e3b]">{demo.label}</span>
+                  {i <= 1 && <span className="text-[10px] font-bold text-white bg-[#e8930c] px-2 py-0.5 rounded-full uppercase tracking-wider">UK</span>}
+                </div>
+                <a href={`tel:${demo.tel}`} className="text-[20px] font-extrabold text-[#e8930c] no-underline hover:underline block mb-2">{demo.phone}</a>
+                <p className="text-[12px] text-[#5a7184] leading-relaxed">{demo.tip}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
         <div className="max-w-[580px] mx-auto mt-16">
           <div className="text-center mb-8">
             <h2 className="text-[24px] font-bold text-[#1a2e3b] mb-2">
