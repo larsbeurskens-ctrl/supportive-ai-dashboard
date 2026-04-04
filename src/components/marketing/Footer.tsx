@@ -47,6 +47,8 @@ export function MarketingFooter() {
               <Link href="/window-cleaning" className="block text-sm text-[#5a7184] no-underline hover:text-[#1a2e3b]">Window Cleaning</Link>
               <Link href="/plumbing" className="block text-sm text-[#5a7184] no-underline hover:text-[#1a2e3b]">Plumbing</Link>
               <Link href="/hvac" className="block text-sm text-[#5a7184] no-underline hover:text-[#1a2e3b]">HVAC</Link>
+              <Link href="/ai-receptionist-for-locksmiths" className="block text-sm text-[#5a7184] no-underline hover:text-[#1a2e3b]">Locksmith</Link>
+              <Link href="/ai-receptionist-for-landscapers" className="block text-sm text-[#5a7184] no-underline hover:text-[#1a2e3b]">Landscaping</Link>
             </div>
           </div>
 

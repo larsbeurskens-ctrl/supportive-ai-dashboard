@@ -94,6 +94,12 @@ const VERTICAL_LABELS: Record<string, {
     servicesPlaceholder: 'e.g. termites, rodents, ants, mosquitoes, bed bugs, wildlife removal...',
     feeFieldName: 'diagnosticFee',
   },
+  locksmith: {
+    feeLabel: 'Call-out fee',
+    feePlaceholder: 'e.g. no call-out fee, £70 emergency lockout, free quotes for lock changes',
+    servicesPlaceholder: 'e.g. lockouts, lock changes, uPVC locks, boarding up, key cutting, safe opening...',
+    feeFieldName: 'diagnosticFee',
+  },
   landscaping: {
     feeLabel: 'Starting price',
     feePlaceholder: 'e.g. mowing from $40, free estimates for projects',

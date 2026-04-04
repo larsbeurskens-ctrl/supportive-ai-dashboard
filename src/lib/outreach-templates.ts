@@ -11,6 +11,10 @@ export const VERTICAL_DESTINATIONS: Record<string, string> = {
   window_cleaning_uk: "/window-cleaning#hear-it",
   electrical: "/ai-receptionist-for-electricians",
   electrical_uk: "/ai-receptionist-for-electricians",
+  locksmith: "/ai-receptionist-for-locksmiths",
+  locksmith_uk: "/ai-receptionist-for-locksmiths",
+  landscaping: "/ai-receptionist-for-landscapers",
+  landscaping_uk: "/ai-receptionist-for-landscapers",
 };
 
 const VERTICAL_LABELS: Record<string, string> = {
@@ -21,6 +25,10 @@ const VERTICAL_LABELS: Record<string, string> = {
   window_cleaning_uk: "window cleaning",
   electrical: "electrical",
   electrical_uk: "electrical",
+  locksmith: "locksmith",
+  locksmith_uk: "locksmith",
+  landscaping: "landscaping",
+  landscaping_uk: "landscaping",
 };
 
 const DEMO_PHONES: Record<string, string> = {
@@ -31,6 +39,10 @@ const DEMO_PHONES: Record<string, string> = {
   window_cleaning_uk: "+44 7427 846243",
   electrical: "+44 7886 080139",
   electrical_uk: "+44 7886 080139",
+  locksmith: "+44 7886 080139",
+  locksmith_uk: "+44 7886 080139",
+  landscaping: "+44 7886 080139",
+  landscaping_uk: "+44 7886 080139",
 };
 
 const SALES_PHONES: Record<string, string> = {
@@ -41,6 +53,10 @@ const SALES_PHONES: Record<string, string> = {
   window_cleaning_uk: "+44 7414 153843",
   electrical: "+44 7414 153843",
   electrical_uk: "+44 7414 153843",
+  locksmith: "+44 7414 153843",
+  locksmith_uk: "+44 7414 153843",
+  landscaping: "+44 7414 153843",
+  landscaping_uk: "+44 7414 153843",
 };
 
 const PAIN_OPENERS: Record<string, string> = {
@@ -51,6 +67,10 @@ const PAIN_OPENERS: Record<string, string> = {
   window_cleaning_uk: "When a customer rings and you're up a ladder, driving between jobs, or quoting another property — you can't always pick up. And the calls you miss usually go to the next window cleaner.",
   electrical: "When a customer rings and you're up a ladder, in a loft, or mid-rewire — you can't always pick up. And the calls you miss usually go to the next electrician on Google.",
   electrical_uk: "When a customer rings and you're up a ladder, in a loft, or mid-rewire — you can't always pick up. And the calls you miss usually go to the next electrician on Google.",
+  locksmith: "When a customer calls and you're picking a lock, driving to a call-out, or hands deep in a door mechanism — you can't always pick up. And someone locked out isn't leaving a voicemail — they're calling the next locksmith.",
+  locksmith_uk: "When a customer rings and you're on a job, driving to a call-out, or mid-way through a lock change — you can't always pick up. And someone locked out isn't leaving a voicemail — they're ringing the next locksmith on Google.",
+  landscaping: "When a customer calls and you're on a mower, up a tree, or knee-deep in a garden clearance — you can't always pick up. And the calls you miss usually go to the next landscaper on the list.",
+  landscaping_uk: "When a customer rings and you're on a mower, trimming a hedge, or mid-way through a clearance — you can't always pick up. And the calls you miss usually go to the next gardener on Google.",
 };
 
 const VERTICAL_TRADE: Record<string, string> = {
@@ -61,6 +81,10 @@ const VERTICAL_TRADE: Record<string, string> = {
   window_cleaning_uk: "window cleaning businesses",
   electrical: "electricians",
   electrical_uk: "electricians",
+  locksmith: "locksmiths",
+  locksmith_uk: "locksmiths",
+  landscaping: "landscapers",
+  landscaping_uk: "landscapers",
 };
 
 const STYLE = `font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;max-width:560px;color:#1a2e3b;font-size:15px;line-height:1.7;`;

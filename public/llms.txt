@@ -1,6 +1,6 @@
 # Supportive AI
 
-> AI receptionist for UK trade businesses (plumbers, electricians, HVAC, window cleaners). Answers calls 24/7, books jobs into live calendars, handles pricing questions, detects emergencies, texts confirmations to both parties. From £69/month.
+> AI receptionist for UK trade businesses (plumbers, electricians, HVAC, window cleaners, locksmiths, landscapers). Answers calls 24/7, books jobs into live calendars, handles pricing questions, detects emergencies, texts confirmations to both parties. From £69/month.
 
 ## Key pages
 
@@ -15,6 +15,8 @@
 - [AI Receptionist for Plumbers](https://supportive-ai.com/ai-receptionist-for-plumbers): Plumbing-specific features, pricing, FAQ
 - [AI Receptionist for Electricians](https://supportive-ai.com/ai-receptionist-for-electricians): Electrical-specific — Part P language, emergency handling, EICR booking
 - [AI Receptionist for HVAC](https://supportive-ai.com/ai-receptionist-for-hvac): HVAC-specific features
+- [AI Receptionist for Locksmiths](https://supportive-ai.com/ai-receptionist-for-locksmiths): Locksmith-specific — 24/7 lockout handling, emergency triage, break-in response, lock change booking
+- [AI Receptionist for Landscapers](https://supportive-ai.com/ai-receptionist-for-landscapers): Landscaping-specific — books maintenance, arranges free estimates for projects, handles regular service enquiries
 - [Missed Calls Calculator](https://supportive-ai.com/missed-calls-calculator): Interactive tool to calculate revenue lost to missed calls
 
 ## Blog
@@ -22,6 +24,8 @@
 - [How to Stop Missing Calls](https://supportive-ai.com/blog/stop-missing-calls-tradesman): Compare voicemail, answering services, AI receptionists
 - [Phone Answering Service Cost 2026](https://supportive-ai.com/blog/phone-answering-service-cost-plumber-2026): Pricing breakdown for UK plumbers
 - [Electrician Emergency Calls](https://supportive-ai.com/blog/electrician-misses-emergency-call): How AI handles safety-critical electrical calls
+- [Locksmith Midnight Calls](https://supportive-ai.com/blog/locksmith-missed-call-midnight): What happens when a locksmith misses a midnight lockout call
+- [Landscaper Missed Calls](https://supportive-ai.com/blog/landscaper-losing-customers-missed-calls): Why landscapers lose £1,000+ customers to missed calls
 
 ## Trust
 

@@ -10,6 +10,8 @@ const VERTICAL_BANNERS: Record<string, { label: string; emoji: string; href: str
   '/electrical':      { label: 'Built for electricians', emoji: '⚡', href: '/ai-receptionist-for-electricians' },
   '/window-cleaning': { label: 'Built for window cleaners', emoji: '🪟', href: '/window-cleaning' },
   '/hvac':            { label: 'Built for HVAC technicians', emoji: '❄️', href: '/hvac' },
+  '/ai-receptionist-for-locksmiths':  { label: 'Built for locksmiths', emoji: '🔑', href: '/ai-receptionist-for-locksmiths' },
+  '/ai-receptionist-for-landscapers': { label: 'Built for landscapers', emoji: '🌿', href: '/ai-receptionist-for-landscapers' },
 };
 
 export function MarketingNav() {
@@ -57,6 +59,12 @@ export function MarketingNav() {
               <Link href="/hvac" className={`flex items-center gap-2.5 px-4 py-2.5 text-sm no-underline hover:bg-[#faf9f7] transition-colors ${pathname === '/hvac' ? 'text-[#e8930c] font-semibold bg-[#fffbf5]' : 'text-[#2a4a5e]'}`}>
                 <span>❄️</span> HVAC
               </Link>
+              <Link href="/ai-receptionist-for-locksmiths" className={`flex items-center gap-2.5 px-4 py-2.5 text-sm no-underline hover:bg-[#faf9f7] transition-colors ${pathname === '/ai-receptionist-for-locksmiths' ? 'text-[#e8930c] font-semibold bg-[#fffbf5]' : 'text-[#2a4a5e]'}`}>
+                <span>🔑</span> Locksmith
+              </Link>
+              <Link href="/ai-receptionist-for-landscapers" className={`flex items-center gap-2.5 px-4 py-2.5 text-sm no-underline hover:bg-[#faf9f7] transition-colors ${pathname === '/ai-receptionist-for-landscapers' ? 'text-[#e8930c] font-semibold bg-[#fffbf5]' : 'text-[#2a4a5e]'}`}>
+                <span>🌿</span> Landscaping
+              </Link>
               </div>
             </div>
           </div>
@@ -92,6 +100,8 @@ export function MarketingNav() {
               <Link href="/ai-receptionist-for-electricians" onClick={() => setMobileOpen(false)} className="flex items-center gap-2 py-2 text-[#2a4a5e] font-medium no-underline">⚡ Electrical</Link>
               <Link href="/window-cleaning" onClick={() => setMobileOpen(false)} className="flex items-center gap-2 py--2 text-[#2a4a5e] font-medium no-underline">🪟 Window Cleaning</Link>
               <Link href="/hvac" onClick={() => setMobileOpen(false)} className="flex items-center gap-2 py-2 text-[#2a4a5e] font-medium no-underline">❄️ HVAC</Link>
+              <Link href="/ai-receptionist-for-locksmiths" onClick={() => setMobileOpen(false)} className="flex items-center gap-2 py-2 text-[#2a4a5e] font-medium no-underline">🔑 Locksmith</Link>
+              <Link href="/ai-receptionist-for-landscapers" onClick={() => setMobileOpen(false)} className="flex items-center gap-2 py-2 text-[#2a4a5e] font-medium no-underline">🌿 Landscaping</Link>
             </div>
             <Link href="/login" onClick={() => setMobileOpen(false)} className="block py-3 text-[#2a4a5e] font-medium no-underline border-b border-[#f0eeeb]">Log in</Link>
             <Link href="/onboarding" onClick={() => setMobileOpen(false)} className="block mt-3 text-center bg-[#e8930c] text-white py-3 rounded-lg font-semibold no-underline hover:bg-[#d17f00] transition-colors">Start Free Trial</Link>

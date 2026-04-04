@@ -51,7 +51,7 @@ interface SMSConversation { id: string; fromNumber: string; toNumber: string; to
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'https://supportive-ai-backend-production.up.railway.app';
 
 const VERTICAL_LABELS: Record<string, string> = {
-  plumbing: '🔧 Plumbing', electrical: '⚡ Electrical', window_cleaning: '🪟 Window Cleaning', hvac: '❄️ HVAC', plumbing_uk: '🔧 Plumbing (UK)', electrical_uk: '⚡ Electrical (UK)', window_cleaning_uk: '🪟 Window Cleaning (UK)',
+  plumbing: '🔧 Plumbing', electrical: '⚡ Electrical', window_cleaning: '🪟 Window Cleaning', hvac: '❄️ HVAC', plumbing_uk: '🔧 Plumbing (UK)', electrical_uk: '⚡ Electrical (UK)', window_cleaning_uk: '🪟 Window Cleaning (UK)', locksmith: '🔑 Locksmith', locksmith_uk: '🔑 Locksmith (UK)', landscaping: '🌿 Landscaping', landscaping_uk: '🌿 Landscaping (UK)',
 };
 const STATUS_STYLES: Record<string, { bg: string; text: string; label: string }> = {
   unsent: { bg: 'bg-[#f5f4f2]', text: 'text-[#5a7184]', label: 'Unsent' },

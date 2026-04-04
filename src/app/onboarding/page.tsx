@@ -40,6 +40,8 @@ const TRADES = [
   { value: 'electrical', label: 'Electrical' },
   { value: 'hvac', label: 'HVAC' },
   { value: 'window_cleaning', label: 'Window Cleaning' },
+  { value: 'locksmith', label: 'Locksmith' },
+  { value: 'landscaping', label: 'Landscaping' },
 ];
 
 const PLAN_LABELS: Record<string, string> = {
