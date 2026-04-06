@@ -39,10 +39,10 @@ const DEMO_PHONES: Record<string, string> = {
   window_cleaning_uk: "+44 7427 846243",
   electrical: "+44 7886 080139",
   electrical_uk: "+44 7886 080139",
-  locksmith: "+44 7886 080139",
-  locksmith_uk: "+44 7886 080139",
-  landscaping: "+44 7886 080139",
-  landscaping_uk: "+44 7886 080139",
+  locksmith: "+44 7700 174894",
+  locksmith_uk: "+44 7700 174894",
+  landscaping: "+44 7862 130941",
+  landscaping_uk: "+44 7862 130941",
 };
 
 const SALES_PHONES: Record<string, string> = {

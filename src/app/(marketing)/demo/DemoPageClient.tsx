@@ -138,6 +138,8 @@ export function DemoPageClient() {
             {[
               { label: 'UK Plumbing', emoji: '🔧', phone: '07427 846 243', tel: '+447427846243', tip: 'Report a leaky tap, ask about call-out fees, or try booking a job. Use postcode SE20 8NE.' },
               { label: 'UK Electrical', emoji: '⚡', phone: '07886 080 139', tel: '+447886080139', tip: 'Report a tripping fuse board, ask about socket pricing, or try a burning smell emergency.' },
+              { label: 'UK Locksmith', emoji: '🔑', phone: '07700 174 894', tel: '+447700174894', tip: 'Report a lockout, ask about lock change prices, or try a burglary emergency. Use a London postcode.' },
+              { label: 'UK Landscaping', emoji: '🌿', phone: '07862 130 941', tel: '+447862130941', tip: 'Ask about lawn mowing, hedge trimming, or request a free estimate for a patio. Mention garden size.' },
               { label: 'US Plumbing', emoji: '🔧', phone: '(240) 301-1473', tel: '+12403011473', tip: 'Report a leak, ask about pricing, or try booking a repair.' },
               { label: 'Window Cleaning', emoji: '🪟', phone: '(845) 209-2401', tel: '+18452092401', tip: 'Book an exterior clean, ask about pricing for a 2-story home.' },
             ].map((demo, i) => (
@@ -145,7 +147,7 @@ export function DemoPageClient() {
                 <div className="flex items-center gap-2 mb-1">
                   <span>{demo.emoji}</span>
                   <span className="text-[14px] font-bold text-[#1a2e3b]">{demo.label}</span>
-                  {i <= 1 && <span className="text-[10px] font-bold text-white bg-[#e8930c] px-2 py-0.5 rounded-full uppercase tracking-wider">UK</span>}
+                  {demo.label.startsWith('UK') && <span className="text-[10px] font-bold text-white bg-[#e8930c] px-2 py-0.5 rounded-full uppercase tracking-wider">UK</span>}
                 </div>
                 <a href={`tel:${demo.tel}`} className="text-[20px] font-extrabold text-[#e8930c] no-underline hover:underline block mb-2">{demo.phone}</a>
                 <p className="text-[12px] text-[#5a7184] leading-relaxed">{demo.tip}</p>
