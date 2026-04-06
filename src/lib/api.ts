@@ -18,7 +18,9 @@ export interface Call {
   };
   transcript?: {
     fullText: string;
+    messages?: Array<{ role: string; content: string }>;
   };
+  audioUrl?: string;
 }
 
 export interface Booking {

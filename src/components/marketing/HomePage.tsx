@@ -506,8 +506,8 @@ export function HomePage() {
       <section className="py-16 px-6 md:px-10 bg-white border-t border-[#e5e0da]">
         <div className="max-w-[860px] mx-auto">
           <div className="text-center mb-10">
-            <h2 className="text-[30px] font-bold text-[#1a2e3b] mb-2">Live in 5 minutes, not 5 days</h2>
-            <p className="text-[15px] text-[#5a7184]">Set it up yourself — or we&apos;ll walk you through it. Either way, it&apos;s fast.</p>
+            <h2 className="text-[30px] font-bold text-[#1a2e3b] mb-2">Set it up yourself, or we&apos;ll do it for you</h2>
+            <p className="text-[15px] text-[#5a7184]">Either way, you&apos;re live in days, not weeks. No tech skills needed.</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {/* Self-serve setup */}
@@ -532,20 +532,21 @@ export function HomePage() {
             </div>
 
             {/* Guided setup */}
-            <div className="rounded-xl border border-[#e5e0da] overflow-hidden">
+            <div className="rounded-xl border-2 border-[#e8930c] overflow-hidden">
               <div className="bg-[#e8930c] px-6 py-4">
-                <h3 className="text-[17px] font-bold text-white">Need a hand? We&apos;re here.</h3>
-                <p className="text-[13px] text-white/80 mt-0.5">Free 15-minute setup call</p>
+                <h3 className="text-[17px] font-bold text-white">We&apos;ll build it for you — free</h3>
+                <p className="text-[13px] text-white/80 mt-0.5">Most customers choose this</p>
               </div>
               <div className="p-6">
                 <p className="text-[14px] text-[#5a7184] leading-relaxed mb-5">
-                  Not sure about connecting your phone or calendar setup? No worries — book a quick call and we&apos;ll walk you through it in 5 minutes.
+                  Send us your website and phone number. We&apos;ll build your AI receptionist, train it on your services and pricing, connect your calendar, and have it ready to take calls — usually within 48 hours.
                 </p>
                 {[
-                  'We walk you through every step live',
-                  'Test your AI with a real call together',
-                  'Customise how and when it picks up',
-                  'Answer any questions about your setup',
+                  'We scrape your website and set up everything',
+                  'Your pricing, services, and hours — pre-configured',
+                  'Calendar connected and tested',
+                  'A real test call with you before going live',
+                  'Ongoing tweaks whenever you need them',
                 ].map((item, i) => (
                   <div key={i} className="flex items-center gap-2.5 mb-2.5">
                     <CheckIcon size={15} className="text-[#059669] flex-shrink-0" />

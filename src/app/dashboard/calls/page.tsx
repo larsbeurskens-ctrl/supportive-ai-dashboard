@@ -1,6 +1,6 @@
 'use client';
 
-import { ChevronDown, ChevronUp, Play } from 'lucide-react';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { getCalls, Call } from '@/lib/api';
 
@@ -72,16 +72,38 @@ function CallRow({ call }: { call: Call }) {
       </div>
       {expanded && (
         <div className="px-5 pb-4 bg-[#faf9f7]">
-          <div className="flex items-center gap-2 mb-3">
-            <button className="flex items-center gap-2 px-4 py-2 bg-[#1a2e3b] text-white rounded-lg hover:bg-[#243d4e] transition-colors text-[13px] font-semibold">
-              <Play size={14} /> Play Recording
-            </button>
-          </div>
+          {call.audioUrl && (
+            <div className="mb-3">
+              <audio controls className="w-full h-10" preload="none">
+                <source src={call.audioUrl} type="audio/wav" />
+                Your browser does not support audio.
+              </audio>
+            </div>
+          )}
+          {!call.audioUrl && (
+            <p className="text-[12px] text-[#94a7b8] mb-3 italic">No recording available</p>
+          )}
           <div className="bg-white p-4 rounded-xl border border-[#e5e0da]">
-            <h4 className="text-[13px] font-bold text-[#1a2e3b] mb-2">Transcript</h4>
-            <pre className="text-[13px] text-[#5a7184] whitespace-pre-wrap font-sans leading-relaxed">
-              {call.transcript?.fullText || 'No transcript available'}
-            </pre>
+            <h4 className="text-[13px] font-bold text-[#1a2e3b] mb-3">Transcript</h4>
+            {call.transcript?.messages && call.transcript.messages.length > 0 ? (
+              <div className="space-y-2">
+                {call.transcript.messages.map((msg: { role: string; content: string }, idx: number) => (
+                  <div key={idx} className={`flex ${msg.role === 'agent' ? 'justify-start' : 'justify-end'}`}>
+                    <div className={`max-w-[85%] px-3 py-2 rounded-xl text-[13px] leading-relaxed ${
+                      msg.role === 'agent'
+                        ? 'bg-[#f0eeeb] text-[#1a2e3b] rounded-bl-sm'
+                        : 'bg-[#1a2e3b] text-white rounded-br-sm'
+                    }`}>
+                      {msg.content}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <pre className="text-[13px] text-[#5a7184] whitespace-pre-wrap font-sans leading-relaxed">
+                {call.transcript?.fullText || 'No transcript available'}
+              </pre>
+            )}
           </div>
         </div>
       )}
