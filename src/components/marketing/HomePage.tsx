@@ -119,7 +119,7 @@ export function HomePage() {
       <section className="py-4 px-6 md:px-10 bg-[#1a2e3b]">
         <div className="max-w-[860px] mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-[15px] text-white text-center sm:text-left">
-            <span className="font-bold">Not technical? No problem.</span> Send us your website — we&apos;ll build your AI receptionist and have it answering calls in 48 hours. Free setup.
+            <span className="font-bold">Not technical? No problem.</span> Send us your website — we&apos;ll build your AI receptionist and have it answering calls within 24 hours. Free setup.
           </p>
           <a href="/onboarding" className="bg-[#e8930c] text-white px-5 py-2.5 rounded-lg text-sm font-semibold no-underline hover:bg-[#d17f00] transition-colors whitespace-nowrap flex-shrink-0">
             Get started →
@@ -552,7 +552,7 @@ export function HomePage() {
               </div>
               <div className="p-6">
                 <p className="text-[14px] text-[#5a7184] leading-relaxed mb-5">
-                  Send us your website and phone number. We&apos;ll build your AI receptionist, train it on your services and pricing, connect your calendar, and have it ready to take calls — usually within 48 hours.
+                  Send us your website and phone number. We&apos;ll build your AI receptionist, train it on your services and pricing, connect your calendar, and have it ready to take calls — usually within 24 hours.
                 </p>
                 {[
                   'We scrape your website and set up everything',

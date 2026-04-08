@@ -166,6 +166,34 @@ export default function SetupWizard() {
   const [customFAQ, setCustomFAQ] = useState('');
   const [saving, setSaving] = useState(false);
 
+  // Website auto-fill in wizard
+  const [wizardWebsite, setWizardWebsite] = useState('');
+  const [wizardScraping, setWizardScraping] = useState(false);
+  const [wizardScraped, setWizardScraped] = useState(false);
+  const API = process.env.NEXT_PUBLIC_API_URL || 'https://supportive-ai-backend-production.up.railway.app';
+  const handleWizardScrape = async () => {
+    if (!wizardWebsite) return;
+    setWizardScraping(true);
+    try {
+      const res = await fetch(`${API}/api/scrape-website`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url: wizardWebsite }),
+      });
+      if (!res.ok) throw new Error('fail');
+      const data = await res.json();
+      if (data.diagnosticFee) setDiagnosticFee(data.diagnosticFee);
+      if (data.services) setServices(data.services);
+      if (data.phone && !ownerPhone) setOwnerPhone(data.phone);
+      if (data.address) {
+        const parts = data.address.split(',').map((s: string) => s.trim());
+        if (parts.length >= 2 && !city) setCity(parts[parts.length - 2] || parts[0]);
+      }
+      localStorage.setItem('scraped_business', JSON.stringify(data));
+      setWizardScraped(true);
+    } catch { /* silent — user can fill manually */ }
+    finally { setWizardScraping(false); }
+  };
+
   // Go live
   const [goingLive, setGoingLive] = useState(false);
   const [selectedCarrier, setSelectedCarrier] = useState('');
@@ -192,6 +220,7 @@ export default function SetupWizard() {
       try {
         const signup = JSON.parse(localStorage.getItem('supportive_signup') || '{}');
         if (signup.name && !ownerName) setOwnerName(signup.name);
+        if (signup.website) setWizardWebsite(signup.website);
       } catch {}
     }
     if (o.ownerPhone) setOwnerPhone(o.ownerPhone);
@@ -627,6 +656,22 @@ export default function SetupWizard() {
             <p className="text-[14px] text-[#5a7184] leading-relaxed">
               {displayName} already knows your trade — now add your specifics so {displayName} sounds like part of your team.
             </p>
+
+            {/* --- Website auto-fill --- */}
+            <div className="bg-[#f0fdf4] rounded-xl border border-[#bbf7d0] p-4">
+              <label className="block text-sm font-semibold text-[#1a2e3b] mb-1">Got a website? We&apos;ll pre-fill your details</label>
+              <div className="flex gap-2">
+                <input type="text" value={wizardWebsite} onChange={e => setWizardWebsite(e.target.value)}
+                  placeholder="www.yourplumbing.co.uk"
+                  className="flex-1 px-3 py-2 border border-[#d1fae5] rounded-lg text-[14px] text-[#1a2e3b] placeholder:text-[#94a7b8] focus:outline-none focus:ring-2 focus:ring-[#0d9488] bg-white"
+                />
+                <button type="button" onClick={handleWizardScrape} disabled={!wizardWebsite || wizardScraping}
+                  className="px-4 py-2 bg-[#0d9488] text-white rounded-lg text-[13px] font-semibold disabled:opacity-40 hover:bg-[#0f766e] transition-colors whitespace-nowrap cursor-pointer"
+                >{wizardScraping ? 'Reading...' : wizardScraped ? '✓ Pre-filled!' : 'Auto-fill'}</button>
+              </div>
+              {wizardScraped && <p className="text-[12px] text-[#059669] mt-1.5 font-medium">Details pulled from your website — review and edit below.</p>}
+              {!wizardScraped && <p className="text-[12px] text-[#94a7b8] mt-1">Optional — or skip and fill in manually below</p>}
+            </div>
 
             {/* --- Section: About you --- */}
             <div className="border-t border-[#f0eeeb] pt-4">
