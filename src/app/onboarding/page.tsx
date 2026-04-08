@@ -74,9 +74,43 @@ function OnboardingForm() {
   const [email, setEmail] = useState('');
   const [company, setCompany] = useState('');
   const [trade, setTrade] = useState('');
+  const [website, setWebsite] = useState('');
+  const [scraping, setScraping] = useState(false);
+  const [scraped, setScraped] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+
+  const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'https://supportive-ai-backend-production.up.railway.app';
+
+  const handleScrape = async () => {
+    if (!website) return;
+    setScraping(true);
+    setError('');
+    try {
+      const res = await fetch(`${API_BASE}/api/scrape-website`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url: website }),
+      });
+      if (!res.ok) throw new Error('Could not read website');
+      const data = await res.json();
+      if (data.businessName && !company) setCompany(data.businessName);
+      if (data.email && !email) setEmail(data.email);
+      if (data.phone) localStorage.setItem('scraped_phone', data.phone);
+      if (data.vertical && !trade) {
+        const verticalMap: Record<string, string> = { plumbing: 'Plumbing', electrical: 'Electrical', locksmith: 'Locksmith', landscaping: 'Landscaping', hvac: 'HVAC', window_cleaning: 'Window Cleaning' };
+        if (verticalMap[data.vertical]) setTrade(verticalMap[data.vertical]);
+      }
+      // Store full scraped data for setup wizard
+      localStorage.setItem('scraped_business', JSON.stringify(data));
+      setScraped(true);
+    } catch (err: any) {
+      setError('Could not auto-fill from website. You can fill in the details manually.');
+    } finally {
+      setScraping(false);
+    }
+  };
 
   const canSubmit = name && email && company && trade;
 
@@ -93,7 +127,7 @@ function OnboardingForm() {
     try {
       // Store signup data for after email verification
       localStorage.setItem('supportive_signup', JSON.stringify({
-        name, email, company, trade,
+        name, email, company, trade, website,
         plan: planFromUrl,
         timezone: isUK ? 'Europe/London' : Intl.DateTimeFormat().resolvedOptions().timeZone,
         country: isUS ? 'US' : 'UK',
@@ -156,6 +190,29 @@ function OnboardingForm() {
             )}
 
             <form onSubmit={handleSubmit} className="space-y-4">
+              {/* Website auto-fill */}
+              <div className="bg-[#faf9f7] rounded-xl border border-[#e5e0da] p-4">
+                <label htmlFor="website" className="block text-sm font-semibold text-[#1a2e3b] mb-1">Got a website? We&apos;ll auto-fill your details</label>
+                <p className="text-[12px] text-[#94a7b8] mb-2">Optional — or skip and fill in manually below</p>
+                <div className="flex gap-2">
+                  <input
+                    id="website" type="text" value={website}
+                    onChange={e => setWebsite(e.target.value)}
+                    placeholder="www.yourplumbing.co.uk"
+                    className="flex-1 px-4 py-2.5 border border-[#e5e0da] rounded-lg text-[14px] text-[#1a2e3b] placeholder:text-[#b8c4ce] focus:outline-none focus:ring-2 focus:ring-[#e8930c] focus:border-transparent bg-white"
+                  />
+                  <button
+                    type="button"
+                    onClick={handleScrape}
+                    disabled={!website || scraping}
+                    className="px-4 py-2.5 bg-[#1a2e3b] text-white rounded-lg text-[13px] font-semibold disabled:opacity-40 hover:bg-[#243d4e] transition-colors whitespace-nowrap"
+                  >
+                    {scraping ? 'Reading...' : scraped ? '✓ Done' : 'Auto-fill'}
+                  </button>
+                </div>
+                {scraped && <p className="text-[12px] text-[#059669] mt-2 font-medium">Details pulled from your website — check below and edit if needed.</p>}
+              </div>
+
               <div>
                 <label htmlFor="name" className="block text-sm font-semibold text-[#1a2e3b] mb-1.5">Your name</label>
                 <input

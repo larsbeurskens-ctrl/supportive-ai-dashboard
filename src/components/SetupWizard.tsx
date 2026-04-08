@@ -210,6 +210,18 @@ export default function SetupWizard() {
     if (o.diagnosticFee) setDiagnosticFee(o.diagnosticFee);
     if (o.feeDeductible !== undefined) setFeeDeductible(o.feeDeductible);
     if (o.services) setServices(o.services);
+
+    // Pre-fill from website scrape if available
+    try {
+      const scraped = JSON.parse(localStorage.getItem('scraped_business') || '{}');
+      if (scraped.diagnosticFee && !o.diagnosticFee) setDiagnosticFee(scraped.diagnosticFee);
+      if (scraped.services && !o.services) setServices(scraped.services);
+      if (scraped.phone && !o.ownerPhone) setOwnerPhone(scraped.phone);
+      if (scraped.address) {
+        const parts = scraped.address.split(',').map((s: string) => s.trim());
+        if (parts.length >= 2 && !o.city) setCity(parts[parts.length - 2] || parts[0]);
+      }
+    } catch {}
     if (o.customFAQ) setCustomFAQ(o.customFAQ);
     if (o.yearsExperience) setYearsExperience(o.yearsExperience);
     if (o.isLicensed !== undefined) setIsLicensed(o.isLicensed);
