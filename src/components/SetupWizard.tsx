@@ -222,6 +222,31 @@ export default function SetupWizard() {
         if (parts.length >= 2 && !o.city) setCity(parts[parts.length - 2] || parts[0]);
       }
     } catch {}
+
+    // Auto-scrape website if URL was provided during onboarding but not yet scraped
+    try {
+      const signup = JSON.parse(localStorage.getItem('supportive_signup') || '{}');
+      const alreadyScraped = localStorage.getItem('scraped_business');
+      if (signup.website && !alreadyScraped) {
+        const API = process.env.NEXT_PUBLIC_API_URL || 'https://supportive-ai-backend-production.up.railway.app';
+        fetch(`${API}/api/scrape-website`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url: signup.website }),
+        }).then(r => r.json()).then(data => {
+          if (data.businessName) {
+            localStorage.setItem('scraped_business', JSON.stringify(data));
+            if (data.diagnosticFee && !o.diagnosticFee) setDiagnosticFee(data.diagnosticFee);
+            if (data.services && !o.services) setServices(data.services);
+            if (data.phone && !o.ownerPhone) setOwnerPhone(data.phone);
+            if (data.address) {
+              const parts = data.address.split(',').map((s: string) => s.trim());
+              if (parts.length >= 2 && !o.city) setCity(parts[parts.length - 2] || parts[0]);
+            }
+          }
+        }).catch(() => {});
+      }
+    } catch {}
     if (o.customFAQ) setCustomFAQ(o.customFAQ);
     if (o.yearsExperience) setYearsExperience(o.yearsExperience);
     if (o.isLicensed !== undefined) setIsLicensed(o.isLicensed);
