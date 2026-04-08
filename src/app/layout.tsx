@@ -44,7 +44,7 @@ export const metadata: Metadata = {
     },
   },
   alternates: {
-    canonical: 'https://supportive-ai.com',
+    canonical: './',
   },
 };
 

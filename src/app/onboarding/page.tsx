@@ -67,7 +67,8 @@ function OnboardingForm() {
   const searchParams = useSearchParams();
   const planFromUrl = searchParams.get('plan') || 'starter';
   const countryParam = searchParams.get('country');
-  const isUK = countryParam === 'UK' || (typeof window !== 'undefined' && Intl.DateTimeFormat().resolvedOptions().timeZone === 'Europe/London');
+  const isUS = countryParam === 'US' || (typeof window !== 'undefined' && !countryParam && Intl.DateTimeFormat().resolvedOptions().timeZone?.startsWith('America/') && !Intl.DateTimeFormat().resolvedOptions().timeZone?.includes('Costa_Rica'));
+  const isUK = !isUS;
   const prices = isUK ? PLAN_PRICES_UK : PLAN_PRICES_US;
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -95,7 +96,7 @@ function OnboardingForm() {
         name, email, company, trade,
         plan: planFromUrl,
         timezone: isUK ? 'Europe/London' : Intl.DateTimeFormat().resolvedOptions().timeZone,
-        country: isUK ? 'UK' : 'US',
+        country: isUS ? 'US' : 'UK',
         createdAt: new Date().toISOString(),
       }));
 

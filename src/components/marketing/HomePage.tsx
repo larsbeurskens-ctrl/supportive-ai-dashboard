@@ -36,12 +36,13 @@ const HOME_DEMO_CONFIGS = [
 ];
 
 export function HomePage() {
-  const isUK = typeof window !== 'undefined' && (
-    Intl.DateTimeFormat().resolvedOptions().timeZone === 'Europe/London' ||
-    new URLSearchParams(window.location.search).get('country') === 'UK'
-  );
-  const currency = isUK ? '£' : '$';
-  const startingPrice = isUK ? '£69/mo' : '$89/mo';
+  // Default to UK (£) unless visitor is clearly US-based
+  const isUS = typeof window !== 'undefined' && (
+    Intl.DateTimeFormat().resolvedOptions().timeZone?.startsWith('America/') &&
+    !Intl.DateTimeFormat().resolvedOptions().timeZone?.includes('Costa_Rica')
+  ) || (typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('country') === 'US');
+  const currency = isUS ? '$' : '£';
+  const startingPrice = isUS ? '$89/mo' : '£69/mo';
   const [showDemo, setShowDemo] = useState(false);
   const [playing, setPlaying] = useState<string | null>(null);
   const [progress, setProgress] = useState<Record<string, number>>({});
@@ -112,6 +113,18 @@ export function HomePage() {
         </div>
         <p className="text-[13px] text-[#94a7b8]">7-day free trial · up to 50 calls · no credit card required.</p>
         <p className="text-[11px] text-[#b8c4ce] mt-1">Demo calls: standard call rates apply</p>
+      </section>
+
+      {/* ===== DONE FOR YOU BANNER ===== */}
+      <section className="py-4 px-6 md:px-10 bg-[#1a2e3b]">
+        <div className="max-w-[860px] mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-[15px] text-white text-center sm:text-left">
+            <span className="font-bold">Not technical? No problem.</span> Send us your website — we&apos;ll build your AI receptionist and have it answering calls in 48 hours. Free setup.
+          </p>
+          <a href="/onboarding" className="bg-[#e8930c] text-white px-5 py-2.5 rounded-lg text-sm font-semibold no-underline hover:bg-[#d17f00] transition-colors whitespace-nowrap flex-shrink-0">
+            Get started →
+          </a>
+        </div>
       </section>
 
       {/* ===== KEEP YOUR NUMBER ===== */}
@@ -592,29 +605,29 @@ export function HomePage() {
             {[
               {
                 name: 'Starter',
-                price: isUK ? 69 : 89,
+                price: !isUS ? 69 : 89,
                 calls: '40 calls/mo',
                 target: 'One-man crews',
                 features: ['AI answering — ideal for after-hours & missed calls', 'Google Calendar booking', 'SMS confirmations', 'Keep your existing number', 'Emergency escalation', 'Junk call screening', 'Dashboard & call history', 'Call recordings & transcripts'],
-                note: isUK ? '£1.75/call overage' : '$2.50/call overage',
+                note: !isUS ? '£1.75/call overage' : '$2.50/call overage',
                 popular: false,
               },
               {
                 name: 'Standard',
-                price: isUK ? 119 : 149,
-                calls: isUK ? '150 calls/mo' : '125 calls/mo',
+                price: !isUS ? 119 : 149,
+                calls: !isUS ? '150 calls/mo' : '125 calls/mo',
                 target: 'Busy trades businesses',
                 features: ['Everything in Starter', 'WhatsApp AI agent', 'Payment links (Stripe)', 'Detailed call analytics'],
-                note: isUK ? '£1.25/call overage' : '$1.50/call overage',
+                note: !isUS ? '£1.25/call overage' : '$1.50/call overage',
                 popular: true,
               },
               {
                 name: 'Business',
-                price: isUK ? 229 : 299,
+                price: !isUS ? 229 : 299,
                 calls: '250 calls/mo',
                 target: 'Multi-van operations',
                 features: ['Everything in Standard', 'Priority support', 'Multi-crew scheduling', 'Review requests'],
-                note: isUK ? '£1.00/call overage' : '$1.25/call overage',
+                note: !isUS ? '£1.00/call overage' : '$1.25/call overage',
                 popular: false,
               },
             ].map((plan) => (

@@ -165,7 +165,10 @@ export default function SettingsPage() {
       {/* Plan & subscription */}
       {status && (() => {
         const planLabels: Record<string, string> = { starter: 'Starter', standard: 'Standard', business: 'Business' };
-        const planPrices: Record<string, string> = { starter: '$89/mo', standard: '$149/mo', business: '$299/mo' };
+        const isUS = status && (status as any).phoneNumber?.startsWith('+1');
+        const planPrices: Record<string, string> = isUS
+          ? { starter: '$89/mo', standard: '$149/mo', business: '$299/mo' }
+          : { starter: '£69/mo', standard: '£119/mo', business: '£229/mo' };
         const plan = (status as any).selectedPlan || 'starter';
         const tier = (status as any).subscriptionTier || 'trial';
         const liveSince = typeof window !== 'undefined' ? localStorage.getItem('agent_live_since') : null;

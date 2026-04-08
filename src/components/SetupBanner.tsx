@@ -150,7 +150,7 @@ export function SetupBanner() {
         <div className="bg-[#faf9f7] rounded-xl border border-[#e5e0da] p-5 md:w-[220px] flex-shrink-0">
           <h4 className="text-[13px] font-bold text-[#1a2e3b] mb-1.5">Your free trial</h4>
           <div className="inline-block mb-3 px-3 py-1 bg-[#eff6ff] text-[#1e40af] text-[12px] font-semibold rounded-full">
-            {{ starter: 'Starter — $89/mo', standard: 'Standard — $149/mo', business: 'Business — $299/mo' }[status.selectedPlan] || 'Starter — $89/mo'}
+            {{ starter: 'Starter — £69/mo', standard: 'Standard — £119/mo', business: 'Business — £229/mo' }[status.selectedPlan] || 'Starter — £69/mo'}
           </div>
           <div className="space-y-2.5 text-[12px] text-[#5a7184]">
             <div className="flex items-start gap-2">
