@@ -410,6 +410,17 @@ model OutreachContact {
   linkClickedAt  DateTime?  // When they first clicked a tracked link (independent of status)
   nextActionAt   DateTime?  // When the next action is due
   nextActionNote String?    // What to do next (e.g. "Call back", "Send follow-up")
+
+  // Postal address — added Chat 60 (Apr 2026) for UK direct mail campaign
+  addressLine1     String?  // Street number + street name
+  addressLine2     String?  // Optional second line (unit, suite)
+  city             String?
+  postcode         String?  // UK postcode
+  country          String?  @default("UK")
+  formattedAddress String?  // Raw address string from Google Places
+  addressSource    String?  // 'google_places' | 'website' | 'companies_house' | 'manual'
+  addressVerified  Boolean  @default(false)
+
   activities     OutreachActivity[]
 
   @@unique([email, vertical])
@@ -417,6 +428,8 @@ model OutreachContact {
   @@index([status])
   @@index([score])
   @@index([lastContactedAt])
+  @@index([postcode])
+  @@index([city])
 }
 
 // Activity log for outreach contacts — tracks every interaction
