@@ -68,17 +68,12 @@ export function MarketingFooter() {
             <h4 className="text-xs font-bold text-[#1a2e3b] uppercase tracking-wider mb-4">Get in touch</h4>
             <div className="space-y-2.5">
               <a href="mailto:lars@supportive-ai.com" className="block text-sm text-[#5a7184] no-underline hover:text-[#1a2e3b]">lars@supportive-ai.com</a>
-              <a href="tel:+18323466405" className="block text-sm text-[#5a7184] no-underline hover:text-[#1a2e3b]">(832) 346-6405</a>
             </div>
-            <p className="text-[12px] text-[#94a7b8] mt-4 mb-2">Try our demo agents:</p>
+            <p className="text-[12px] text-[#94a7b8] mt-4 mb-2">Try our demo agent:</p>
             <div className="space-y-1.5">
               <div>
-                <a href="tel:+18452092401" className="text-[14px] font-bold text-[#1a2e3b] no-underline hover:text-[#e8930c]">(845) 209-2401</a>
-                <span className="text-[11px] text-[#94a7b8] ml-1.5">Window Cleaning</span>
-              </div>
-              <div>
-                <a href="tel:+12403011473" className="text-[14px] font-bold text-[#1a2e3b] no-underline hover:text-[#e8930c]">(240) 301-1473</a>
-                <span className="text-[11px] text-[#94a7b8] ml-1.5">Plumbing</span>
+                <a href="tel:+447863762527" className="text-[14px] font-bold text-[#1a2e3b] no-underline hover:text-[#e8930c]">+44 7863 762 527</a>
+                <span className="text-[11px] text-[#94a7b8] ml-1.5">UK Plumbing</span>
               </div>
             </div>
           </div>
@@ -86,7 +81,7 @@ export function MarketingFooter() {
 
         <div className="border-t border-[#e5e0da] pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-xs text-[#94a7b8]">
-            © 2026 Supportive AI LLC. All rights reserved.
+            Supportive AI is a trading name of Beurskens Property Ltd · Registered in England & Wales, Company No. 13340006
           </p>
           <div className="flex items-center gap-4">
             <Link href="/privacy" className="text-xs text-[#94a7b8] no-underline hover:text-[#5a7184]">Privacy Policy</Link>

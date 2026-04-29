@@ -64,8 +64,8 @@ const faqSections: { title: string; items: FAQItem[] }[] = [
         answer: (
           <span>
             The AI uses advanced voice synthesis that sounds natural and conversational — not robotic or scripted.
-            The best way to judge is to try it yourself: call our demo line at{' '}
-            <a href="tel:+18452092401" className="text-[#1a2e3b] font-semibold no-underline hover:text-[#e8930c]">(845) 209-2401</a>.
+            The best way to judge is to try it yourself: call our UK demo line at{' '}
+            <a href="tel:+447863762527" className="text-[#1a2e3b] font-semibold no-underline hover:text-[#e8930c]">+44 7863 762 527</a>.
             Most callers don&apos;t realize they&apos;re speaking with an AI.
           </span>
         ),
@@ -330,11 +330,11 @@ export function FAQPage() {
             The fastest way to understand Supportive AI is to hear it yourself.
           </p>
           <a
-            href="tel:+18452092401"
+            href="tel:+447863762527"
             className="inline-flex items-center gap-3 bg-[#243d4e] rounded-xl px-8 py-[18px] border border-[#35596e] no-underline hover:bg-[#2c4a5d] transition-colors"
           >
             <PhoneIcon size={22} className="text-[#e8930c]" />
-            <span className="text-2xl font-bold text-white tracking-wide">(845) 209-2401</span>
+            <span className="text-2xl font-bold text-white tracking-wide">+44 7863 762 527</span>
           </a>
           <p className="text-[13px] text-[#6b8fa3] mt-3">Call our demo agent — takes 60 seconds.</p>
         </div>
