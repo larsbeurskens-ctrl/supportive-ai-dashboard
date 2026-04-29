@@ -127,9 +127,9 @@ const faqSections: { title: string; items: FAQItem[] }[] = [
           <div>
             <p className="mb-3">Three plans, all with a 14-day free trial (up to 50 calls):</p>
             <div className="space-y-2">
-              <div className="flex items-baseline gap-2"><strong className="text-[#1a2e3b]">Starter — {isUS ? '$89' : '£69'}/mo</strong><span>40 calls/month. Ideal for after-hours & missed calls. Calendar booking, SMS, dashboard, keep your number.</span></div>
-              <div className="flex items-baseline gap-2"><strong className="text-[#1a2e3b]">Standard — {isUS ? '$149' : '£119'}/mo</strong><span>{isUS ? '125' : '150'} calls/month. Everything in Starter plus WhatsApp AI agent and payment links.</span></div>
-              <div className="flex items-baseline gap-2"><strong className="text-[#1a2e3b]">Business — {isUS ? '$299' : '£229'}/mo</strong><span>250 calls/month. Everything in Standard plus priority support and multi-crew scheduling.</span></div>
+              <div className="flex items-baseline gap-2"><strong className="text-[#1a2e3b]">Starter — £69/mo</strong><span>40 calls/month. Ideal for after-hours & missed calls. Calendar booking, SMS, dashboard, keep your number.</span></div>
+              <div className="flex items-baseline gap-2"><strong className="text-[#1a2e3b]">Standard — £119/mo</strong><span>150 calls/month. Everything in Starter plus WhatsApp AI agent and payment links.</span></div>
+              <div className="flex items-baseline gap-2"><strong className="text-[#1a2e3b]">Business — £229/mo</strong><span>250 calls/month. Everything in Standard plus priority support and multi-crew scheduling.</span></div>
             </div>
             <p className="mt-3">No setup fees. No per-seat charges. Cancel anytime.</p>
           </div>
@@ -142,7 +142,7 @@ const faqSections: { title: string; items: FAQItem[] }[] = [
       {
         question: 'What happens if I exceed my call limit?',
         answer: (
-          <span>We keep answering your calls — we&apos;ll never cut a customer off mid-month. Overage calls are billed at the end of the month at your plan rate (Starter: {isUS ? '$2.50' : '£1.75'}/call, Standard: {isUS ? '$1.50' : '£1.25'}/call, Business: {isUS ? '$1.25' : '£1.00'}/call).</span>
+          <span>We keep answering your calls — we&apos;ll never cut a customer off mid-month. Overage calls are billed at the end of the month at your plan rate (Starter: £1.75/call, Standard: £1.25/call, Business: £1.00/call).</span>
         ),
       },
       {
