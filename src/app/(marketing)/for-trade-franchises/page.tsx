@@ -68,7 +68,7 @@ export default function ForTradeFranchises() {
             <div className="bg-[#f0fdf4] rounded-xl px-5 py-5 border-2 border-[#059669]">
               <p className="text-[13px] font-bold text-[#059669] uppercase tracking-wider mb-1">Supportive AI</p>
               <p className="text-[28px] font-extrabold text-[#059669]">£69<span className="text-[14px] font-normal text-[#5a7184]">/mo/location</span></p>
-              <p className="text-[13px] text-[#5a7184] mt-2">10 locations = £8,280/year. Unlimited calls. Actual bookings. 24/7. Volume discounts available.</p>
+              <p className="text-[13px] text-[#5a7184] mt-2">10 locations = £8,280/year. 40 calls/mo per location. Actual bookings. 24/7. Volume discounts available.</p>
             </div>
           </div>
         </div>

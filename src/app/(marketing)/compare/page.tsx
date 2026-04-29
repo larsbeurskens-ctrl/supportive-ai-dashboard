@@ -55,7 +55,7 @@ export default function ComparePage() {
             <div className="bg-[#fef9f0] rounded-xl px-5 py-5 border-2 border-[#e8930c]">
               <p className="text-[13px] font-bold text-[#e8930c] uppercase tracking-wider mb-1">Supportive AI</p>
               <p className="text-[28px] font-extrabold text-[#1a2e3b] mb-2">£69<span className="text-[16px] font-normal text-[#5a7184]">/month</span></p>
-              <p className="text-[13px] text-[#5a7184]">Unlimited calls. No per-minute charges. No setup fee. = <strong className="text-[#1a2e3b]">£828/year</strong></p>
+              <p className="text-[13px] text-[#5a7184]">40 calls/mo. No per-minute charges. No setup fee. = <strong className="text-[#1a2e3b]">£828/year</strong></p>
             </div>
             <div className="bg-[#faf9f7] rounded-xl px-5 py-5 border border-[#e5e0da]">
               <p className="text-[13px] font-bold text-[#5a7184] uppercase tracking-wider mb-1">Human answering</p>
