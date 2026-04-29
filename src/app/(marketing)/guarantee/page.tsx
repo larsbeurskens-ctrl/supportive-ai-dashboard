@@ -105,7 +105,7 @@ export default function GuaranteePage() {
       <section className="py-14 px-6 md:px-10 text-center">
         <div className="max-w-lg mx-auto">
           <h2 className="text-[26px] font-extrabold text-[#1a2e3b] mb-3">Risk-free. Results or refund.</h2>
-          <p className="text-[16px] text-[#5a7184] mb-8">7-day free trial to start. Then 30 days to see 3 booked jobs. If it does not deliver, you pay nothing.</p>
+          <p className="text-[16px] text-[#5a7184] mb-8">14-day free trial to start. Then 30 days to see 3 booked jobs. If it does not deliver, you pay nothing.</p>
           <Link href="/onboarding" className="inline-block bg-[#e8930c] text-white px-8 py-4 rounded-xl text-[17px] font-bold no-underline hover:bg-[#d17f00] transition-colors shadow-[0_2px_8px_rgba(232,147,12,0.3)]">Start Your Free Trial</Link>
           <p className="text-[13px] text-[#94a7b8] mt-4">From £69/month · Guarantee included automatically</p>
         </div>

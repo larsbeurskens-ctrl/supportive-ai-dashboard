@@ -111,7 +111,7 @@ export function HomePage() {
             <PhoneIcon size={18} /> Call our demo agent
           </button>
         </div>
-        <p className="text-[13px] text-[#94a7b8]">7-day free trial · up to 50 calls · no credit card required.</p>
+        <p className="text-[13px] text-[#94a7b8]">14-day free trial · up to 50 calls · no credit card required.</p>
         <p className="text-[11px] text-[#b8c4ce] mt-1">Demo calls: standard call rates apply</p>
       </section>
 
@@ -675,7 +675,7 @@ export function HomePage() {
             ))}
           </div>
           <p className="text-center text-[13px] text-[#94a7b8] mt-5">
-            7-day free trial on all plans (up to 50 calls). No setup fees. Cancel anytime.
+            14-day free trial on all plans (up to 50 calls). No setup fees. Cancel anytime.
           </p>
           <div className="mt-4 mx-auto max-w-[540px] bg-[#f9f8f6] border border-[#e5e0da] rounded-lg px-5 py-3 text-center">
             <p className="text-[13px] text-[#2a4a5e]">
@@ -702,7 +702,7 @@ export function HomePage() {
             <LeadCaptureForm />
           </div>
           <div className="flex justify-center gap-6 mt-6">
-            {['7-day free trial', 'No credit card', 'Cancel anytime'].map((s, i) => (
+            {['14-day free trial', 'No credit card', 'Cancel anytime'].map((s, i) => (
               <div key={i} className="flex items-center gap-1.5">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
                 <span className="text-[13px] text-[#5a7184] font-medium">{s}</span>

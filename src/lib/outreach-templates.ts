@@ -169,7 +169,7 @@ export function buildEmail(
 
 <p style="margin-top:24px;">Best,<br/>Lars Beurskens<br/><span style="${SIG_STYLE}">Founder, Supportive AI <a href="https://www.linkedin.com/in/lars-beurskens-19642a8/" style="text-decoration:none;"><img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" width="14" height="14" alt="LinkedIn" style="vertical-align:middle;margin-left:4px;" /></a><br/>${salesPhone}<br/><a href="${SITE_URL}" style="${LINK}">supportive-ai.com</a></span></p>
 
-<p style="color:#94a7b8;font-size:13px;margin-top:16px;">P.S. Free 7-day trial, no card needed.</p>
+<p style="color:#94a7b8;font-size:13px;margin-top:16px;">P.S. Free 14-day trial, no card needed.</p>
 </div>`,
   };
 }

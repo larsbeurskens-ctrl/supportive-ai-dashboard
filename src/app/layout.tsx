@@ -6,7 +6,7 @@ import { ChatWidget } from "@/components/ChatWidget";
 export const metadata: Metadata = {
   title: "Supportive AI — AI Receptionist for Home Service Businesses",
   description:
-    "AI receptionist built for plumbers, window cleaners, and HVAC businesses. Answers every call, books jobs into your live calendar, sends confirmations, and handles payments — 24/7. 7-day free trial.",
+    "AI receptionist built for plumbers, window cleaners, and HVAC businesses. Answers every call, books jobs into your live calendar, sends confirmations, and handles payments — 24/7. 14-day free trial.",
   keywords: [
     "AI receptionist", "AI phone answering", "home services AI",
     "plumber answering service", "window cleaning answering service",

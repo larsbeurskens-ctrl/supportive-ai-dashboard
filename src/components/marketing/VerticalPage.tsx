@@ -450,7 +450,7 @@ export function VerticalPage({
             ))}
           </div>
           <p className="text-center text-[13px] text-[#94a7b8] mt-5">
-            7-day free trial on all plans (up to 50 calls). No setup fees. Cancel anytime.
+            14-day free trial on all plans (up to 50 calls). No setup fees. Cancel anytime.
           </p>
         </div>
       </section>
@@ -470,7 +470,7 @@ export function VerticalPage({
           </div>
           <div className="flex justify-center gap-6 mt-6">
             {[
-              '7-day free trial',
+              '14-day free trial',
               'No credit card',
               'Cancel anytime',
             ].map((s, i) => (

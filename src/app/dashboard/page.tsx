@@ -190,7 +190,7 @@ export default function DashboardPage() {
             <div className="bg-[#fef2f2] rounded-2xl border border-[#fecaca] p-5">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-[15px] font-bold text-[#991b1b]">Your 7-day trial has ended</p>
+                  <p className="text-[15px] font-bold text-[#991b1b]">Your 14-day trial has ended</p>
                   <p className="text-[13px] text-[#dc2626] mt-0.5">Add your payment details to keep {agentName} running. Your plan: {planLabel}.</p>
                 </div>
                 <button onClick={async () => {

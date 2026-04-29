@@ -125,11 +125,11 @@ const faqSections: { title: string; items: FAQItem[] }[] = [
         question: 'How much does it cost?',
         answer: (
           <div>
-            <p className="mb-3">Three plans, all with a 7-day free trial (up to 50 calls):</p>
+            <p className="mb-3">Three plans, all with a 14-day free trial (up to 50 calls):</p>
             <div className="space-y-2">
-              <div className="flex items-baseline gap-2"><strong className="text-[#1a2e3b]">Starter — $89/mo</strong><span>40 calls/month. Ideal for after-hours & missed calls. Calendar booking, SMS, dashboard, keep your number.</span></div>
-              <div className="flex items-baseline gap-2"><strong className="text-[#1a2e3b]">Standard — $149/mo</strong><span>125 calls/month. Everything in Starter plus WhatsApp AI agent and payment links.</span></div>
-              <div className="flex items-baseline gap-2"><strong className="text-[#1a2e3b]">Business — $299/mo</strong><span>250 calls/month. Everything in Standard plus priority support and multi-crew scheduling.</span></div>
+              <div className="flex items-baseline gap-2"><strong className="text-[#1a2e3b]">Starter — {isUS ? '$89' : '£69'}/mo</strong><span>40 calls/month. Ideal for after-hours & missed calls. Calendar booking, SMS, dashboard, keep your number.</span></div>
+              <div className="flex items-baseline gap-2"><strong className="text-[#1a2e3b]">Standard — {isUS ? '$149' : '£119'}/mo</strong><span>{isUS ? '125' : '150'} calls/month. Everything in Starter plus WhatsApp AI agent and payment links.</span></div>
+              <div className="flex items-baseline gap-2"><strong className="text-[#1a2e3b]">Business — {isUS ? '$299' : '£229'}/mo</strong><span>250 calls/month. Everything in Standard plus priority support and multi-crew scheduling.</span></div>
             </div>
             <p className="mt-3">No setup fees. No per-seat charges. Cancel anytime.</p>
           </div>
@@ -137,11 +137,13 @@ const faqSections: { title: string; items: FAQItem[] }[] = [
       },
       {
         question: 'Is there a free trial?',
-        answer: 'Yes — 7 days, fully functional, up to 50 calls, no credit card required. You get your own AI phone number and can test it with real calls. If it\'s not for you, just don\'t subscribe.',
+        answer: 'Yes — 14 days, fully functional, up to 50 calls, no credit card required. You get your own AI phone number and can test it with real calls. If it\'s not for you, just don\'t subscribe.',
       },
       {
         question: 'What happens if I exceed my call limit?',
-        answer: 'We keep answering your calls — we\'ll never cut a customer off mid-month. Overage calls are billed at the end of the month at your plan rate (Starter: $2.50/call, Standard: $1.50/call, Business: $1.25/call).',
+        answer: (
+          <span>We keep answering your calls — we&apos;ll never cut a customer off mid-month. Overage calls are billed at the end of the month at your plan rate (Starter: {isUS ? '$2.50' : '£1.75'}/call, Standard: {isUS ? '$1.50' : '£1.25'}/call, Business: {isUS ? '$1.25' : '£1.00'}/call).</span>
+        ),
       },
       {
         question: 'What counts as a "call"?',
@@ -275,7 +277,7 @@ export function FAQPage() {
             >
               Start Your Free Trial
             </Link>
-            <span className="text-[13px] text-[#94a7b8]">7-day free trial · No credit card · Cancel anytime</span>
+            <span className="text-[13px] text-[#94a7b8]">14-day free trial · No credit card · Cancel anytime</span>
           </div>
         </div>
       </section>
@@ -310,7 +312,7 @@ export function FAQPage() {
             <LeadCaptureForm />
           </div>
           <div className="flex justify-center gap-6 mt-6">
-            {['7-day free trial', 'No credit card', 'Cancel anytime'].map((s, i) => (
+            {['14-day free trial', 'No credit card', 'Cancel anytime'].map((s, i) => (
               <div key={i} className="flex items-center gap-1.5">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
                 <span className="text-[13px] text-[#5a7184] font-medium">{s}</span>

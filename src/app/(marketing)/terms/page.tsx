@@ -24,7 +24,7 @@ export default function TermsPage() {
 
         <section>
           <h2 className="text-[20px] font-bold text-[#1a2e3b] mb-3">Free trial</h2>
-          <p>New accounts receive a 7-day free trial with up to 50 calls. No credit card is required for the trial. After the trial, you must subscribe to a paid plan to continue using the service. If you do not subscribe, your AI phone number will be deactivated.</p>
+          <p>New accounts receive a 14-day free trial with up to 50 calls. No credit card is required for the trial. After the trial, you must subscribe to a paid plan to continue using the service. If you do not subscribe, your AI phone number will be deactivated.</p>
         </section>
 
         <section>

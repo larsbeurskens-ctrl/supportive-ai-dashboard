@@ -10,7 +10,7 @@ export function MarketingFooter() {
         <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
           <div>
             <p className="text-[20px] font-bold text-white mb-1">Ready to stop missing calls?</p>
-            <p className="text-[14px] text-[#94a7b8]">7-day free trial · up to 50 calls · no credit card required.</p>
+            <p className="text-[14px] text-[#94a7b8]">14-day free trial · up to 50 calls · no credit card required.</p>
           </div>
           <div className="flex flex-col sm:flex-row gap-3 flex-shrink-0">
             <Link

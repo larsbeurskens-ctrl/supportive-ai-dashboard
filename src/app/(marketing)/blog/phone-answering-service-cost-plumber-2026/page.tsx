@@ -102,7 +102,7 @@ export default function BlogPost() {
 
         <div className="mt-12 bg-[#faf9f7] rounded-xl p-6 border border-[#e5e0da]">
           <h3 className="text-[18px] font-bold text-[#1a2e3b] mb-3">See pricing in detail</h3>
-          <p className="text-[15px] text-[#5a7184] mb-4">Transparent pricing, no hidden fees, no per-minute charges. Compare our plans and start a free 7-day trial.</p>
+          <p className="text-[15px] text-[#5a7184] mb-4">Transparent pricing, no hidden fees, no per-minute charges. Compare our plans and start a free 14-day trial.</p>
           <div className="flex flex-col sm:flex-row gap-3">
             <Link href="/pricing" className="bg-[#e8930c] text-white px-6 py-3 rounded-lg text-[15px] font-bold no-underline hover:bg-[#d17f00] text-center">
               View Pricing

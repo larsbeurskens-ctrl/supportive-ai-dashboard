@@ -234,7 +234,7 @@ function OnboardingForm() {
           <div className="flex items-center justify-center gap-5 mt-6 text-[12px] text-[#94a7b8]">
             <span className="flex items-center gap-1.5">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-              7-day free trial
+              14-day free trial
             </span>
             <span className="text-[#d1ccc6]">·</span>
             <span>No credit card</span>

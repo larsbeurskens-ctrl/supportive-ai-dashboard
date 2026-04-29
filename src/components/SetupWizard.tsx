@@ -911,7 +911,7 @@ export default function SetupWizard() {
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2" className="flex-shrink-0 mt-0.5"><path d="M20 6L9 17l-5-5"/></svg>
                   <div>
                     <p className="text-[13px] font-bold text-[#059669]">All set! {displayName} is ready to go live.</p>
-                    <p className="text-[12px] text-[#16a34a]">Your 7-day free trial starts when you hit Go Live below.</p>
+                    <p className="text-[12px] text-[#16a34a]">Your 14-day free trial starts when you hit Go Live below.</p>
                   </div>
                 </div>
               ) : (
@@ -1016,7 +1016,7 @@ export default function SetupWizard() {
                           <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
                           Going live...
                         </span>
-                      ) : `🚀 Go live — start your 7-day free trial`}
+                      ) : `🚀 Go live — start your 14-day free trial`}
                     </button>
                     {!canGoLive && requiredDone && isKeepNumber && !selectedCarrier && (
                       <p className="text-[12px] text-[#94a7b8] text-center mt-2">Select your carrier and dial the code above to go live</p>

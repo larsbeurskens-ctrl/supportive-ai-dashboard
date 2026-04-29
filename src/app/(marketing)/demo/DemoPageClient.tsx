@@ -170,7 +170,7 @@ export function DemoPageClient() {
             <LeadCaptureForm />
           </div>
           <div className="flex justify-center gap-6 mt-6">
-            {['7-day free trial', 'No credit card', 'Cancel anytime'].map((s, i) => (
+            {['14-day free trial', 'No credit card', 'Cancel anytime'].map((s, i) => (
               <div key={i} className="flex items-center gap-1.5">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
                 <span className="text-[13px] text-[#5a7184] font-medium">{s}</span>
