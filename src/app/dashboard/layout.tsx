@@ -29,6 +29,11 @@ const adminOnlyItems = [
   { href: '/dashboard/outreach', label: 'Tracking links', icon: LinkIcon },
 ];
 
+const cotorraNavItems = [
+  { href: '/dashboard', label: 'Dashboard', icon: TrendUpIcon },
+  { href: '/dashboard/settings', label: 'Settings', icon: SettingsIcon },
+];
+
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
@@ -43,7 +48,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   const handleSignOut = () => signOut({ callbackUrl: '/login' });
   const isAdmin = session?.user?.email === ADMIN_EMAIL;
-  const visibleNavItems = isAdmin ? [...navItems, ...adminOnlyItems] : navItems;
+  const brand = (session?.user as { brand?: string | null } | undefined)?.brand;
+  const isCotorra = brand === 'cotorra';
+  const visibleNavItems = isCotorra ? cotorraNavItems : (isAdmin ? [...navItems, ...adminOnlyItems] : navItems);
 
   if (status === 'loading' || (status === 'authenticated' && !session?.user?.businessId)) {
     return (
@@ -58,7 +65,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       {/* Mobile header */}
       <header className="lg:hidden bg-white border-b border-[#e5e0da] px-4 py-3 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Logo size="sm" />
+          <Logo size="sm" brand={brand} />
         </div>
         <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="p-2 rounded-lg hover:bg-[#f0eeeb]">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1a2e3b" strokeWidth="2">
@@ -95,7 +102,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <aside className="hidden lg:flex lg:flex-col lg:w-60 lg:fixed lg:inset-y-0 bg-white border-r border-[#e5e0da]">
           <div className="p-5 border-b border-[#e5e0da]">
             <div className="flex items-center gap-2">
-              <Logo size="sm" />
+              <Logo size="sm" brand={brand} />
             </div>
             <p className="text-xs text-[#94a7b8] mt-1">{session?.user?.businessName || 'Loading...'}</p>
           </div>

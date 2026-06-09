@@ -6,9 +6,23 @@ const sizeConfig: Record<LogoSize, { icon: number; text: string; gap: string; ra
   lg: { icon: 44, text: 'text-xl', gap: 'gap-3', radius: 'rounded-xl', fontSize: 'text-xl' },
 };
 
-export function Logo({ size = 'md', showText = true }: { size?: LogoSize; showText?: boolean }) {
+export function Logo({ size = 'md', showText = true, brand }: { size?: LogoSize; showText?: boolean; brand?: string | null }) {
   const s = sizeConfig[size];
 
+  // Cotorra brand — jade dot + lowercase wordmark
+  if (brand === 'cotorra') {
+    const dot = Math.round(s.icon * 0.4);
+    return (
+      <span className={`flex items-center ${s.gap}`}>
+        <span className="inline-block rounded-full bg-[#0F9A66]" style={{ width: dot, height: dot }} />
+        {showText && (
+          <span className={`${s.text} font-bold text-[#16150F] tracking-tight lowercase`}>cotorra</span>
+        )}
+      </span>
+    );
+  }
+
+  // Default — Supportive AI
   return (
     <span className={`flex items-center ${s.gap}`}>
       <span

@@ -4,6 +4,8 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { getDashboardMetrics, getTodaysBookings, getCalls, DashboardMetrics, Booking, Call } from '@/lib/api';
 import SetupWizard from '@/components/SetupWizard';
+import { useSession } from 'next-auth/react';
+import CotorraDashboard from './CotorraDashboard';
 import {
   PhoneIcon, CalendarIcon, DollarIcon, ClockIcon, TrendUpIcon,
 } from '@/components/marketing/Icons';
@@ -53,7 +55,7 @@ function formatJobDate(dateStr: string): string {
   return date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
 }
 
-export default function DashboardPage() {
+function TradesDashboard() {
   const [metrics, setMetrics] = useState<DashboardMetrics | null>(null);
   const [todaysJobs, setTodaysJobs] = useState<Booking[]>([]);
   const [recentCalls, setRecentCalls] = useState<Call[]>([]);
@@ -407,4 +409,18 @@ export default function DashboardPage() {
       </div>
     </div>
   );
+}
+
+export default function DashboardPage() {
+  const { data: session, status } = useSession();
+  const brand = (session?.user as { brand?: string | null } | undefined)?.brand;
+  if (status === 'loading') {
+    return (
+      <div className="flex items-center justify-center py-24">
+        <div className="w-6 h-6 border-2 border-[#0F9A66] border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
+  if (brand === 'cotorra') return <CotorraDashboard />;
+  return <TradesDashboard />;
 }

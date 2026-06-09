@@ -329,3 +329,38 @@ export async function sendSMS(data: { to: string; body: string; name?: string; c
 export async function getSMSTemplates(): Promise<Array<{ id: string; name: string; body: string; variables: string[] }>> {
   return fetchWithAuth('/api/sms/templates');
 }
+
+
+// ==========================================
+// Cotorra dashboard (WhatsApp-first) — Phase 1
+// ==========================================
+export interface CotorraMetrics {
+  conversationsToday: number;
+  conversationsThisWeek: number;
+  perDay: { date: string; count: number }[];
+  bookingLinksSent: number;
+  questionsAnswered: number;
+  bookingsMade: number;
+}
+
+export interface CotorraConversation {
+  id: string;
+  channel: 'whatsapp' | 'voice';
+  customerName: string | null;
+  customerPhone: string;
+  createdAt: string;
+  status: string;
+  preview: string;
+  messageCount: number | null;
+  bookingLinkSent: boolean;
+  bookingMade: boolean;
+  summary: string | null;
+}
+
+export async function getCotorraMetrics(): Promise<CotorraMetrics> {
+  return fetchWithAuth('/api/cotorra/metrics');
+}
+
+export async function getCotorraConversations(limit = 50): Promise<CotorraConversation[]> {
+  return fetchWithAuth(`/api/cotorra/conversations?limit=${limit}`);
+}

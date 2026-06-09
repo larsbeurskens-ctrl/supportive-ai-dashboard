@@ -89,7 +89,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     },
     async jwt({ token, trigger }) {
       // Fetch business info on sign-in or when token is refreshed
-      if (trigger === 'signIn' || !token.businessId) {
+      if (trigger === 'signIn' || !token.businessId || (token as any).brand === undefined) {
         if (token.email) {
           try {
             const res = await fetch(`${API_BASE}/api/users/by-email/${encodeURIComponent(token.email)}`);
@@ -102,6 +102,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                 token.businessName = userData.business.name;
                 token.industry = userData.business.industry;
                 token.timezone = userData.business.timezone;
+                (token as any).brand = userData.business.brand ?? null;
               }
             }
           } catch (error) {
@@ -119,6 +120,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         (session.user as any).businessName = token.businessName || null;
         (session.user as any).industry = token.industry || null;
         (session.user as any).timezone = token.timezone || null;
+        (session.user as any).brand = (token as any).brand ?? null;
       }
       return session;
     },

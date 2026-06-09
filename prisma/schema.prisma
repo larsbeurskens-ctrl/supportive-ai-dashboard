@@ -9,6 +9,7 @@ datasource db {
 }
 
 model Business {
+  brand              String?        // tenant brand flag: 'cotorra' | null = supportive-ai
   id                 String         @id @default(cuid())
   createdAt          DateTime       @default(now())
   updatedAt          DateTime       @updatedAt
