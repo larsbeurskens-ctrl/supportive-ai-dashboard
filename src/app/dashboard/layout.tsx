@@ -5,12 +5,12 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useSession, signOut } from 'next-auth/react';
 import { useState, useEffect } from 'react';
 import { Logo } from '@/components/Logo';
+import { BusinessSwitcher } from '@/components/BusinessSwitcher';
+import { isAdminEmail } from '@/lib/admin';
 import {
   PhoneIcon, CalendarIcon, UsersIcon, SettingsIcon,
   TrendUpIcon, DollarIcon, LinkIcon, MessageIcon,
 } from '@/components/marketing/Icons';
-
-const ADMIN_EMAIL = 'larsbeurskens@gmail.com';
 
 const navItems = [
   { href: '/dashboard', label: 'Dashboard', icon: TrendUpIcon },
@@ -47,7 +47,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   }, [status, session, router]);
 
   const handleSignOut = () => signOut({ callbackUrl: '/login' });
-  const isAdmin = session?.user?.email === ADMIN_EMAIL;
+  const isAdmin = isAdminEmail(session?.user?.email);
   const brand = (session?.user as { brand?: string | null } | undefined)?.brand;
   const isCotorra = brand === 'cotorra';
   const visibleNavItems = isCotorra ? cotorraNavItems : (isAdmin ? [...navItems, ...adminOnlyItems] : navItems);
@@ -81,6 +81,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       {/* Mobile menu */}
       {mobileMenuOpen && (
         <nav className="lg:hidden bg-white border-b border-[#e5e0da] px-4 py-2">
+          {isAdmin && <div className="px-1 py-2 mb-1 border-b border-[#f0eeeb]"><BusinessSwitcher /></div>}
           {visibleNavItems.map((item) => {
             const Icon = item.icon;
             const isActive = pathname === item.href;
@@ -105,6 +106,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               <Logo size="sm" brand={brand} />
             </div>
             <p className="text-xs text-[#94a7b8] mt-1">{session?.user?.businessName || 'Loading...'}</p>
+            {isAdmin && <div className="mt-3"><BusinessSwitcher /></div>}
           </div>
 
           <nav className="flex-1 px-3 py-4 space-y-0.5">

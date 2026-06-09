@@ -2,18 +2,24 @@
 
 import { SessionProvider, useSession } from 'next-auth/react';
 import { useEffect } from 'react';
-import { setBusinessId } from '@/lib/api';
+import { setBusinessId, setUserEmail } from '@/lib/api';
+import { isAdminEmail } from '@/lib/admin';
 
 function BusinessIdSync() {
   const { data: session } = useSession();
+  const email = session?.user?.email ?? null;
+  const sessionBusinessId = session?.user?.businessId ?? null;
 
   useEffect(() => {
-    if (session?.user?.businessId) {
-      setBusinessId(session.user.businessId);
-    } else {
-      setBusinessId(null);
+    setUserEmail(email);
+    // Admins can pin an "active business" via the switcher (stored locally).
+    let active: string | null = sessionBusinessId;
+    if (isAdminEmail(email) && typeof window !== 'undefined') {
+      const pinned = window.localStorage.getItem('activeBusinessId');
+      if (pinned) active = pinned;
     }
-  }, [session?.user?.businessId]);
+    setBusinessId(active);
+  }, [email, sessionBusinessId]);
 
   return null;
 }

@@ -77,6 +77,12 @@ export function getBusinessId(): string | null {
   return _businessId;
 }
 
+// Logged-in user's email - sent for per-business authorization on the backend
+let _userEmail: string | null = null;
+export function setUserEmail(email: string | null) {
+  _userEmail = email;
+}
+
 // Fetch with business ID header
 async function fetchWithAuth(endpoint: string, options: RequestInit = {}) {
   const businessId = _businessId;
@@ -89,6 +95,7 @@ async function fetchWithAuth(endpoint: string, options: RequestInit = {}) {
     headers: {
       'Content-Type': 'application/json',
       'X-Business-Id': businessId,
+      ...(_userEmail ? { 'X-User-Email': _userEmail } : {}),
       ...options.headers,
     },
   });
@@ -363,4 +370,22 @@ export async function getCotorraMetrics(): Promise<CotorraMetrics> {
 
 export async function getCotorraConversations(limit = 50): Promise<CotorraConversation[]> {
   return fetchWithAuth(`/api/cotorra/conversations?limit=${limit}`);
+}
+
+// Admin: list all businesses for the operator business switcher
+export interface AdminBusiness {
+  id: string;
+  name: string;
+  brand: string | null;
+  verticalType: string | null;
+  whatsappPhoneNumber: string | null;
+  isActive: boolean;
+}
+
+export async function getAdminBusinesses(): Promise<AdminBusiness[]> {
+  const res = await fetch(`${API_BASE}/api/admin/businesses`, {
+    headers: { 'Content-Type': 'application/json', ...(_userEmail ? { 'X-User-Email': _userEmail } : {}) },
+  });
+  if (!res.ok) throw new Error(`API error: ${res.status}`);
+  return res.json();
 }
