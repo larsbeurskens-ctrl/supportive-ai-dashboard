@@ -22,9 +22,16 @@ export function BusinessSwitcher() {
   if (!isAdminEmail(email)) return null;
 
   const onChange = (id: string) => {
+    const picked = businesses.find((b) => b.id === id);
     if (typeof window !== 'undefined') {
-      if (id === sessionBusinessId) window.localStorage.removeItem('activeBusinessId');
-      else window.localStorage.setItem('activeBusinessId', id);
+      if (id === sessionBusinessId) {
+        window.localStorage.removeItem('activeBusinessId');
+        window.localStorage.removeItem('activeBrand');
+      } else {
+        window.localStorage.setItem('activeBusinessId', id);
+        if (picked?.brand) window.localStorage.setItem('activeBrand', picked.brand);
+        else window.localStorage.removeItem('activeBrand');
+      }
     }
     setBusinessId(id);
     setActive(id);

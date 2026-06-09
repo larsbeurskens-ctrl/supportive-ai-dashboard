@@ -6,6 +6,7 @@ import { getDashboardMetrics, getTodaysBookings, getCalls, DashboardMetrics, Boo
 import SetupWizard from '@/components/SetupWizard';
 import { useSession } from 'next-auth/react';
 import CotorraDashboard from './CotorraDashboard';
+import { useEffectiveBrand } from '@/lib/useEffectiveBrand';
 import {
   PhoneIcon, CalendarIcon, DollarIcon, ClockIcon, TrendUpIcon,
 } from '@/components/marketing/Icons';
@@ -413,7 +414,7 @@ function TradesDashboard() {
 
 export default function DashboardPage() {
   const { data: session, status } = useSession();
-  const brand = (session?.user as { brand?: string | null } | undefined)?.brand;
+  const brand = useEffectiveBrand(session?.user?.email, (session?.user as { brand?: string | null } | undefined)?.brand);
   if (status === 'loading') {
     return (
       <div className="flex items-center justify-center py-24">

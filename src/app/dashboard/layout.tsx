@@ -7,6 +7,7 @@ import { useState, useEffect } from 'react';
 import { Logo } from '@/components/Logo';
 import { BusinessSwitcher } from '@/components/BusinessSwitcher';
 import { isAdminEmail } from '@/lib/admin';
+import { useEffectiveBrand } from '@/lib/useEffectiveBrand';
 import {
   PhoneIcon, CalendarIcon, UsersIcon, SettingsIcon,
   TrendUpIcon, DollarIcon, LinkIcon, MessageIcon,
@@ -48,7 +49,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   const handleSignOut = () => signOut({ callbackUrl: '/login' });
   const isAdmin = isAdminEmail(session?.user?.email);
-  const brand = (session?.user as { brand?: string | null } | undefined)?.brand;
+  const brand = useEffectiveBrand(session?.user?.email, (session?.user as { brand?: string | null } | undefined)?.brand);
   const isCotorra = brand === 'cotorra';
   const visibleNavItems = isCotorra ? cotorraNavItems : (isAdmin ? [...navItems, ...adminOnlyItems] : navItems);
 
