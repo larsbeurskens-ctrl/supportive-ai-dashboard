@@ -94,14 +94,14 @@ export default function CotorraDashboard() {
           <h2 className="text-sm font-bold" style={{ color: INK }}>Conversations per day</h2>
           <span className="text-xs text-[#8a8a82]">last 7 days</span>
         </div>
-        <div className="flex items-end gap-2 h-28">
+        <div className="flex items-end gap-2">
           {(metrics?.perDay ?? []).map((d) => {
-            const h = Math.round((d.count / maxDay) * 100);
+            const barPx = d.count ? Math.max(Math.round((d.count / maxDay) * 96), 10) : 4;
             const label = new Date(d.date + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'short' });
             return (
-              <div key={d.date} className="flex-1 flex flex-col items-center justify-end gap-1.5">
+              <div key={d.date} className="flex-1 flex flex-col items-center gap-1.5">
                 <span className="text-[11px] font-semibold" style={{ color: d.count ? INK : '#c9c6bf' }}>{d.count}</span>
-                <div className="w-full rounded-t-md" style={{ height: `${Math.max(h, 3)}%`, background: d.count ? JADE : '#ece9e2' }} />
+                <div className="w-full rounded-t-md" style={{ height: barPx, background: d.count ? JADE : '#ece9e2' }} />
                 <span className="text-[10px] text-[#8a8a82]">{label}</span>
               </div>
             );

@@ -36,23 +36,36 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
         const { Resend } = await import("resend");
         const resend = new Resend(process.env.RESEND_API_KEY);
+
+        // Brand the email by the user's business (Cotorra vs Supportive AI)
+        let isCotorra = false;
+        try {
+          const r = await fetch(`${API_BASE}/api/users/by-email/${encodeURIComponent(email.toLowerCase())}`);
+          if (r.ok) {
+            const u = await r.json();
+            isCotorra = u?.business?.brand === 'cotorra';
+          }
+        } catch { /* default to Supportive AI branding */ }
+        const brandName = isCotorra ? "Cotorra" : "Supportive AI";
+        const accent = isCotorra ? "#0F9A66" : "#e8930c";
+        const headingColor = isCotorra ? "#16150F" : "#1a1a1a";
         
         try {
           await resend.emails.send({
-            from: "Supportive AI <noreply@supportive-ai.com>",
+            from: `${brandName} <noreply@supportive-ai.com>`,
             to: email,
-            subject: "Sign in to Supportive AI",
+            subject: `Sign in to ${brandName}`,
             html: `
               <!DOCTYPE html>
               <html>
-                <head><meta charset="utf-8"><title>Sign in to Supportive AI</title></head>
+                <head><meta charset="utf-8"><title>Sign in to ${brandName}</title></head>
                 <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; padding: 40px; background: #f5f5f5;">
                   <div style="max-width: 500px; margin: 0 auto; background: white; border-radius: 16px; padding: 40px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                    <h1 style="color: #1a1a1a; font-size: 24px; margin-bottom: 24px;">Sign in to Supportive AI</h1>
+                    <h1 style="color: ${headingColor}; font-size: 24px; margin-bottom: 24px;">Sign in to ${brandName}</h1>
                     <p style="color: #666; font-size: 16px; line-height: 1.6; margin-bottom: 32px;">
                       Click the button below to sign in to your dashboard. This link expires in 1 hour.
                     </p>
-                    <a href="${url}" style="display: inline-block; background: #e8930c; color: white; padding: 16px 32px; border-radius: 8px; text-decoration: none; font-size: 16px; font-weight: 600;">
+                    <a href="${url}" style="display: inline-block; background: ${accent}; color: white; padding: 16px 32px; border-radius: 8px; text-decoration: none; font-size: 16px; font-weight: 600;">
                       Sign in to Dashboard
                     </a>
                     <p style="color: #999; font-size: 14px; margin-top: 32px;">

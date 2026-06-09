@@ -32,7 +32,6 @@ const adminOnlyItems = [
 
 const cotorraNavItems = [
   { href: '/dashboard', label: 'Dashboard', icon: TrendUpIcon },
-  { href: '/dashboard/settings', label: 'Settings', icon: SettingsIcon },
 ];
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
