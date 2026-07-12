@@ -25,6 +25,21 @@ export const authConfig: NextAuthConfig = {
       
       return true;
     },
+    async redirect({ url, baseUrl }) {
+      // Allow redirects to both brand dashboards (supportive-ai.com + app.cotorra.io).
+      // Default NextAuth behaviour forces everything back to AUTH_URL's origin,
+      // which bounced Cotorra logins to supportive-ai.com after verification.
+      const allowedOrigins = [
+        new URL(baseUrl).origin,
+        "https://app.cotorra.io",
+        "https://supportive-ai.com",
+      ];
+      try {
+        const target = new URL(url, baseUrl);
+        if (allowedOrigins.includes(target.origin)) return target.toString();
+      } catch { /* fall through to baseUrl */ }
+      return baseUrl;
+    },
   },
   session: {
     strategy: "jwt",

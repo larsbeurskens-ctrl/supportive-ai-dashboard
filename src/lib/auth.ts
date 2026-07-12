@@ -16,7 +16,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       name: "Email",
       type: "email",
       maxAge: 60 * 60, // 1 hour
-      sendVerificationRequest: async ({ identifier: email, url }) => {
+      sendVerificationRequest: async (params) => {
+        const { identifier: email, url } = params;
         // Rate limit: max 3 emails per address per hour, 30 global per hour
         const now = new Date();
         const perEmailCount = await prisma.verificationToken.count({
@@ -37,25 +38,47 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         const { Resend } = await import("resend");
         const resend = new Resend(process.env.RESEND_API_KEY);
 
-        // Brand the email by the user's business (Cotorra vs Supportive AI)
+        // Brand the email by the user's business (Cotorra vs Supportive AI),
+        // or by the host the sign-in came from (e.g. Lars logging in at app.cotorra.io)
         let isCotorra = false;
+        try {
+          const req = (params as any).request;
+          const reqHost = req?.headers?.get?.("x-forwarded-host") || req?.headers?.get?.("host") || "";
+          if (typeof reqHost === "string" && reqHost.includes("cotorra")) isCotorra = true;
+        } catch { /* host detection is best-effort */ }
         try {
           const r = await fetch(`${API_BASE}/api/users/by-email/${encodeURIComponent(email.toLowerCase())}`);
           if (r.ok) {
             const u = await r.json();
-            isCotorra = u?.business?.brand === 'cotorra';
+            if (u?.business?.brand === 'cotorra') isCotorra = true;
           }
         } catch { /* default to Supportive AI branding */ }
         const brandName = isCotorra ? "Cotorra" : "Supportive AI";
         const accent = isCotorra ? "#0F9A66" : "#e8930c";
         const headingColor = isCotorra ? "#16150F" : "#1a1a1a";
+
+        // Cotorra users sign in at app.cotorra.io - rewrite the magic link host
+        let signInUrl = url;
+        if (isCotorra) {
+          try {
+            const u = new URL(url);
+            u.protocol = "https:";
+            u.host = "app.cotorra.io";
+            const cb = u.searchParams.get("callbackUrl");
+            if (cb) {
+              try {
+                // Resolve relative paths like "/dashboard" against the Cotorra origin
+                const c = new URL(cb, "https://app.cotorra.io");
+                c.protocol = "https:";
+                c.host = "app.cotorra.io";
+                u.searchParams.set("callbackUrl", c.toString());
+              } catch { /* keep original callbackUrl */ }
+            }
+            signInUrl = u.toString();
+          } catch { /* keep original url */ }
+        }
         
-        try {
-          await resend.emails.send({
-            from: `${brandName} <noreply@supportive-ai.com>`,
-            to: email,
-            subject: `Sign in to ${brandName}`,
-            html: `
+        const emailHtml = `
               <!DOCTYPE html>
               <html>
                 <head><meta charset="utf-8"><title>Sign in to ${brandName}</title></head>
@@ -65,7 +88,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                     <p style="color: #666; font-size: 16px; line-height: 1.6; margin-bottom: 32px;">
                       Click the button below to sign in to your dashboard. This link expires in 1 hour.
                     </p>
-                    <a href="${url}" style="display: inline-block; background: ${accent}; color: white; padding: 16px 32px; border-radius: 8px; text-decoration: none; font-size: 16px; font-weight: 600;">
+                    <a href="${signInUrl}" style="display: inline-block; background: ${accent}; color: white; padding: 16px 32px; border-radius: 8px; text-decoration: none; font-size: 16px; font-weight: 600;">
                       Sign in to Dashboard
                     </a>
                     <p style="color: #999; font-size: 14px; margin-top: 32px;">
@@ -74,8 +97,33 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                   </div>
                 </body>
               </html>
-            `,
+            `;
+
+        // Preferred sender per brand; falls back to the verified supportive-ai.com
+        // domain if cotorra.io isn't verified in Resend yet (login must never break)
+        const preferredFrom = isCotorra
+          ? "Cotorra <noreply@cotorra.io>"
+          : "Supportive AI <noreply@supportive-ai.com>";
+        try {
+          let result = await resend.emails.send({
+            from: preferredFrom,
+            to: email,
+            subject: `Sign in to ${brandName}`,
+            html: emailHtml,
           });
+          if (result.error && isCotorra) {
+            console.warn("[AUTH] cotorra.io sender failed, falling back to supportive-ai.com:", result.error.message);
+            result = await resend.emails.send({
+              from: "Cotorra <noreply@supportive-ai.com>",
+              to: email,
+              subject: `Sign in to ${brandName}`,
+              html: emailHtml,
+            });
+          }
+          if (result.error) {
+            console.error("Failed to send verification email:", result.error);
+            throw new Error("Failed to send verification email");
+          }
         } catch (error) {
           console.error("Failed to send verification email:", error);
           throw new Error("Failed to send verification email");

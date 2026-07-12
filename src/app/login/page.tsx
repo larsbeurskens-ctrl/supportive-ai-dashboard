@@ -45,7 +45,7 @@ export default function LoginPage() {
       if (!res.ok) {
         setError(data.error || 'Something went wrong. Please try again.');
       } else {
-        window.location.href = '/login/check-email';
+        window.location.href = isCotorra ? '/login/check-email?brand=cotorra' : '/login/check-email';
       }
     } catch { setError('Something went wrong. Please try again.'); }
     finally { setLoading(false); }

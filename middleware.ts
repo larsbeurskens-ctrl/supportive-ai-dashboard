@@ -3,12 +3,16 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 const CANONICAL_HOST = "supportive-ai.com";
+// Hosts allowed to serve the app directly (brand front doors). Anything else
+// (e.g. *.vercel.app preview URLs) is canonicalized to supportive-ai.com.
+const ALLOWED_HOSTS = [CANONICAL_HOST, "app.cotorra.io"];
 
 export default function middleware(request: NextRequest) {
   const host = request.headers.get("host") || "";
 
-  // Redirect .vercel.app (and any non-canonical host) to the real domain
-  if (host && !host.includes(CANONICAL_HOST) && !host.includes("localhost")) {
+  // Redirect .vercel.app (and any non-allowed host) to the real domain
+  const isAllowed = ALLOWED_HOSTS.some((h) => host.includes(h)) || host.includes("localhost");
+  if (host && !isAllowed) {
     const url = new URL(request.url);
     url.host = CANONICAL_HOST;
     url.protocol = "https";

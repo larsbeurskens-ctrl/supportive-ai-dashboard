@@ -348,11 +348,13 @@ export interface CotorraMetrics {
   bookingLinksSent: number;
   questionsAnswered: number;
   bookingsMade: number;
+  conversationsThisMonth: number;
+  planMonthlyConversations: number;
 }
 
 export interface CotorraConversation {
   id: string;
-  channel: 'whatsapp' | 'voice';
+  channel: 'whatsapp' | 'voice' | 'sms';
   customerName: string | null;
   customerPhone: string;
   createdAt: string;
@@ -370,6 +372,29 @@ export async function getCotorraMetrics(): Promise<CotorraMetrics> {
 
 export async function getCotorraConversations(limit = 50): Promise<CotorraConversation[]> {
   return fetchWithAuth(`/api/cotorra/conversations?limit=${limit}`);
+}
+
+export interface CotorraMessage {
+  id: string;
+  direction: 'inbound' | 'outbound';
+  body: string;
+  createdAt: string | null;
+}
+
+export interface CotorraConversationDetail {
+  id: string;
+  channel: 'whatsapp' | 'voice' | 'sms';
+  customerName: string | null;
+  customerPhone: string;
+  createdAt: string;
+  status: string;
+  bookingMade: boolean;
+  messages: CotorraMessage[];
+  fullTranscript: string | null;
+}
+
+export async function getCotorraConversationDetail(id: string): Promise<CotorraConversationDetail> {
+  return fetchWithAuth(`/api/cotorra/conversations/${id}`);
 }
 
 // Admin: list all businesses for the operator business switcher

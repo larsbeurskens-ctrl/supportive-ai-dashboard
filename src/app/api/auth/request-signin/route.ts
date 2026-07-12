@@ -12,6 +12,20 @@ export async function POST(req: Request) {
     }
     const normalizedEmail = email.toLowerCase().trim();
 
+    // Brand detection: by the host the request came from, or the user's business
+    const reqHost = req.headers.get("x-forwarded-host") || req.headers.get("host") || "";
+    let isCotorra = reqHost.includes("cotorra");
+    if (!isCotorra) {
+      try {
+        const apiBase = process.env.NEXT_PUBLIC_API_URL || "https://supportive-ai-backend-production.up.railway.app";
+        const r = await fetch(`${apiBase}/api/users/by-email/${encodeURIComponent(normalizedEmail)}`);
+        if (r.ok) {
+          const u = await r.json();
+          if (u?.business?.brand === "cotorra") isCotorra = true;
+        }
+      } catch { /* default to Supportive AI branding */ }
+    }
+
     // 1. Verify Turnstile token
     const secretKey = process.env.TURNSTILE_SECRET_KEY;
     if (secretKey && secretKey !== "SKIP") {
@@ -78,25 +92,65 @@ export async function POST(req: Request) {
       token: rawToken,
       email: normalizedEmail,
     });
-    const verifyUrl = `${baseUrl}/api/auth/callback/email?${params}`;
+    let verifyUrl = `${baseUrl}/api/auth/callback/email?${params}`;
+    if (isCotorra) {
+      try {
+        const u = new URL(verifyUrl);
+        u.protocol = "https:";
+        u.host = "app.cotorra.io";
+        const cb = u.searchParams.get("callbackUrl");
+        if (cb) {
+          try {
+            // Resolve relative paths like "/dashboard" against the Cotorra origin
+            const c = new URL(cb, "https://app.cotorra.io");
+            c.protocol = "https:";
+            c.host = "app.cotorra.io";
+            u.searchParams.set("callbackUrl", c.toString());
+          } catch { /* keep original callbackUrl */ }
+        }
+        verifyUrl = u.toString();
+      } catch { /* keep original url */ }
+    }
 
-    // 5. Send email via Resend (same template as auth.ts)
+    // 5. Send email via Resend (brand-aware, same template as auth.ts)
     const { Resend } = await import("resend");
     const resend = new Resend(process.env.RESEND_API_KEY);
 
-    await resend.emails.send({
-      from: "Supportive AI <noreply@supportive-ai.com>",
-      to: normalizedEmail,
-      subject: "Sign in to Supportive AI",
-      html: `<!DOCTYPE html><html><head><meta charset="utf-8"><title>Sign in to Supportive AI</title></head>
+    const brandName = isCotorra ? "Cotorra" : "Supportive AI";
+    const accent = isCotorra ? "#0F9A66" : "#e8930c";
+    const headingColor = isCotorra ? "#16150F" : "#1a1a1a";
+    const emailHtml = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>Sign in to ${brandName}</title></head>
 <body style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;padding:40px;background:#f5f5f5;">
 <div style="max-width:500px;margin:0 auto;background:white;border-radius:16px;padding:40px;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
-<h1 style="color:#1a1a1a;font-size:24px;margin-bottom:24px;">Sign in to Supportive AI</h1>
+<h1 style="color:${headingColor};font-size:24px;margin-bottom:24px;">Sign in to ${brandName}</h1>
 <p style="color:#666;font-size:16px;line-height:1.6;margin-bottom:32px;">Click the button below to sign in to your dashboard. This link expires in 1 hour.</p>
-<a href="${verifyUrl}" style="display:inline-block;background:#e8930c;color:white;padding:16px 32px;border-radius:8px;text-decoration:none;font-size:16px;font-weight:600;">Sign in to Dashboard</a>
+<a href="${verifyUrl}" style="display:inline-block;background:${accent};color:white;padding:16px 32px;border-radius:8px;text-decoration:none;font-size:16px;font-weight:600;">Sign in to Dashboard</a>
 <p style="color:#999;font-size:14px;margin-top:32px;">If you didn't request this email, you can safely ignore it.</p>
-</div></body></html>`,
+</div></body></html>`;
+
+    // Preferred sender per brand; falls back to the verified supportive-ai.com
+    // domain if cotorra.io ever fails (login must never break)
+    const preferredFrom = isCotorra
+      ? "Cotorra <noreply@cotorra.io>"
+      : "Supportive AI <noreply@supportive-ai.com>";
+    let sendResult = await resend.emails.send({
+      from: preferredFrom,
+      to: normalizedEmail,
+      subject: `Sign in to ${brandName}`,
+      html: emailHtml,
     });
+    if (sendResult.error && isCotorra) {
+      console.warn("[AUTH] cotorra.io sender failed, falling back:", sendResult.error.message);
+      sendResult = await resend.emails.send({
+        from: "Cotorra <noreply@supportive-ai.com>",
+        to: normalizedEmail,
+        subject: `Sign in to ${brandName}`,
+        html: emailHtml,
+      });
+    }
+    if (sendResult.error) {
+      throw new Error(`Email send failed: ${sendResult.error.message}`);
+    }
 
     console.log(`[AUTH] Verification email sent to ${normalizedEmail}`);
     return Response.json({ ok: true });
